@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inteligent v0.2</title>
+    <title>Inteligent v0.3</title>
     <style>
         :root {
             --bg-color: #0f141c;
@@ -16,6 +16,7 @@
             --accent-color: #238636;
             --brightness-val: 1;
             --minecraft-header-display: none;
+            --femboy-greeting-display: none;
         }
 
         body {
@@ -32,7 +33,7 @@
             transition: filter 0.3s, background 0.3s, color 0.3s;
         }
 
-        /* ANIMACJA STARTOWA v0.2 */
+        /* ANIMACJA STARTOWA v0.3 */
         #intro-splash {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #0f141c; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999999;
@@ -77,7 +78,7 @@
         .main-content-area { flex-grow: 1; background-color: var(--bg-color); padding: 30px; overflow-y: auto; position: relative; box-sizing: border-box; }
         .section-content { display: none; }
 
-        /* MINECRAFT CREEPER BANNER */
+        /* MINECRAFT BANNER */
         #creeper-head-banner {
             display: var(--minecraft-header-display);
             align-items: center;
@@ -89,14 +90,34 @@
             border-radius: 8px;
             gap: 15px;
         }
-        .creeper-face {
-            width: 40px;
-            height: 40px;
-            background: #000;
-            box-shadow: 
-                -8px -8px 0 0 #000, 8px -8px 0 0 #000,
-                0 0 0 4px #000;
-            position: relative;
+
+        /* FEMBOY POZDROWIENIE W ROGU */
+        #femboy-greeting-tag {
+            display: var(--femboy-greeting-display);
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            background: #db2777;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(219, 39, 119, 0.4);
+            z-index: 9999;
+        }
+
+        /* ANIMACJA ZMIENIAJĄCYCH SIĘ KOLORÓW */
+        body.theme-rainbow-anim {
+            animation: rainbowBG 10s infinite linear;
+        }
+        @keyframes rainbowBG {
+            0% { background-color: #1e3a8a; }
+            20% { background-color: #ca8a04; }
+            40% { background-color: #15803d; }
+            60% { background-color: #7e22ce; }
+            80% { background-color: #be123c; }
+            100% { background-color: #1e3a8a; }
         }
 
         .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
@@ -120,9 +141,11 @@
 
     <div id="intro-splash">
         <div class="splash-logo-icon">🔍</div>
-        <div class="splash-title-v1">Inteligent v0.2</div>
+        <div class="splash-title-v1">Inteligent v0.3</div>
         <div class="splash-lupa">🔎</div>
     </div>
+
+    <div id="femboy-greeting-tag">🌸 Lubisz femboye? Ja też! Pozdrawiam!</div>
 
     <div id="auth-modal">
         <div class="auth-card">
@@ -169,7 +192,7 @@
         </div>
 
         <div id="default-menu-view" style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; text-align:center;">
-            <h2 data-i18n="welcome_title" style="font-size: 32px; margin-bottom: 10px;">Witaj w systemie Inteligent v0.2</h2>
+            <h2 data-i18n="welcome_title" style="font-size: 32px; margin-bottom: 10px;">Witaj w systemie Inteligent v0.3</h2>
             <p data-i18n="welcome_desc" style="opacity: 0.7; max-width: 500px;">Wybierz opcję z panelu bocznego.</p>
         </div>
 
@@ -190,7 +213,13 @@
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-top:20px;">
                 <div style="background:var(--container-bg); padding:20px; border-radius:10px; border:1px solid var(--border-color);">
                     <h4 data-i18n="theme_title">🎨 Wybór Motywu</h4>
-                    <div style="display:flex; flex-direction:column; gap:8px; max-height:300px; overflow-y:auto; padding-right:5px;">
+                    <div style="display:flex; flex-direction:column; gap:8px; max-height:320px; overflow-y:auto; padding-right:5px;">
+                        <button onclick="setTheme('femboy')" class="action-btn" style="background:#db2777;">🌸 Femboy</button>
+                        <button onclick="setTheme('femboy-colorful')" class="action-btn" style="background:linear-gradient(to right, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7); color:#fff;">🌈 Kolorowy Femboy (Paski)</button>
+                        <button onclick="setTheme('zmieniajacy')" class="action-btn" style="background:linear-gradient(135deg, #1e3a8a, #ca8a04, #15803d); color:#fff;">🔄 Zmieniający Kolory (RGB)</button>
+                        <button onclick="setTheme('zielono-bialy')" class="action-btn" style="background:linear-gradient(135deg, #15803d, #ffffff); color:#000;">🟩⚪ Zielono-Biały</button>
+                        <button onclick="setTheme('linux')" class="action-btn" style="background:#09090b; color:#22c55e; border:1px solid #22c55e;">🐧 Linux Terminal</button>
+                        <button onclick="setTheme('polski')" class="action-btn" style="background:linear-gradient(180deg, #ffffff 50%, #dc2626 50%); color:#000;">🇵🇱 Polski (Biało-Czerwony)</button>
                         <button onclick="setTheme('minecraft')" class="action-btn" style="background:#557a2b; color:#fff; border:2px solid #2e4414;">🟩 Minecraft Dirt & Creeper 👾</button>
                         <button onclick="setTheme('zolty')" class="action-btn" style="background:#eab308; color:#000;">🟨 Żółty</button>
                         <button onclick="setTheme('brazowy')" class="action-btn" style="background:#78350f; color:#fff;">🟤 Brązowy</button>
@@ -198,43 +227,23 @@
                         <button onclick="setTheme('fiolet-zolty')" class="action-btn" style="background:linear-gradient(135deg, #7e22ce, #eab308); color:#fff;">🟣🟡 Fioletowo-Żółty</button>
                         <button onclick="setTheme('fiolet-zolty-czarny')" class="action-btn" style="background:linear-gradient(135deg, #581c87, #ca8a04, #000000); color:#fff;">🟣🟡⬛ Fioletowo-Żółto-Czarny</button>
                         <button onclick="setTheme('szary')" class="action-btn" style="background:#374151;">Szary</button>
-                        <button onclick="setTheme('rozowy')" class="action-btn" style="background:#f472b6;">Różowy</button>
                         <button onclick="setTheme('ciemny')" class="action-btn" style="background:#111827;">Ciemny</button>
                         <button onclick="setTheme('czerwony')" class="action-btn" style="background:#dc2626;">Czerwony</button>
                         <button onclick="setTheme('bialy')" class="action-btn" style="background:#ffffff; color:#000;">Biały</button>
-                        <button onclick="setTheme('femboy')" class="action-btn" style="background:#db2777;">🌸 Femboy</button>
-                        <button onclick="setTheme('femboy-colorful')" class="action-btn" style="background:linear-gradient(135deg,#ec4899,#8b5cf6,#3b82f6); color:#fff;">🌈 Kolorowy Femboy+</button>
                     </div>
                 </div>
 
                 <div style="background:var(--container-bg); padding:20px; border-radius:10px; border:1px solid var(--border-color);">
                     <h4 data-i18n="lang_title">🌍 Wybór Języka</h4>
                     <select id="lang-select" onchange="changeLanguage(this.value)" style="width:100%; padding:10px; background:var(--btn-bg); color:var(--text-color); border:1px solid var(--border-color); border-radius:6px; margin-bottom:15px;">
-                        <option value="pl">🇵🇱 Polska (Polish)</option>
-                        <option value="usa">🇺🇸 English (USA)</option>
-                        <option value="de">🇩🇪 Deutsch (German)</option>
-                        <option value="fr">🇫🇷 Français (French)</option>
-                        <option value="ua">🇺🇦 Українська (Ukrainian)</option>
-                        <option value="lt">🇱🇹 Lietuvių (Lithuanian)</option>
-                        <option value="lv">🇱🇻 Latviešu (Latvian)</option>
-                        <option value="et">🇪🇪 Eesti (Estonian)</option>
-                        <option value="ru">🇷🇺 Русский (Russian)</option>
-                        <option value="ro">🇷🇴 Română (Romanian)</option>
-                        <option value="jp">🇯🇵 日本語 (Japanese)</option>
-                        <option value="es">🇪🇸 Español (Spanish)</option>
-                        <option value="pt">🇵🇹 Português (Portuguese)</option>
-                        <option value="it">🇮🇹 Italiano (Italian)</option>
-                        <option value="no">🇳🇴 Norsk (Norwegian)</option>
-                        <option value="fi">🇫🇮 Suomi (Finnish)</option>
-                        <option value="hu">🇭🇺 Magyar (Hungarian)</option>
-                        <option value="cs">🇨🇿 Čeština (Czech)</option>
-                        <option value="sk">🇸🇰 Slovenčina (Slovak)</option>
-                        <option value="sv">🇸🇪 Svenska (Swedish)</option>
-                        <option value="sq">🇦🇱 Shqip (Albanian)</option>
-                        <option value="el">🇬🇷 Ελληνικά (Greek)</option>
-                        <option value="tr">🇹🇷 Türkçe (Turkish)</option>
-                        <option value="ko">🇰🇷 한국어 (Korean)</option>
-                        <option value="da">🇩🇰 Dansk (Danish)</option>
+                        <option value="pl">🇵🇱 Polski (Polish)</option>
+                        <option value="usa">🇺🇸 Angielski (English)</option>
+                        <option value="lt">🇱🇹 Litewski (Lithuanian)</option>
+                        <option value="fr">🇫🇷 Francuski (French)</option>
+                        <option value="ru">🇷🇺 Rosyjski (Russian)</option>
+                        <option value="it">🇮🇹 Włoski (Italian)</option>
+                        <option value="es">🇪🇸 Hiszpański (Spanish)</option>
+                        <option value="jp">🇯🇵 Japoński (Japanese)</option>
                     </select>
                 </div>
 
@@ -273,7 +282,7 @@
                 </div>
                 <div class="discord-chat-main">
                     <div id="intedisc-chat-box" class="chat-box">
-                        <div class="chat-msg"><b>[System]:</b> Witaj w Intedisc v0.2.</div>
+                        <div class="chat-msg"><b>[System]:</b> Witaj w Intedisc v0.3.</div>
                     </div>
                     <div class="typing-indicator" id="intedisc-typing"></div>
                     <input type="text" id="intedisc-msg-input" data-i18n-placeholder="chat_placeholder" placeholder="Napisz wiadomość..." oninput="triggerTyping('intedisc')" onkeydown="handleIntediscKey(event)" style="width:100%; padding:10px; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:6px; box-sizing:border-box;">
@@ -303,8 +312,8 @@
         <div id="info-section" class="section-content">
             <h3 data-i18n="nav_info">📢 Inteligent Informacje</h3>
             <div style="background:var(--container-bg); border:1px solid var(--border-color); border-radius:10px; padding:20px; margin-top:15px; line-height:1.6;">
-                <h4 data-i18n="info_title" style="margin-top:0; color:var(--accent-color);">✨ Wersja v0.2:</h4>
-                <p data-i18n="info_desc">Usunięto wyskakujące komunikaty, dodano motyw Minecraft Dirt/Creeper, nowe bogate palety kolorów oraz pełną obsługę 25 języków świata!</p>
+                <h4 data-i18n="info_title" style="margin-top:0; color:var(--accent-color);">✨ Wersja v0.3:</h4>
+                <p data-i18n="info_desc">Dodano motyw tęczowy (paski), zmieniający kolory (RGB), zielono-biały, polski oraz pozdrowienie femboyowe w rogu!</p>
             </div>
         </div>
 
@@ -317,31 +326,22 @@
 
     </div>
 
-    <div class="version-tag">v0.2</div>
+    <div class="version-tag">v0.3</div>
 
     <script>
         let currentUser = "";
         let currentLang = localStorage.getItem('inteligent_lang') || 'pl';
 
-        // PEŁNE DEDYKOWANE SŁOWNIKI DLA WSZYSTKICH 25 JĘZYKÓW
         const i18n = {
-            pl: { auth_title: "🔒 Logowanie / Konto", auth_desc: "Wpisz swój nick i hasło:", nick: "Nick:", pass: "Hasło:", enter: "Wejdź do systemu", nav_maps: "Inteligent Maps", nav_settings: "Ustawienia i Motywy", nav_projects: "Przyszłe Projekty", nav_chat: "Intedisc (Discord)", nav_notes: "Notatki (Kwadraty)", nav_store: "Inteligent Store", nav_info: "Inteligent Informacje", nav_media: "Globalne Media", welcome_title: "Witaj w systemie Inteligent v0.2", welcome_desc: "Wybierz opcję z panelu bocznego.", map_placeholder: "Wpisz lokalizację...", btn_search: "Szukaj", map_hint: "Wpisz lokalizację i kliknij szukaj.", theme_title: "🎨 Wybór Motywu", lang_title: "🌍 Wybór Języka", account_title: "👤 Zarządzanie Kontem", account_current: "Aktualny użytkownik:", btn_logout: "Wyloguj się", btn_switch: "Stwórz / Przełącz konto", proj_browser_title: "🌐 1. Przeglądarka Inteligent", proj_browser_desc: "Dedykowana, szybka przeglądarka internetowa.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Autorska dystrybucja systemu Linux.", chat_channels: "Kanały", btn_new_group: "+ Stwórz grupę", chat_placeholder: "Napisz wiadomość...", nav_notes: "Twoje Notatki", btn_new_note: "+ Nowy Kwadrat", store_placeholder: "Szukaj plików...", lbl_upload: "📤 Wrzuć plik", info_title: "✨ Wersja v0.2:", info_desc: "Pełne wsparcie dla 25 języków oraz nowe motywy!" },
-            usa: { auth_title: "🔒 Login / Account", auth_desc: "Enter nickname and password:", nick: "Nickname:", pass: "Password:", enter: "Enter System", nav_maps: "Inteligent Maps", nav_settings: "Settings & Themes", nav_projects: "Future Projects", nav_chat: "Intedisc (Discord)", nav_notes: "Notes", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Global Media", welcome_title: "Welcome to Inteligent v0.2", welcome_desc: "Select an option from sidebar.", map_placeholder: "Enter location...", btn_search: "Search", map_hint: "Enter location and search.", theme_title: "🎨 Select Theme", lang_title: "🌍 Select Language", account_title: "👤 Account", account_current: "Current user:", btn_logout: "Log out", btn_switch: "Switch account", proj_browser_title: "🌐 1. Inteligent Browser", proj_browser_desc: "Dedicated fast web browser.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Custom Linux distribution.", chat_channels: "Channels", btn_new_group: "+ Create group", chat_placeholder: "Type message...", nav_notes: "Notes", btn_new_note: "+ New Square", store_placeholder: "Search files...", lbl_upload: "📤 Upload file", info_title: "✨ Version v0.2:", info_desc: "Full 25 language support and new themes!" },
-            ru: { auth_title: "🔒 Вход / Аккаунт", auth_desc: "Введите ник и пароль:", nick: "Ник:", pass: "Пароль:", enter: "Войти в систему", nav_maps: "Inteligent Maps", nav_settings: "Настройки и Темы", nav_projects: "Будущие Проекты", nav_chat: "Intedisc (Discord)", nav_notes: "Заметки", nav_store: "Inteligent Store", nav_info: "Информация", nav_media: "Глобальные Медиа", welcome_title: "Добро пожаловать в Inteligent v0.2", welcome_desc: "Выберите опцию в меню.", map_placeholder: "Введите локацию...", btn_search: "Поиск", map_hint: "Введите местоположение.", theme_title: "🎨 Выбор Темы", lang_title: "🌍 Выбор Языка", account_title: "👤 Управление аккаунтом", account_current: "Текущий пользователь:", btn_logout: "Выйти", btn_switch: "Сменить аккаунт", proj_browser_title: "🌐 1. Браузер Inteligent", proj_browser_desc: "Быстрый веб-браузер.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Собственный Linux.", chat_channels: "Каналы", btn_new_group: "+ Создать группу", chat_placeholder: "Напишите сообщение...", nav_notes: "Заметки", btn_new_note: "+ Новый квадрат", store_placeholder: "Поиск файлов...", lbl_upload: "📤 Загрузить файл", info_title: "✨ Версия v0.2:", info_desc: "Полная поддержка русского языка и новых тем!" },
-            et: { auth_title: "🔒 Sisselogimine", auth_desc: "Sisestage andmed:", nick: "Kasutaja:", pass: "Parool:", enter: "Sisene", nav_maps: "Inteligent Maps", nav_settings: "Seaded", nav_projects: "Projektid", nav_chat: "Intedisc", nav_notes: "Märkmed", nav_store: "Inteligent Store", nav_info: "Teave", nav_media: "Meedia", welcome_title: "Tere tulemast Inteligent v0.2", welcome_desc: "Valige menüüst valik.", map_placeholder: "Asukoht...", btn_search: "Otsi", map_hint: "Otsi asukohta.", theme_title: "🎨 Teema", lang_title: "🌍 Keel", account_title: "👤 Konto", account_current: "Kasutaja:", btn_logout: "Logi välja", btn_switch: "Vaheta kontot", proj_browser_title: "🌐 1. Inteligent Brauser", proj_browser_desc: "Kiire brauser.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Linux süsteem.", chat_channels: "Kanalid", btn_new_group: "+ Loo", chat_placeholder: "Sõnum...", nav_notes: "Märkmed", btn_new_note: "+ Uus", store_placeholder: "Otsi...", lbl_upload: "📤 Laadi fail", info_title: "✨ v0.2:", info_desc: "Täielik eesti keele tugi!" },
-            lt: { auth_title: "🔒 Prisijungimas", auth_desc: "Įveskite duomenis:", nick: "Slapyvardis:", pass: "Slaptažodis:", enter: "Įeiti", nav_maps: "Inteligent Maps", nav_settings: "Nustatymai", nav_projects: "Projektai", nav_chat: "Intedisc", nav_notes: "Užrašai", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Media", welcome_title: "Sveiki atvykę į Inteligent v0.2", welcome_desc: "Pasirinkite parinktį.", map_placeholder: "Vieta...", btn_search: "Ieškoti", map_hint: "Įveskite vietą.", theme_title: "🎨 Tema", lang_title: "🌍 Kalba", account_title: "👤 Paskyra", account_current: "Vartotojas:", btn_logout: "Atsijungti", btn_switch: "Keisti", proj_browser_title: "🌐 1. Naršyklė Inteligent", proj_browser_desc: "Greita naršyklė.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Linux sistema.", chat_channels: "Kanalai", btn_new_group: "+ Sukurti", chat_placeholder: "Žinutė...", nav_notes: "Užrašai", btn_new_note: "+ Naujas", store_placeholder: "Ieškoti...", lbl_upload: "📤 Įkelti", info_title: "✨ v0.2:", info_desc: "Lietuvių kalbos palaikymas!" },
-            lv: { auth_title: "🔒 Pieteikšanās", auth_desc: "Ievadiet datus:", nick: "Segvārds:", pass: "Parole:", enter: "Ienākt", nav_maps: "Inteligent Maps", nav_settings: "Iestatījumi", nav_projects: "Projekti", nav_chat: "Intedisc", nav_notes: "Piezīmes", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Mediji", welcome_title: "Laipni lūdzam Inteligent v0.2", welcome_desc: "Izvēlieties opciju.", map_placeholder: "Vieta...", btn_search: "Meklēt", map_hint: "Ievadiet vietu.", theme_title: "🎨 Tēma", lang_title: "🌍 Valoda", account_title: "👤 Konts", account_current: "Lietotājs:", btn_logout: "Iziet", btn_switch: "Mainīt", proj_browser_title: "🌐 1. Inteligent Pārlūks", proj_browser_desc: "Ātrs pārlūks.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Linux sistēma.", chat_channels: "Kanāli", btn_new_group: "+ Izveidot", chat_placeholder: "Ziņa...", nav_notes: "Piezīmes", btn_new_note: "+ Jauns", store_placeholder: "Meklēt...", lbl_upload: "📤 Augšupielādēt", info_title: "✨ v0.2:", info_desc: "Latviešu valodas atbalsts!" },
-            de: { auth_title: "🔒 Anmelden", auth_desc: "Daten eingeben:", nick: "Nickname:", pass: "Passwort:", enter: "Einloggen", nav_maps: "Inteligent Maps", nav_settings: "Einstellungen", nav_projects: "Projekte", nav_chat: "Intedisc", nav_notes: "Notizen", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Medien", welcome_title: "Willkommen bei Inteligent v0.2", welcome_desc: "Option wählen.", map_placeholder: "Ort...", btn_search: "Suchen", map_hint: "Ort eingeben.", theme_title: "🎨 Thema", lang_title: "🌍 Sprache", account_title: "👤 Konto", account_current: "Benutzer:", btn_logout: "Abmelden", btn_switch: "Wechseln", proj_browser_title: "🌐 1. Inteligent Browser", proj_browser_desc: "Webbrowser.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Linux System.", chat_channels: "Kanäle", btn_new_group: "+ Erstellen", chat_placeholder: "Nachricht...", nav_notes: "Notizen", btn_new_note: "+ Neu", store_placeholder: "Suchen...", lbl_upload: "📤 Hochladen", info_title: "✨ v0.2:", info_desc: "Volle Unterstützung für Deutsch!" },
-            fr: { auth_title: "🔒 Connexion", auth_desc: "Identifiants :", nick: "Pseudo :", pass: "Mot de passe :", enter: "Entrer", nav_maps: "Inteligent Maps", nav_settings: "Paramètres", nav_projects: "Projets", nav_chat: "Intedisc", nav_notes: "Notes", nav_store: "Inteligent Store", nav_info: "Infos", nav_media: "Médias", welcome_title: "Bienvenue sur Inteligent v0.2", welcome_desc: "Choisissez une option.", map_placeholder: "Lieu...", btn_search: "Rechercher", map_hint: "Entrez un lieu.", theme_title: "🎨 Thème", lang_title: "🌍 Langue", account_title: "👤 Compte", account_current: "Utilisateur :", btn_logout: "Déconnexion", btn_switch: "Changer", proj_browser_title: "🌐 1. Navigateur Inteligent", proj_browser_desc: "Navigateur web.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Distribution Linux.", chat_channels: "Canaux", btn_new_group: "+ Créer", chat_placeholder: "Message...", nav_notes: "Notes", btn_new_note: "+ Nouveau", store_placeholder: "Rechercher...", lbl_upload: "📤 Envoyer", info_title: "✨ v0.2:", info_desc: "Support français complet !" },
-            ua: { auth_title: "🔒 Вхід", auth_desc: "Введіть дані:", nick: "Нік:", pass: "Пароль:", enter: "Увійти", nav_maps: "Inteligent Maps", nav_settings: "Налаштування", nav_projects: "Проекти", nav_chat: "Intedisc", nav_notes: "Нотатки", nav_store: "Inteligent Store", nav_info: "Інфо", nav_media: "Медіа", welcome_title: "Ласкаво просимо до Inteligent v0.2", welcome_desc: "Виберіть опцію.", map_placeholder: "Локація...", btn_search: "Пошук", map_hint: "Введіть локацію.", theme_title: "🎨 Тема", lang_title: "🌍 Мова", account_title: "👤 Акаунт", account_current: "Користувач:", btn_logout: "Вийти", btn_switch: "Змінити", proj_browser_title: "🌐 1. Браузер Inteligent", proj_browser_desc: "Веб-браузер.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Система Linux.", chat_channels: "Канали", btn_new_group: "+ Створити", chat_placeholder: "Повідомлення...", nav_notes: "Нотатки", btn_new_note: "+ Новий", store_placeholder: "Пошук...", lbl_upload: "📤 Завантажити", info_title: "✨ v0.2:", info_desc: "Повна підтримка української мови!" },
-            jp: { auth_title: "🔒 ログイン / アカウント", auth_desc: "ニックネームとパスワードを入力:", nick: "ニックネーム:", pass: "パスワード:", enter: "ログイン", nav_maps: "Inteligent マップ", nav_settings: "設定とテーマ", nav_projects: "今後のプロジェクト", nav_chat: "Intedisc (Discord)", nav_notes: "メモ", nav_store: "Inteligent ストア", nav_info: "情報", nav_media: "グローバルメディア", welcome_title: "Inteligent v0.2へようこそ", welcome_desc: "メニューからオプションを選択してください。", map_placeholder: "場所を入力...", btn_search: "検索", map_hint: "場所を入力してください。", theme_title: "🎨 テーマ選択", lang_title: "🌍 言語選択", account_title: "👤 アカウント管理", account_current: "現在のユーザー:", btn_logout: "ログアウト", btn_switch: "アカウント切替", proj_browser_title: "🌐 1. Inteligent ブラウザ", proj_browser_desc: "高速Webブラウザ。", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "独自のLinux OS。", chat_channels: "チャンネル", btn_new_group: "+ グループ作成", chat_placeholder: "メッセージを入力...", nav_notes: "メモ", btn_new_note: "+ 新規作成", store_placeholder: "ファイルを検索...", lbl_upload: "📤 アップロード", info_title: "✨ バージョン v0.2:", info_desc: "日本語対応と新しいテーマを追加！" },
-            ko: { auth_title: "🔒 로그인 / 계정", auth_desc: "닉네임과 비밀번호 입력:", nick: "닉네임:", pass: "비밀번호:", enter: "시스템 입장", nav_maps: "Inteligent 지도", nav_settings: "설정 및 테마", nav_projects: "향후 프로젝트", nav_chat: "Intedisc", nav_notes: "메모", nav_store: "Inteligent 스토어", nav_info: "정보", nav_media: "글로벌 미디어", welcome_title: "Inteligent v0.2에 오신 것을 환영합니다", welcome_desc: "메뉴에서 옵션을 선택하세요.", map_placeholder: "위치 입력...", btn_search: "검색", map_hint: "위치를 입력하세요.", theme_title: "🎨 테마 선택", lang_title: "🌍 언어 선택", account_title: "👤 계정 관리", account_current: "현재 사용자:", btn_logout: "로그아웃", btn_switch: "계정 전환", proj_browser_title: "🌐 1. Inteligent 브라우저", proj_browser_desc: "전용 전속 웹 브라우저.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "자체 Linux 배포판.", chat_channels: "채널", btn_new_group: "+ 그룹 생성", chat_placeholder: "메시지 입력...", nav_notes: "메모", btn_new_note: "+ 새 메모", store_placeholder: "파일 검색...", lbl_upload: "📤 파일 업로드", info_title: "✨ 버전 v0.2:", info_desc: "한국어 지원 및 새 테마 추가!" }
+            pl: { auth_title: "🔒 Logowanie / Konto", auth_desc: "Wpisz swój nick i hasło:", nick: "Nick:", pass: "Hasło:", enter: "Wejdź do systemu", nav_maps: "Inteligent Maps", nav_settings: "Ustawienia i Motywy", nav_projects: "Przyszłe Projekty", nav_chat: "Intedisc (Discord)", nav_notes: "Notatki (Kwadraty)", nav_store: "Inteligent Store", nav_info: "Inteligent Informacje", nav_media: "Globalne Media", welcome_title: "Witaj w systemie Inteligent v0.3", welcome_desc: "Wybierz opcję z panelu bocznego.", map_placeholder: "Wpisz lokalizację...", btn_search: "Szukaj", map_hint: "Wpisz lokalizację i kliknij szukaj.", theme_title: "🎨 Wybór Motywu", lang_title: "🌍 Wybór Języka", account_title: "👤 Zarządzanie Kontem", account_current: "Aktualny użytkownik:", btn_logout: "Wyloguj się", btn_switch: "Stwórz / Przełącz konto", proj_browser_title: "🌐 1. Przeglądarka Inteligent", proj_browser_desc: "Dedykowana, szybka przeglądarka internetowa.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Autorska dystrybucja systemu Linux.", chat_channels: "Kanały", btn_new_group: "+ Stwórz grupę", chat_placeholder: "Napisz wiadomość...", nav_notes: "Twoje Notatki", btn_new_note: "+ Nowy Kwadrat", store_placeholder: "Szukaj plików...", lbl_upload: "📤 Wrzuć plik", info_title: "✨ Wersja v0.3:", info_desc: "Brak komunikatów, nowe genialne motywy i pozdrowienie femboyowe!" },
+            usa: { auth_title: "🔒 Login / Account", auth_desc: "Enter nickname and password:", nick: "Nickname:", pass: "Password:", enter: "Enter System", nav_maps: "Inteligent Maps", nav_settings: "Settings & Themes", nav_projects: "Future Projects", nav_chat: "Intedisc (Discord)", nav_notes: "Notes", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Global Media", welcome_title: "Welcome to Inteligent v0.3", welcome_desc: "Select an option from sidebar.", map_placeholder: "Enter location...", btn_search: "Search", map_hint: "Enter location and search.", theme_title: "🎨 Select Theme", lang_title: "🌍 Select Language", account_title: "👤 Account", account_current: "Current user:", btn_logout: "Log out", btn_switch: "Switch account", proj_browser_title: "🌐 1. Inteligent Browser", proj_browser_desc: "Dedicated fast web browser.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Custom Linux distribution.", chat_channels: "Channels", btn_new_group: "+ Create group", chat_placeholder: "Type message...", nav_notes: "Notes", btn_new_note: "+ New Square", store_placeholder: "Search files...", lbl_upload: "📤 Upload file", info_title: "✨ Version v0.3:", info_desc: "New themes, animated RGB, and femboy greeting!" },
+            lt: { auth_title: "🔒 Prisijungimas", auth_desc: "Įveskite duomenis:", nick: "Slapyvardis:", pass: "Slaptažodis:", enter: "Įeiti", nav_maps: "Inteligent Maps", nav_settings: "Nustatymai", nav_projects: "Projektai", nav_chat: "Intedisc", nav_notes: "Užrašai", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Media", welcome_title: "Sveiki atvykę į Inteligent v0.3", welcome_desc: "Pasirinkite parinktį.", map_placeholder: "Vieta...", btn_search: "Ieškoti", map_hint: "Įveskite vietą.", theme_title: "🎨 Tema", lang_title: "🌍 Kalba", account_title: "👤 Paskyra", account_current: "Vartotojas:", btn_logout: "Atsijungti", btn_switch: "Keisti", proj_browser_title: "🌐 1. Naršyklė Inteligent", proj_browser_desc: "Greita naršyklė.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Linux sistema.", chat_channels: "Kanalai", btn_new_group: "+ Sukurti", chat_placeholder: "Žinutė...", nav_notes: "Užrašai", btn_new_note: "+ Naujas", store_placeholder: "Ieškoti...", lbl_upload: "📤 Įkelti", info_title: "✨ v0.3:", info_desc: "Naujos temos ir funkcionalumas!" },
+            fr: { auth_title: "🔒 Connexion", auth_desc: "Identifiants :", nick: "Pseudo :", pass: "Mot de passe :", enter: "Entrer", nav_maps: "Inteligent Maps", nav_settings: "Paramètres", nav_projects: "Projets", nav_chat: "Intedisc", nav_notes: "Notes", nav_store: "Inteligent Store", nav_info: "Infos", nav_media: "Médias", welcome_title: "Bienvenue sur Inteligent v0.3", welcome_desc: "Choisissez une option.", map_placeholder: "Lieu...", btn_search: "Rechercher", map_hint: "Entrez un lieu.", theme_title: "🎨 Thème", lang_title: "🌍 Langue", account_title: "👤 Compte", account_current: "Utilisateur :", btn_logout: "Déconnexion", btn_switch: "Changer", proj_browser_title: "🌐 1. Navigateur Inteligent", proj_browser_desc: "Navigateur web.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Distribution Linux.", chat_channels: "Canaux", btn_new_group: "+ Créer", chat_placeholder: "Message...", nav_notes: "Notes", btn_new_note: "+ Nouveau", store_placeholder: "Rechercher...", lbl_upload: "📤 Envoyer", info_title: "✨ v0.3:", info_desc: "Nouveaux thèmes et options !" },
+            ru: { auth_title: "🔒 Вход / Аккаунт", auth_desc: "Введите ник и пароль:", nick: "Ник:", pass: "Пароль:", enter: "Войти в систему", nav_maps: "Inteligent Maps", nav_settings: "Настройки и Темы", nav_projects: "Будущие Проекты", nav_chat: "Intedisc (Discord)", nav_notes: "Заметки", nav_store: "Inteligent Store", nav_info: "Информация", nav_media: "Глобальные Медиа", welcome_title: "Добро пожаловать в Inteligent v0.3", welcome_desc: "Выберите опцию в меню.", map_placeholder: "Введите локацию...", btn_search: "Поиск", map_hint: "Введите местоположение.", theme_title: "🎨 Выбор Темы", lang_title: "🌍 Выбор Языка", account_title: "👤 Управление аккаунтом", account_current: "Текущий пользователь:", btn_logout: "Выйти", btn_switch: "Сменить аккаунт", proj_browser_title: "🌐 1. Браузер Inteligent", proj_browser_desc: "Быстрый веб-браузер.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Собственный Linux.", chat_channels: "Каналы", btn_new_group: "+ Создать группу", chat_placeholder: "Напишите сообщение...", nav_notes: "Заметки", btn_new_note: "+ Новый квадрат", store_placeholder: "Поиск файлов...", lbl_upload: "📤 Загрузить файл", info_title: "✨ Версия v0.3:", info_desc: "Новые темы и плавающий текст!" },
+            it: { auth_title: "🔒 Accedi", auth_desc: "Inserisci credenziali:", nick: "Nickname:", pass: "Password:", enter: "Entra", nav_maps: "Inteligent Maps", nav_settings: "Impostazioni", nav_projects: "Progetti", nav_chat: "Intedisc", nav_notes: "Note", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Media", welcome_title: "Benvenuto su Inteligent v0.3", welcome_desc: "Seleziona un'opzione.", map_placeholder: "Luogo...", btn_search: "Cerca", map_hint: "Inserisci luogo.", theme_title: "🎨 Tema", lang_title: "🌍 Lingua", account_title: "👤 Account", account_current: "Utente:", btn_logout: "Esci", btn_switch: "Cambia", proj_browser_title: "🌐 1. Browser Inteligent", proj_browser_desc: "Browser veloce.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Sistema Linux.", chat_channels: "Canali", btn_new_group: "+ Crea", chat_placeholder: "Messaggio...", nav_notes: "Note", btn_new_note: "+ Nuovo", store_placeholder: "Cerca...", lbl_upload: "📤 Carica", info_title: "✨ v0.3:", info_desc: "Nuovi temi e funzionalità!" },
+            es: { auth_title: "🔒 Iniciar sesión", auth_desc: "Ingrese datos:", nick: "Usuario:", pass: "Contraseña:", enter: "Entrar", nav_maps: "Inteligent Maps", nav_settings: "Ajustes", nav_projects: "Proyectos", nav_chat: "Intedisc", nav_notes: "Notas", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Medios", welcome_title: "Bienvenido a Inteligent v0.3", welcome_desc: "Seleccione una opción.", map_placeholder: "Ubicación...", btn_search: "Buscar", map_hint: "Ingrese ubicación.", theme_title: "🎨 Tema", lang_title: "🌍 Idioma", account_title: "👤 Cuenta", account_current: "Usuario:", btn_logout: "Salir", btn_switch: "Cambiar", proj_browser_title: "🌐 1. Navegador Inteligent", proj_browser_desc: "Navegador web.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Sistema Linux.", chat_channels: "Canales", btn_new_group: "+ Crear", chat_placeholder: "Mensaje...", nav_notes: "Notas", btn_new_note: "+ Nuevo", store_placeholder: "Buscar...", lbl_upload: "📤 Subir", info_title: "✨ v0.3:", info_desc: "¡Nuevos temas y opciones!" },
+            jp: { auth_title: "🔒 ログイン", auth_desc: "情報を入力:", nick: "ニックネーム:", pass: "パスワード:", enter: "ログイン", nav_maps: "Inteligent マップ", nav_settings: "設定", nav_projects: "プロジェクト", nav_chat: "Intedisc", nav_notes: "メモ", nav_store: "Inteligent ストア", nav_info: "情報", nav_media: "メディア", welcome_title: "Inteligent v0.3へようこそ", welcome_desc: "オプションを選択してください。", map_placeholder: "場所...", btn_search: "検索", map_hint: "場所を入力。", theme_title: "🎨 テーマ", lang_title: "🌍 言語", account_title: "👤 アカウント", account_current: "ユーザー:", btn_logout: "ログアウト", btn_switch: "切替", proj_browser_title: "🌐 1. Inteligent ブラウザ", proj_browser_desc: "高速ブラウザ。", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Linux OS。", chat_channels: "チャンネル", btn_new_group: "+ 作成", chat_placeholder: "メッセージ...", nav_notes: "メモ", btn_new_note: "+ 新規", store_placeholder: "検索...", lbl_upload: "📤 アップロード", info_title: "✨ v0.3:", info_desc: "新しいテーマと機能を追加！" }
         };
-
-        // Automatyczny fallback dla pozostałych języków bez zakłóceń
-        ['ro','es','pt','it','no','fi','hu','cs','sk','sv','sq','el','tr','da'].forEach(lang => {
-            if(!i18n[lang]) i18n[lang] = i18n['usa'];
-        });
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('inteligent_active_user');
@@ -398,71 +398,77 @@
 
         function setTheme(theme) {
             const root = document.documentElement;
+            document.body.classList.remove('theme-rainbow-anim');
             document.getElementById('creeper-head-banner').style.display = 'none';
+            root.style.setProperty('--femboy-greeting-display', 'none');
 
-            if(theme === 'minecraft') {
-                root.style.setProperty('--bg-color', '#3d2817');
-                root.style.setProperty('--sidebar-bg', '#24170d');
-                root.style.setProperty('--container-bg', '#543921');
+            if(theme === 'femboy' || theme === 'femboy-colorful') {
+                root.style.setProperty('--femboy-greeting-display', 'block');
+            }
+
+            if(theme === 'femboy') {
+                root.style.setProperty('--bg-color', '#ffe4e6'); root.style.setProperty('--sidebar-bg', '#fce7f3'); root.style.setProperty('--container-bg', '#ffffff'); root.style.setProperty('--text-color', '#9d174d'); root.style.setProperty('--border-color', '#f472b6'); root.style.setProperty('--btn-bg', '#fbcfe8'); root.style.setProperty('--accent-color', '#db2777');
+            } else if(theme === 'femboy-colorful') {
+                root.style.setProperty('--bg-color', '#2a0845');
+                root.style.setProperty('--sidebar-bg', '#1b003a');
+                root.style.setProperty('--container-bg', 'linear-gradient(to right, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7)');
                 root.style.setProperty('--text-color', '#ffffff');
-                root.style.setProperty('--border-color', '#855b35');
-                root.style.setProperty('--btn-bg', '#3b2614');
-                root.style.setProperty('--accent-color', '#557a2b');
+                root.style.setProperty('--border-color', '#ec4899');
+                root.style.setProperty('--btn-bg', 'rgba(0,0,0,0.4)');
+                root.style.setProperty('--accent-color', '#ec4899');
+            } else if(theme === 'zmieniajacy') {
+                document.body.classList.add('theme-rainbow-anim');
+                root.style.setProperty('--sidebar-bg', '#0f172a');
+                root.style.setProperty('--container-bg', '#1e293b');
+                root.style.setProperty('--text-color', '#ffffff');
+                root.style.setProperty('--border-color', '#38bdf8');
+                root.style.setProperty('--btn-bg', '#334155');
+                root.style.setProperty('--accent-color', '#0284c7');
+            } else if(theme === 'zielono-bialy') {
+                root.style.setProperty('--bg-color', '#f0fdf4');
+                root.style.setProperty('--sidebar-bg', '#dcfce7');
+                root.style.setProperty('--container-bg', '#ffffff');
+                root.style.setProperty('--text-color', '#14532d');
+                root.style.setProperty('--border-color', '#86efac');
+                root.style.setProperty('--btn-bg', '#bbf7d0');
+                root.style.setProperty('--accent-color', '#16a34a');
+            } else if(theme === 'linux') {
+                root.style.setProperty('--bg-color', '#050505');
+                root.style.setProperty('--sidebar-bg', '#0d0d0d');
+                root.style.setProperty('--container-bg', '#121212');
+                root.style.setProperty('--text-color', '#22c55e');
+                root.style.setProperty('--border-color', '#15803d');
+                root.style.setProperty('--btn-bg', '#1a1a1a');
+                root.style.setProperty('--accent-color', '#16a34a');
+            } else if(theme === 'polski') {
+                root.style.setProperty('--bg-color', '#fef2f2');
+                root.style.setProperty('--sidebar-bg', '#ffffff');
+                root.style.setProperty('--container-bg', '#ffffff');
+                root.style.setProperty('--text-color', '#991b1b');
+                root.style.setProperty('--border-color', '#f87171');
+                root.style.setProperty('--btn-bg', '#fee2e2');
+                root.style.setProperty('--accent-color', '#dc2626');
+            } else if(theme === 'minecraft') {
+                root.style.setProperty('--bg-color', '#3d2817'); root.style.setProperty('--sidebar-bg', '#24170d'); root.style.setProperty('--container-bg', '#543921'); root.style.setProperty('--text-color', '#ffffff'); root.style.setProperty('--border-color', '#855b35'); root.style.setProperty('--btn-bg', '#3b2614'); root.style.setProperty('--accent-color', '#557a2b');
                 document.getElementById('creeper-head-banner').style.display = 'flex';
             } else if(theme === 'zolty') {
-                root.style.setProperty('--bg-color', '#423200');
-                root.style.setProperty('--sidebar-bg', '#261c00');
-                root.style.setProperty('--container-bg', '#705500');
-                root.style.setProperty('--text-color', '#fef08a');
-                root.style.setProperty('--border-color', '#ca8a04');
-                root.style.setProperty('--btn-bg', '#856404');
-                root.style.setProperty('--accent-color', '#eab308');
+                root.style.setProperty('--bg-color', '#423200'); root.style.setProperty('--sidebar-bg', '#261c00'); root.style.setProperty('--container-bg', '#705500'); root.style.setProperty('--text-color', '#fef08a'); root.style.setProperty('--border-color', '#ca8a04'); root.style.setProperty('--btn-bg', '#856404'); root.style.setProperty('--accent-color', '#eab308');
             } else if(theme === 'brazowy') {
-                root.style.setProperty('--bg-color', '#271206');
-                root.style.setProperty('--sidebar-bg', '#180a03');
-                root.style.setProperty('--container-bg', '#451a03');
-                root.style.setProperty('--text-color', '#ffedd5');
-                root.style.setProperty('--border-color', '#78350f');
-                root.style.setProperty('--btn-bg', '#78350f');
-                root.style.setProperty('--accent-color', '#92400e');
+                root.style.setProperty('--bg-color', '#271206'); root.style.setProperty('--sidebar-bg', '#180a03'); root.style.setProperty('--container-bg', '#451a03'); root.style.setProperty('--text-color', '#ffedd5'); root.style.setProperty('--border-color', '#78350f'); root.style.setProperty('--btn-bg', '#78350f'); root.style.setProperty('--accent-color', '#92400e');
             } else if(theme === 'niebiesko-bialy') {
-                root.style.setProperty('--bg-color', '#eff6ff');
-                root.style.setProperty('--sidebar-bg', '#dbeafe');
-                root.style.setProperty('--container-bg', '#ffffff');
-                root.style.setProperty('--text-color', '#1e3a8a');
-                root.style.setProperty('--border-color', '#93c5fd');
-                root.style.setProperty('--btn-bg', '#bfdbfe');
-                root.style.setProperty('--accent-color', '#2563eb');
+                root.style.setProperty('--bg-color', '#eff6ff'); root.style.setProperty('--sidebar-bg', '#dbeafe'); root.style.setProperty('--container-bg', '#ffffff'); root.style.setProperty('--text-color', '#1e3a8a'); root.style.setProperty('--border-color', '#93c5fd'); root.style.setProperty('--btn-bg', '#bfdbfe'); root.style.setProperty('--accent-color', '#2563eb');
             } else if(theme === 'fiolet-zolty') {
-                root.style.setProperty('--bg-color', '#2e1065');
-                root.style.setProperty('--sidebar-bg', '#3b0764');
-                root.style.setProperty('--container-bg', '#581c87');
-                root.style.setProperty('--text-color', '#fef08a');
-                root.style.setProperty('--border-color', '#eab308');
-                root.style.setProperty('--btn-bg', '#7e22ce');
-                root.style.setProperty('--accent-color', '#ca8a04');
+                root.style.setProperty('--bg-color', '#2e1065'); root.style.setProperty('--sidebar-bg', '#3b0764'); root.style.setProperty('--container-bg', '#581c87'); root.style.setProperty('--text-color', '#fef08a'); root.style.setProperty('--border-color', '#eab308'); root.style.setProperty('--btn-bg', '#7e22ce'); root.style.setProperty('--accent-color', '#ca8a04');
             } else if(theme === 'fiolet-zolty-czarny') {
-                root.style.setProperty('--bg-color', '#090514');
-                root.style.setProperty('--sidebar-bg', '#140824');
-                root.style.setProperty('--container-bg', '#2e1065');
-                root.style.setProperty('--text-color', '#fef08a');
-                root.style.setProperty('--border-color', '#a855f7');
-                root.style.setProperty('--btn-bg', '#3b0764');
-                root.style.setProperty('--accent-color', '#eab308');
+                root.style.setProperty('--bg-color', '#090514'); root.style.setProperty('--sidebar-bg', '#140824'); root.style.setProperty('--container-bg', '#2e1065'); root.style.setProperty('--text-color', '#fef08a'); root.style.setProperty('--border-color', '#a855f7'); root.style.setProperty('--btn-bg', '#3b0764'); root.style.setProperty('--accent-color', '#eab308');
             } else if(theme === 'szary') {
                 root.style.setProperty('--bg-color', '#1f2937'); root.style.setProperty('--sidebar-bg', '#111827'); root.style.setProperty('--container-bg', '#374151'); root.style.setProperty('--text-color', '#f9fafb'); root.style.setProperty('--border-color', '#4b5563'); root.style.setProperty('--btn-bg', '#4b5563'); root.style.setProperty('--accent-color', '#6b7280');
-            } else if(theme === 'rozowy') {
-                root.style.setProperty('--bg-color', '#fdf2f8'); root.style.setProperty('--sidebar-bg', '#fce7f3'); root.style.setProperty('--container-bg', '#ffffff'); root.style.setProperty('--text-color', '#831843'); root.style.setProperty('--border-color', '#fbcfe8'); root.style.setProperty('--btn-bg', '#fce7f3'); root.style.setProperty('--accent-color', '#ec4899');
             } else if(theme === 'ciemny') {
                 root.style.setProperty('--bg-color', '#09090b'); root.style.setProperty('--sidebar-bg', '#18181b'); root.style.setProperty('--container-bg', '#27272a'); root.style.setProperty('--text-color', '#f4f4f5'); root.style.setProperty('--border-color', '#3f3f46'); root.style.setProperty('--btn-bg', '#3f3f46'); root.style.setProperty('--accent-color', '#6366f1');
             } else if(theme === 'czerwony') {
                 root.style.setProperty('--bg-color', '#450a0a'); root.style.setProperty('--sidebar-bg', '#7f1d1d'); root.style.setProperty('--container-bg', '#991b1b'); root.style.setProperty('--text-color', '#fee2e2'); root.style.setProperty('--border-color', '#f87171'); root.style.setProperty('--btn-bg', '#b91c1c'); root.style.setProperty('--accent-color', '#ef4444');
             } else if(theme === 'bialy') {
                 root.style.setProperty('--bg-color', '#f4f4f9'); root.style.setProperty('--sidebar-bg', '#e2e8f0'); root.style.setProperty('--container-bg', '#ffffff'); root.style.setProperty('--text-color', '#121218'); root.style.setProperty('--border-color', '#cbd5e1'); root.style.setProperty('--btn-bg', '#f1f5f9'); root.style.setProperty('--accent-color', '#3b82f6');
-            } else if(theme === 'femboy') {
-                root.style.setProperty('--bg-color', '#ffe4e6'); root.style.setProperty('--sidebar-bg', '#fce7f3'); root.style.setProperty('--container-bg', '#ffffff'); root.style.setProperty('--text-color', '#9d174d'); root.style.setProperty('--border-color', '#f472b6'); root.style.setProperty('--btn-bg', '#fbcfe8'); root.style.setProperty('--accent-color', '#db2777');
-            } else if(theme === 'femboy-colorful') {
-                root.style.setProperty('--bg-color', '#3b0764'); root.style.setProperty('--sidebar-bg', '#4c1d95'); root.style.setProperty('--container-bg', '#581c87'); root.style.setProperty('--text-color', '#fce7f3'); root.style.setProperty('--border-color', '#ec4899'); root.style.setProperty('--btn-bg', '#7c3aed'); root.style.setProperty('--accent-color', '#ec4899');
             }
         }
 
@@ -499,7 +505,7 @@
             }
         }
 
-        let notesList = JSON.parse(localStorage.getItem('inteligent_notes_cards') || '["Notatka v0.2..."]');
+        let notesList = JSON.parse(localStorage.getItem('inteligent_notes_cards') || '["Notatka v0.3..."]');
         function loadNotesCards() {
             const container = document.getElementById('notes-grid-container');
             container.innerHTML = '';
@@ -520,7 +526,7 @@
             }
         }
 
-        let storeItems = JSON.parse(localStorage.getItem('inteligent_store_items') || '[{"name": "Modpack v0.2", "desc": "Start.", "url": "#", "author": "System"}]');
+        let storeItems = JSON.parse(localStorage.getItem('inteligent_store_items') || '[{"name": "Modpack v0.3", "desc": "Start.", "url": "#", "author": "System"}]');
         function loadStoreItems(filter = "") {
             const grid = document.getElementById('store-items-grid');
             grid.innerHTML = "";
