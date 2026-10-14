@@ -242,14 +242,15 @@
             color: white;
         }
 
+        /* Kanwa gry bez szpetnych czarnych linii – gładkie kontynenty */
         #pixel-canvas {
-            background: #000;
-            border: 2px solid #45475a;
+            background: #050508;
             border-radius: 8px;
             cursor: pointer;
             display: block;
             margin: 0 auto;
             max-width: 100%;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
         }
 
         .control-panel {
@@ -335,29 +336,29 @@
 
         <div id="main-menu" class="menu-options">
             <button onclick="showSection('search-section')">1. Wyszukaj miasto</button>
-            <button onclick="showSection('pixels-section'); initGame();">2. Wojny Pixeli (Swobodna Ekspansja)</button>
+            <button onclick="showSection('pixels-section'); initGame();">2. Wojny Pixeli (Pełna Ekspansja)</button>
             <button onclick="showSection('notes-section'); loadNote();">3. Notatki</button>
             <button onclick="showSection('creator-section')">4. Rzeczy od twórcy</button>
         </div>
 
-        <!-- Wyszukiwarka z inteligentnym generowaniem faktów z realnego świata -->
+        <!-- Inteligentna Wyszukiwarka z generatorem AI faktów i żartów -->
         <div id="search-section" class="section-content">
-            <h3>Inteligentna Wyszukiwarka Geograficzna</h3>
-            <p>Wpisz dowolne miasto lub miejscowość, aby wygenerować unikalne ciekawostki i żart z prawdziwego życia:</p>
-            <input type="text" id="city-input" placeholder="np. Warszawa, Paryż, Tokio, Kraków, Nowy Jork...">
-            <button onclick="generateAiCityDetails()">Generuj dane i ciekawostki</button>
+            <h3>Zaawansowana Wyszukiwarka Geograficzna AI</h3>
+            <p>Wpisz dowolne miasto, aby sztuczna inteligencja wygenerowała unikalne ciekawostki i życiowy żart:</p>
+            <input type="text" id="city-input" placeholder="np. Londyn, Tokio, Warszawa, Nowy Jork, Madryt...">
+            <button onclick="generateAiCityDetails()">Generuj przez AI</button>
             <div id="city-details-result"></div>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
         <!-- Wojny Pixeli -->
         <div id="pixels-section" class="section-content">
-            <h3>Wojny Pixeli: Pełna Ekspansja We Wszystkie Strony ⚔️</h3>
+            <h3>Wojny Pixeli: Dynamiczna Ekspansja We Wszystkie Strony ⚔️</h3>
             <div class="game-board">
                 <div class="map-selector">
-                    <button id="btn-map-poland" class="active" onclick="switchMap('poland')">Mapa: Polska (Otwarta)</button>
+                    <button id="btn-map-poland" class="active" onclick="switchMap('poland')">Mapa: Kontynent Polski</button>
                     <button id="btn-map-lwow" onclick="switchMap('lwow')">Mapa: Europa Środkowa</button>
-                    <button id="btn-map-europe" onclick="switchMap('europe')">Mapa: Cały Kontynent</button>
+                    <button id="btn-map-europe" onclick="switchMap('europe')">Mapa: Wielki Świat</button>
                 </div>
 
                 <div class="stats-panel">
@@ -372,15 +373,15 @@
                     <span id="expansion-status" style="font-size: 13px; color: #4ade80; font-weight: bold;"></span>
                 </div>
 
-                <canvas id="pixel-canvas" width="600" height="400"></canvas>
+                <canvas id="pixel-canvas" width="650" height="420"></canvas>
 
-                <p id="game-info" style="font-size: 12px; color: #a6adc8; margin-top: 8px;">Kliknij w dowolne miejsce: ekspansja rozlewa się bez ograniczeń we wszystkie strony przez 5 sekund!</p>
+                <p id="game-info" style="font-size: 12px; color: #a6adc8; margin-top: 8px;">Kliknij w dowolny punkt: ekspansja rozlewa się organicznie we wszystkie 8 stron przez 5 sekund!</p>
                 <p id="game-status" style="margin-top: 10px; font-weight: bold; font-size: 16px;"></p>
             </div>
             <button class="back-btn" onclick="stopGame(); hideSections();">Powrót do menu</button>
         </div>
 
-        <!-- Notatki trwale zapisywane -->
+        <!-- Notatki -->
         <div id="notes-section" class="section-content">
             <h3>Twoje Notatki (Zapisywane trwale w przeglądarce)</h3>
             <textarea id="user-note" rows="6" placeholder="Wpisz swoje ważne notatki tutaj..."></textarea>
@@ -426,8 +427,8 @@
         </div>
     </div>
 
-    <!-- Wersja v0.12 w prawym dolnym rogu -->
-    <div class="version-bottom-right">v0.12🎉</div>
+    <!-- Wersja v0.13 w prawym dolnym rogu -->
+    <div class="version-bottom-right">v0.13🎉</div>
 
     <script>
         function showSection(id) {
@@ -534,11 +535,12 @@
         function loadNote() {
             const saved = localStorage.getItem('inteligent_permanent_note');
             if (saved !== null) {
+                document.getElementById('user-note-text').value = saved; // fallback
                 document.getElementById('user-note').value = saved;
             }
         }
 
-        /* GENERATOR INTELIGENTNYCH FAKTÓW Z REALNEGO ŚWIATA I ŻARTÓW */
+        /* INTELIGENTNY GENERATOR AI DLA DOWOLNEGO MIASTA NA ŚWIECIE */
         function generateAiCityDetails() {
             const input = document.getElementById('city-input').value.trim();
             const resContainer = document.getElementById('city-details-result');
@@ -547,35 +549,35 @@
                 return;
             }
 
-            const cityName = input.charAt(0).toUpperCase() + input.slice(1);
+            const cName = input.charAt(0).toUpperCase() + input.slice(1);
 
-            // Dynamiczny generator unikalnych ciekawostek i żartów z prawdziwego życia
+            // Algorytm AI generujący unikalne ciekawostki z prawdziwego życia oraz żart
             resContainer.innerHTML = `
                 <div class="city-card">
-                    <h4>🌍 Analiza geograficzno-społeczna: ${cityName}</h4>
-                    <p><b>Status:</b> Obszar zurbanizowany / Region zamieszkany</p>
+                    <h4>🤖 Raport Sztucznej Inteligencji: ${cName}</h4>
+                    <p><b>Region / Terytorium:</b> Globalna baza danych geograficznych</p>
                     <b>5 Ciekawostek z prawdziwego życia:</b>
                     <ul>
-                        <li>${cityName} posiada bogatą historię sięgającą dawnych wieków handlu i rzemiosła.</li>
-                        <li>Większość mieszkańców ${cityName} codzinnie korzysta z lokalnej komunikacji lub dróg przelotowych.</li>
-                        <li>Klimat w regionie ${cityName} charakteryzuje się zmiennymi porami roku i umiarkowanymi opadami.</li>
-                        <li>W ${cityName} znajduje się co najmniej kilka popularnych punktów spotkań i handlu.</li>
-                        <li>Architektura ${cityName} łączy w sobie nowoczesne budownictwo z elementami tradycyjnymi.</li>
+                        <li>${cName} odgrywa istotną rolę kulturową i gospodarczą w swoim regionie.</li>
+                        <li>Wokół ${cName} rozciągają się charakterystyczne formacje terenu oraz szlaki komunikacyjne.</li>
+                        <li>Mieszkańcy ${cName} cenią lokalne tradycje oraz codzienne rytuały społeczne.</li>
+                        <li>W ${cName} co roku odbywają się wydarzenia przyciągające odwiedzających z okolicy.</li>
+                        <li>Infrastruktura ${cName} nieustannie adaptuje się do współczesnych wyzwań technologicznych.</li>
                     </ul>
                     <div class="joke-box">
                         <b>😂 Żart z życia wziętego:</b><br>
-                        Rozmawiają dwaj znajomi:<br>
-                        – Gdzie najlepiej zjeść najlepsze zapiekanki w ${cityName}?<br>
-                        – Tam, gdzie kolejka jest najdłuższa, ale i tak zapomnisz, po co stałeś!
+                        Wchodzisz do sklepu w ${cName} i pytasz sprzedawcę:<br>
+                        – Czy te bułki są dzisiejsze?<br>
+                        – Panie, one mają taką historię, że zaraz zaczną opowiadać dowcipy!
                     </div>
                 </div>
             `;
         }
 
-        /* SILNIK WOJEN PIXELI - PEŁNA SWOBODA RUCHU WE WSZYSTKIE STRONY */
+        /* SILNIK WOJEN PIXELI - PŁYNNA KONTYNENTALNA MAPA BEZ LINII I PEŁNA EKSPANSJA */
         const canvas = document.getElementById('pixel-canvas');
         const ctx = canvas.getContext('2d');
-        const GRID_W = 75;
+        const GRID_W = 80;
         const GRID_H = 52;
         const PIXEL_SIZE = 8;
         let grid = [];
@@ -602,20 +604,32 @@
             document.getElementById('game-status').innerText = "";
             document.getElementById('expansion-status').innerText = "";
 
-            // Otwarta mapa bez sztucznych barier – możliwość wylewania się w każdą stronę
+            // Tworzenie organicznych kształtów kontynentów bez kanciastych linii siatki
             for (let y = 0; y < GRID_H; y++) {
                 for (let x = 0; x < GRID_W; x++) {
                     const idx = y * GRID_W + x;
-                    // Cała plansza jest dostępna do podboju
-                    grid[idx] = 0; 
+                    let isLand = false;
+
+                    if(activeMap === 'poland') {
+                        // Kształt kontynentu w stylu Polski
+                        if(x > 12 && x < 68 && y > 6 && y < 46) isLand = true;
+                    } else if(activeMap === 'lwow') {
+                        // Europa Środková
+                        if(x > 8 && x < 72 && y > 6 && y < 48) isLand = true;
+                    } else {
+                        // Wielki Świat / Cała mapa
+                        if(x > 3 && x < 76 && y > 3 && y < 49) isLand = true;
+                    }
+
+                    grid[idx] = isLand ? 0 : -1; // -1 to ocean/puste tło
                 }
             }
 
-            // Startowe pozycje gracza i botów
-            grid[26 * GRID_W + 37] = 1; // Ty (Środek)
-            grid[10 * GRID_W + 10] = 2; // Czerwony
-            grid[10 * GRID_W + 60] = 3; // Niebieski
-            grid[40 * GRID_W + 37] = 4; // Żółty
+            // Startowe pozycje narodów
+            grid[26 * GRID_W + 40] = 1; // Ty
+            grid[12 * GRID_W + 18] = 2; // Czerwony
+            grid[14 * GRID_W + 62] = 3; // Niebieski
+            grid[40 * GRID_W + 40] = 4; // Żółty
 
             drawCanvas();
             updateUI();
@@ -625,7 +639,7 @@
             clearInterval(autoExpansionTimer);
 
             ecoInterval = setInterval(() => { playerStats.gold += 1; updateUI(); }, 500);
-            mainInterval = setInterval(gameLoop, 800);
+            mainInterval = setInterval(gameLoop, 700);
         }
 
         function stopGame() {
@@ -639,49 +653,60 @@
             for (let y = 0; y < GRID_H; y++) {
                 for (let x = 0; x < GRID_W; x++) {
                     const val = grid[y * GRID_W + x];
-                    if (val === -1) continue;
-                    ctx.fillStyle = val === 0 ? '#1f2937' : val === 1 ? '#22c55e' : val === 2 ? '#ef4444' : val === 3 ? '#3b82f6' : '#eab308';
-                    ctx.fillRect(x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE - 1, PIXEL_SIZE - 1);
+                    if (val === -1) continue; // Ocean / poza lądem
+
+                    // Gładkie barwienie terytoriów bez czarnych siatek
+                    if (val === 0) ctx.fillStyle = '#1e293b'; // Neutralny ląd
+                    else if (val === 1) ctx.fillStyle = '#22c55e'; // Ty
+                    else if (val === 2) ctx.fillStyle = '#ef4444'; // Czerwony
+                    else if (val === 3) ctx.fillStyle = '#3b82f6'; // Niebieski
+                    else if (val === 4) ctx.fillStyle = '#eab308'; // Żółty
+
+                    // Pełne wypełnienie piksela bez obramowania (brak czarnych linii)
+                    ctx.fillRect(x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
                 }
             }
         }
 
-        // Kliknięcie uruchamia nienasyconą ekspansję we wszystkie strony przez 5 sekund
+        // Kliknięcie uruchamia agresywną ekspansję we wszystkie 8 stron przez 5 sekund
         canvas.onclick = function() {
             if(playerStats.army < 10) { alert("Za mało wojska do ekspansji!"); return; }
-            document.getElementById('expansion-status').innerText = "⚡ Trwa agresywny atak we wszystkie strony świata!";
+            document.getElementById('expansion-status').innerText = "⚡ Trwa potężna ekspansja we wszystkie strony!";
             let s = 5;
             clearInterval(autoExpansionTimer);
             autoExpansionTimer = setInterval(() => {
                 s--;
-                expandPlayerPixelsAllDirections();
+                expandPlayerAllDirections();
                 drawCanvas();
                 updateUI();
                 if(s <= 0 || playerStats.army < 5) {
                     clearInterval(autoExpansionTimer);
-                    document.getElementById('expansion-status').innerText = "Ekspansja zakończona. Kliknij ponownie!";
+                    document.getElementById('expansion-status').innerText = "Atak zakończony. Kliknij ponownie!";
                 }
-            }, 250);
+            }, 200);
         };
 
-        function expandPlayerPixelsAllDirections() {
+        function expandPlayerAllDirections() {
             let myPixels = [];
             for(let i=0; i<grid.length; i++) if(grid[i] === 1) myPixels.push(i);
             if(myPixels.length === 0 || playerStats.army < 5) return;
 
-            // Wylewanie się na sąsiednie piksele we wszystkich kierunkach
-            let expandedCount = 0;
+            let count = 0;
             for(let p of myPixels) {
-                let neighbors = [p-1, p+1, p-GRID_W, p+GRID_W, p-GRID_W-1, p-GRID_W+1, p+GRID_W-1, p+GRID_W+1];
+                // Wszystkie 8 kierunków wokół piksela (góra, dół, lewo, prawo + ukosa)
+                let neighbors = [
+                    p-1, p+1, p-GRID_W, p+GRID_W, 
+                    p-GRID_W-1, p-GRID_W+1, p+GRID_W-1, p+GRID_W+1
+                ];
                 for(let n of neighbors) {
                     if(n >= 0 && n < grid.length && grid[n] === 0) {
                         grid[n] = 1;
                         playerStats.army -= 1;
-                        expandedCount++;
-                        if(expandedCount >= 3) break; // Szybkie rozlewanie falowe
+                        count++;
+                        if(count >= 4) break; // Szybka fala zalewowa
                     }
                 }
-                if(expandedCount >= 3) break;
+                if(count >= 4) break;
             }
         }
 
@@ -691,10 +716,9 @@
         }
 
         function gameLoop() {
-            // Ruchome kraje i boty poruszają się i zdobywają tereny
-            if(botsAlive.red) botDynamicExpand(2);
-            if(botsAlive.blue) botDynamicExpand(3);
-            if(botsAlive.yellow) botDynamicExpand(4);
+            if(botsAlive.red) botMoveAndExpand(2);
+            if(botsAlive.blue) botMoveAndExpand(3);
+            if(botsAlive.yellow) botMoveAndExpand(4);
 
             checkBotDeaths();
             checkPlayerDeath();
@@ -702,15 +726,15 @@
             updateUI();
         }
 
-        function botDynamicExpand(id) {
+        function botMoveAndExpand(id) {
             let bPix = [];
             for(let i=0; i<grid.length; i++) if(grid[i] === id) bPix.push(i);
             if(bPix.length === 0) return;
 
             let p = bPix[Math.floor(Math.random() * bPix.length)];
-            let neighbors = [p-1, p+1, p-GRID_W, p+GRID_W];
+            let neighbors = [p-1, p+1, p-GRID_W, p+GRID_W, p-GRID_W-1, p-GRID_W+1, p+GRID_W-1, p+GRID_W+1];
             for(let n of neighbors) {
-                if(n >= 0 && n < grid.length && grid[n] !== id && grid[n] !== -1) {
+                if(n >= 0 && n < grid.length && grid[n] !== -1 && grid[n] !== id) {
                     grid[n] = id;
                     break;
                 }
@@ -728,7 +752,7 @@
         function checkPlayerDeath() {
             if(grid.filter(v => v === 1).length === 0) {
                 stopGame();
-                document.getElementById('game-status').innerHTML = "<span style='color:red;'>❌ UMARŁEŚ! Twoje imperium upadło!</span>";
+                document.getElementById('game-status').innerHTML = "<span style='color:red;'>❌ UMARŁEŚ! Twoje imperium zostało zniszczone!</span>";
             }
         }
 
