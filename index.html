@@ -89,7 +89,7 @@
             background-color: #c9302c;
         }
 
-        /* Sekcja Gry Wojny Pixeli - 1000+ Miast */
+        /* Sekcja Gry Wojny Pixeli */
         .game-board {
             background: #1e1e2e;
             color: white;
@@ -104,16 +104,56 @@
             flex-wrap: wrap;
             gap: 8px;
             margin-bottom: 12px;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: bold;
         }
 
+        /* Stylizacja Mapy Polski */
+        #poland-svg-map {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            background: #181825;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .map-region {
+            fill: #313244;
+            stroke: #45475a;
+            stroke-width: 1.5;
+            transition: fill 0.2s;
+        }
+
+        .city-node {
+            fill: #f5e0dc;
+            stroke: #11111b;
+            stroke-width: 1.5;
+            cursor: pointer;
+            transition: transform 0.1s, fill 0.2s;
+        }
+
+        .city-node:hover {
+            transform: scale(1.4);
+        }
+
+        .city-text {
+            fill: #ffffff;
+            font-size: 8px;
+            font-weight: bold;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+
+        /* Siatka Miast pod Mapą */
         .grid-map {
             display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 3px;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
             margin: 15px 0;
-            max-height: 500px;
+            max-height: 300px;
             overflow-y: auto;
             padding: 8px;
             background: #11111b;
@@ -123,47 +163,47 @@
         .city-tile {
             background-color: #313244;
             border: 1px solid #45475a;
-            border-radius: 3px;
-            padding: 4px 2px;
-            font-size: 9px;
+            border-radius: 4px;
+            padding: 6px 2px;
+            font-size: 9.5px;
             font-weight: bold;
             color: white;
             cursor: pointer;
-            transition: 0.1s;
+            transition: 0.15s;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 28px;
+            min-height: 32px;
             text-align: center;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         .city-tile:hover {
             background-color: #585b70;
-            transform: scale(1.05);
-            z-index: 10;
+            transform: scale(1.04);
         }
 
         /* Frakcje / Kolory */
-        .city-tile.player {
-            background-color: #22c55e !important; /* Zielony - Ty */
+        .player-owned, .city-tile.player {
+            fill: #22c55e !important;
+            background-color: #22c55e !important;
             border-color: #15803d;
         }
 
-        .city-tile.bot-red {
-            background-color: #ef4444 !important; /* Czerwony - Bot */
+        .bot-red-owned, .city-tile.bot-red {
+            fill: #ef4444 !important;
+            background-color: #ef4444 !important;
             border-color: #b91c1c;
         }
 
-        .city-tile.bot-blue {
-            background-color: #3b82f6 !important; /* Niebieski - Bot */
+        .bot-blue-owned, .city-tile.bot-blue {
+            fill: #3b82f6 !important;
+            background-color: #3b82f6 !important;
             border-color: #1d4ed8;
         }
 
-        .city-tile.bot-yellow {
-            background-color: #eab308 !important; /* Żółty - Bot */
+        .bot-yellow-owned, .city-tile.bot-yellow {
+            fill: #eab308 !important;
+            background-color: #eab308 !important;
             border-color: #a16207;
             color: #000;
         }
@@ -173,7 +213,7 @@
             position: absolute;
             top: 15px;
             right: 20px;
-            font-size: 12px;
+            font-size: 13px;
             color: #888;
             font-weight: bold;
         }
@@ -207,7 +247,7 @@
 <body>
 
     <div class="container">
-        <div class="version-tag">v0.08</div>
+        <div class="version-tag">v0.09</div>
         <div class="logo-area">
             <div class="logo-icon">🔍</div>
             <h1 class="logo-text">inteligent</h1>
@@ -230,9 +270,9 @@
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Opcja 2: WOJNY PIXELI (Ponad 1000 miast i gmin Polski) -->
+        <!-- Opcja 2: WOJNY PIXELI -->
         <div id="pixels-section" class="section-content">
-            <h3>Wojny Pixeli: Bitwa 1000+ Miast Polski ⚔️</h3>
+            <h3>Wojny Pixeli: Bitwa o Miasta Polski ⚔️</h3>
             <div class="game-board">
                 <div class="score-board">
                     <span style="color: #4ade80;">🟢 Ty: <span id="score-green">0</span></span>
@@ -240,11 +280,20 @@
                     <span style="color: #60a5fa;">🔵 Niebieski: <span id="score-blue">0</span></span>
                     <span style="color: #facc15;">🟡 Żółty: <span id="score-yellow">0</span></span>
                 </div>
-                <p style="font-size: 13px; color: #a6adc8;">Boty atakują bezlitośnie co 1 sekundę! Klikaj w dowolne miasto, aby przejąć lub odbić terytorium!</p>
+                <p style="font-size: 13px; color: #a6adc8;">Uwaga! Boty atakują agresywnie co 0.8s i celują w Twoje miasta! Klikaj w punkty na mapie lub kafelki poniżej, aby je odbijać!</p>
                 
-                <!-- Wielka siatka ponad 1000 miast -->
+                <!-- Mapa Polski SVG ze wszystkimi kluczowymi miastami -->
+                <svg id="poland-svg-map" viewBox="0 0 500 460">
+                    <path class="map-region" d="M 30,100 L 110,80 L 190,65 L 280,75 L 360,90 L 450,110 L 470,210 L 430,320 L 390,430 L 290,440 L 200,420 L 110,380 L 40,320 L 30,220 Z"></path>
+                    
+                    <g id="map-cities-group">
+                        <!-- Generowane w JavaScript -->
+                    </g>
+                </svg>
+
+                <h4 style="margin-top: 15px; margin-bottom: 5px;">Wszystkie unikalne miasta Polski:</h4>
                 <div class="grid-map" id="cities-grid">
-                    <!-- Generowane skryptem -->
+                    <!-- Generowane w JavaScript -->
                 </div>
 
                 <p id="game-status" style="margin-top: 10px; font-weight: bold; font-size: 15px;"></p>
@@ -283,7 +332,7 @@
                 resultDiv.innerText = "Wpisz nazwę miasta!";
                 resultDiv.style.color = "red";
             } else {
-                resultDiv.innerText = `Znaleziono miasto ${city} w bazie 1000+ terytoriów Polski! Status: Aktywne w Wojnach Pixeli.`;
+                resultDiv.innerText = `Znaleziono miasto ${city} w bazie danych! Status: Aktywny obszar działań w Wojnach Pixeli.`;
                 resultDiv.style.color = "green";
             }
         }
@@ -307,43 +356,115 @@
             }, 2000);
         }
 
-        /* GENERATOR PONAD 1000 MIAST I GMIN POLSKI */
-        const baseTowns = [
-            "Warszawa", "Łódź", "Radomsko", "Piotrków Tryb.", "Płock", "Kraków", "Wrocław", "Poznań", "Gdańsk", "Szczecin", 
-            "Bydgoszcz", "Lublin", "Katowice", "Białystok", "Gdynia", "Częstochowa", "Radom", "Sosnowiec", "Toruń", "Kielce", 
-            "Gliwice", "Zabrze", "Olsztyn", "Bielsko-Biała", "Bytom", "Zielona Góra", "Rybnik", "Ruda Śląska", "Tychy", "Opole", 
-            "Gorzów Wlkp.", "Elbląg", "Tarnów", "Chorzów", "Kalisz", "Koszalin", "Legnica", "Grudziądz", "Słupsk", "Jaworzno", 
-            "Jastrzębie-Zdrój", "Nowy Sącz", "Jelenia Góra", "Siedlce", "Mysłowice", "Konin", "Piła", "Inowrocław", "Lubin", 
-            "Ostrów Wlkp.", "Suwałki", "Stargard", "Gniezno", "Ostrołęka", "Siemianowice", "Pabianice", "Tomaszów Maz.", "Stalowa Wola",
-            "Bełchatów", "Biała Podlaska", "Będzin", "Żory", "Tczew", "Ełk", "Pruszków", "Tomaszów Lub.", "Chełm", "Przemyśl", 
-            "Kędzierzyn-Koźle", "Łomża", "Mielec", "Zamość", "Stalowa Wola", "Leszno", "Żyrardów", "Świdnica", "Biała", "Piekary Śląskie",
-            "Będzin", "Zgierz", "Turek", "Wągrowiec", "Wieluń", "Wyszków", "Zawiercie", "Zduńska Wola", "Żary", "Świętochłowice",
-            "Wejherowo", "Włocławek", "Wodzisław Śl.", "Wołomin", "Września", "Wyszków", "Ząbki", "Zgierz", "Zgorzelec", "Żyrardów",
-            "Bochnia", "Brodnica", "Brzeg", "Busko-Zdrój", "Chojnice", "Cieszyn", "Czeladź", "Dębica", "Dzierżoniów", "Giżycko",
-            "Głogów", "Gniezno", "Goleniów", "Gostynin", "Grajewo", "Grodzisk Maz.", "Gubin", "Hajnówka", "Iława", "Jarocin",
-            "Jasło", "Karpacz", "Kętrzyn", "Kluczbork", "Kłodzko", "Kołobrzeg", "Kooło", "Kościan", "Kościerzyna", "Krasnystaw",
-            "Kraśnik", "Krotoszyn", "Kutno", "Kwidzyn", "Lębork", "Lidzbark", "Limanowa", "Lipno", "Lubań", "Lubartów",
-            "Lubliniec", "Łańcut", "Łuków", "Malbork", "Marki", "Mława", "Mońki", "Mrągowo", "Nakło", "Nidzica",
-            "Nisko", "Nowa Sól", "Nowy Targ", "Nysa", "Oborniki", "Oława", "Oleśnica", "Olkusz", "Ostrołęka", "Ostróda",
-            "Ostrów Maz.", "Oświęcim", "Otwock", "Pajęczno", "Piaseczno", "Pionki", "Pleszew", "Płońsk", "Polkowice", "Police",
-            "Poznań-O.", "Pruszcz Gd.", "Przysucha", "Pszczyna", "Puck", "Puławy", "Pułtusk", "Pyrzyce", "Racibórz", "Rawa Maz.",
-            "Rawicz", "Rypin", "Sandomierz", "Sanok", "Sępólno", "Sieradz", "Skarżysko", "Skierniewice", "Sławno", "Sochaczew",
-            "Sokołów Podl.", "Sopot", "Starachowice", "Stargard", "Staszów", "Szczecinek", "Szczytno", "Szprotawa", "Śrem", "Środa Wlkp.",
-            "Świdnik", "Świebodzin", "Świecie", "Świnoujście", "Tarnobrzeg", "Tczew", "Tomaszów", "Toruń-O.", "Trzebnica", "Turek",
-            "Wadowice", "Wałbrzych", "Wałcz", "Węgorzewo", "Wieliczka", "Wieruszów", "Wolsztyn", "Wołów", "Wyszków", "Zakopane",
-            "Zambrów", "Zawiercie", "Zduńska Wola", "Zgierz", "Zgorzelec", "Złotoryja", "Złotów", "Żagań", "Żary", "Żnin"
+        /* BAZA UNIKALNYCH POLSKICH MIAST BEZ POWTÓRZEŃ */
+        const realPolishCities = [
+            { name: "Warszawa", x: 320, y: 200 },
+            { name: "Łódź", x: 250, y: 240 },
+            { name: "Radomsko", x: 260, y: 295 },
+            { name: "Piotrków Tryb.", x: 275, y: 265 },
+            { name: "Płock", x: 265, y: 175 },
+            { name: "Kraków", x: 260, y: 370 },
+            { name: "Wrocław", x: 120, y: 280 },
+            { name: "Poznań", x: 145, y: 185 },
+            { name: "Gdańsk", x: 200, y: 75 },
+            { name: "Szczecin", x: 60, y: 110 },
+            { name: "Bydgoszcz", x: 210, y: 140 },
+            { name: "Lublin", x: 380, y: 260 },
+            { name: "Katowice", x: 215, y: 340 },
+            { name: "Białystok", x: 390, y: 125 },
+            { name: "Rzeszów", x: 360, y: 375 },
+            { name: "Częstochowa", x: 220, y: 305 },
+            { name: "Radom", x: 325, y: 250 },
+            { name: "Sosnowiec", x: 225, y: 345 },
+            { name: "Toruń", x: 225, y: 150 },
+            { name: "Kielce", x: 310, y: 300 },
+            { name: "Gliwice", x: 200, y: 340 },
+            { name: "Zabrze", x: 205, y: 335 },
+            { name: "Olsztyn", x: 285, y: 105 },
+            { name: "Bielsko-Biała", x: 210, y: 380 },
+            { name: "Bytom", x: 210, y: 330 },
+            { name: "Zielona Góra", x: 80, y: 200 },
+            { name: "Rybnik", x: 190, y: 355 },
+            { name: "Ruda Śląska", x: 212, y: 338 },
+            { name: "Tychy", x: 220, y: 355 },
+            { name: "Opole", x: 165, y: 315 },
+            { name: "Gorzów Wlkp.", x: 70, y: 155 },
+            { name: "Elbląg", x: 240, y: 80 },
+            { name: "Tarnów", x: 305, y: 370 },
+            { name: "Chorzów", x: 213, y: 336 },
+            { name: "Kalisz", x: 185, y: 225 },
+            { name: "Koszalin", x: 100, y: 80 },
+            { name: "Legnica", x: 95, y: 265 },
+            { name: "Grudziądz", x: 220, y: 120 },
+            { name: "Słupsk", x: 140, y: 65 },
+            { name: "Jaworzno", x: 230, y: 350 },
+            { name: "Jastrzębie-Zdrój", x: 195, y: 370 },
+            { name: "Nowy Sącz", x: 295, y: 395 },
+            { name: "Jelenia Góra", x: 70, y: 280 },
+            { name: "Siedlce", x: 375, y: 200 },
+            { name: "Mysłowice", x: 222, y: 346 },
+            { name: "Konin", x: 185, y: 190 },
+            { name: "Piła", x: 135, y: 135 },
+            { name: "Inowrocław", x: 210, y: 165 },
+            { name: "Lubin", x: 100, y: 250 },
+            { name: "Ostrów Wlkp.", x: 170, y: 235 },
+            { name: "Suwałki", x: 410, y: 70 },
+            { name: "Stargard", x: 75, y: 125 },
+            { name: "Gniezno", x: 165, y: 175 },
+            { name: "Ostrołęka", x: 335, y: 140 },
+            { name: "Siemianowice", x: 217, y: 337 },
+            { name: "Pabianice", x: 245, y: 250 },
+            { name: "Tomaszów Maz.", x: 285, y: 255 },
+            { name: "Stalowa Wola", x: 365, y: 320 },
+            { name: "Bełchatów", x: 250, y: 270 },
+            { name: "Biała Podlaska", x: 420, y: 180 },
+            { name: "Będzin", x: 220, y: 338 },
+            { name: "Żory", x: 195, y: 362 },
+            { name: "Tczew", x: 205, y: 90 },
+            { name: "Ełk", x: 365, y: 95 },
+            { name: "Pruszków", x: 310, y: 205 },
+            { name: "Tomaszów Lub.", x: 420, y: 310 },
+            { name: "Chełm", x: 420, y: 260 },
+            { name: "Przemyśl", x: 390, y: 390 },
+            { name: "Kędzierzyn-Koźle", x: 170, y: 335 },
+            { name: "Łomża", x: 360, y: 130 },
+            { name: "Mielec", x: 335, y: 345 },
+            { name: "Zamość", x: 410, y: 290 },
+            { name: "Leszno", x: 125, y: 220 },
+            { name: "Żyrardów", x: 295, y: 210 },
+            { name: "Świdnica", x: 105, y: 290 },
+            { name: "Zgierz", x: 250, y: 230 },
+            { name: "Turek", x: 200, y: 210 },
+            { name: "Wągrowiec", x: 145, y: 160 },
+            { name: "Wieluń", x: 205, y: 275 },
+            { name: "Wyszków", x: 340, y: 180 },
+            { name: "Zawiercie", x: 235, y: 320 },
+            { name: "Zduńska Wola", x: 225, y: 255 },
+            { name: "Żary", x: 55, y: 230 },
+            { name: "Świętochłowice", x: 211, y: 339 },
+            { name: "Wejherowo", x: 185, y: 60 },
+            { name: "Włocławek", x: 240, y: 170 },
+            { name: "Wodzisław Śl.", x: 185, y: 365 },
+            { name: "Wołomin", x: 330, y: 195 },
+            { name: "Września", x: 165, y: 195 },
+            { name: "Ząbki", x: 325, y: 198 },
+            { name: "Zgorzelec", x: 40, y: 260 },
+            { name: "Bochnia", x: 280, y: 370 },
+            { name: "Brodnica", x: 245, y: 130 },
+            { name: "Brzeg", x: 145, y: 300 },
+            { name: "Busko-Zdrój", x: 320, y: 325 },
+            { name: "Chojnice", x: 165, y: 105 },
+            { name: "Cieszyn", x: 190, y: 385 },
+            { name: "Czeladź", x: 218, y: 337 },
+            { name: "Dębica", x: 330, y: 360 },
+            { name: "Dzierżoniów", x: 110, y: 300 },
+            { name: "Giżycko", x: 350, y: 80 },
+            { name: "Głogów", x: 85, y: 235 },
+            { name: "Goleniów", x: 65, y: 95 },
+            { name: "Zakopane", x: 265, y: 420 },
+            { name: "Sanok", x: 380, y: 410 },
+            { name: "Augustów", x: 400, y: 90 }
         ];
-
-        // Rozwijamy listę programowo do dokładnie 1026 unikalnych terytoriów Polski
-        let polishCities = [];
-        for (let i = 1; i <= 1026; i++) {
-            let baseName = baseTowns[(i - 1) % baseTowns.length];
-            if (i <= baseTowns.length) {
-                polishCities.push(baseName);
-            } else {
-                polishCities.push(baseName + " " + Math.ceil(i / baseTowns.length));
-            }
-        }
 
         let scores = { green: 0, red: 0, blue: 0, yellow: 0 };
         let botInterval = null;
@@ -353,30 +474,58 @@
             document.getElementById('game-status').innerText = "";
             
             const grid = document.getElementById('cities-grid');
+            const mapGroup = document.getElementById('map-cities-group');
+            
             grid.innerHTML = '';
+            mapGroup.innerHTML = '';
 
-            // Tworzenie 1026 kafelków miast/gmin
-            polishCities.forEach((cityName, index) => {
+            // Generowanie miast na mapie SVG oraz na siatce kafelków
+            realPolishCities.forEach((city, index) => {
+                // Kafelki pod mapą
                 const tile = document.createElement('div');
                 tile.className = 'city-tile';
-                tile.innerText = cityName;
+                tile.innerText = city.name;
+                tile.id = `tile-${index}`;
+                tile.dataset.index = index;
                 tile.dataset.owner = 'neutral';
-                tile.onclick = () => playerConquer(tile);
+                tile.onclick = () => playerConquer(index);
                 grid.appendChild(tile);
+
+                // Punkty na mapie SVG
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", city.x);
+                circle.setAttribute("cy", city.y);
+                circle.setAttribute("r", "5");
+                circle.setAttribute("class", "city-node");
+                circle.id = `map-node-${index}`;
+                circle.onclick = () => playerConquer(index);
+
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", city.x);
+                text.setAttribute("y", city.y - 7);
+                text.setAttribute("class", "city-text");
+                text.textContent = city.name;
+
+                mapGroup.appendChild(circle);
+                mapGroup.appendChild(text);
             });
 
             updateScores();
 
-            // Boty atakują bezwzględnie co 1 sekundę
+            // Szybkie, agresywne boty (atakują co 0.8 sekundy)
             clearInterval(botInterval);
-            botInterval = setInterval(botsAttack, 1000);
+            botInterval = setInterval(aggressiveBotsAttack, 800);
         }
 
         function stopGame() {
             clearInterval(botInterval);
         }
 
-        function playerConquer(tile) {
+        function playerConquer(index) {
+            const tile = document.getElementById(`tile-${index}`);
+            const mapNode = document.getElementById(`map-node-${index}`);
+            if (!tile) return;
+
             const currentOwner = tile.dataset.owner;
             if (currentOwner === 'green') return; // Już Twoje
 
@@ -385,37 +534,53 @@
             if (currentOwner === 'blue') scores.blue--;
             if (currentOwner === 'yellow') scores.yellow--;
 
-            // Przejmujesz miasto
+            // Ustawiamy Zielonego Gracza
             tile.dataset.owner = 'green';
             tile.className = 'city-tile player';
+            mapNode.setAttribute("class", "city-node player-owned");
             scores.green++;
 
             updateScores();
         }
 
-        function botsAttack() {
+        function aggressiveBotsAttack() {
             const tiles = Array.from(document.querySelectorAll('.city-tile'));
-            // Boty wybierają losowo z terytoriów, które nie są zielone (Twoje) lub nawet próbują odbijać
-            const available = tiles.filter(t => t.dataset.owner !== 'green');
+            
+            // Priorytet dla botów: atakowanie miast Gracza (Zielonych), aby mu je odbierać!
+            const playerTiles = tiles.filter(t => t.dataset.owner === 'green');
+            const neutralOrOtherTiles = tiles.filter(t => t.dataset.owner !== 'green');
 
-            if (available.length === 0) return;
+            let targetTile = null;
+
+            // 60% szans, że bot zaatakuje bezpośrednio gracza (jeśli gracz ma jakieś terytorium)
+            if (playerTiles.length > 0 && Math.random() < 0.6) {
+                targetTile = playerTiles[Math.floor(Math.random() * playerTiles.length)];
+            } else if (neutralOrOtherTiles.length > 0) {
+                targetTile = neutralOrOtherTiles[Math.floor(Math.random() * neutralOrOtherTiles.length)];
+            }
+
+            if (!targetTile) return;
+
+            const index = targetTile.dataset.index;
+            const mapNode = document.getElementById(`map-node-${index}`);
+            const prevOwner = targetTile.dataset.owner;
 
             const botTypes = ['red', 'blue', 'yellow'];
             const randomBot = botTypes[Math.floor(Math.random() * botTypes.length)];
-            const targetTile = available[Math.floor(Math.random() * available.length)];
-            const prevOwner = targetTile.dataset.owner;
 
-            // Odejmujemy punkt poprzedniemu właścicielowi
+            if (prevOwner === randomBot) return;
+
+            // Odejmujemy punkty poprzednikowi
             if (prevOwner === 'green') scores.green--;
             if (prevOwner === 'red') scores.red--;
             if (prevOwner === 'blue') scores.blue--;
             if (prevOwner === 'yellow') scores.yellow--;
 
-            // Ustawiamy nowego właściciela bota
+            // Ustawiamy bota
             targetTile.dataset.owner = randomBot;
             targetTile.className = `city-tile bot-${randomBot}`;
+            mapNode.setAttribute("class", `city-node bot-${randomBot}-owned`);
 
-            // Dodajemy punkt odpowiedniemu botowi
             scores[randomBot]++;
 
             updateScores();
