@@ -14,6 +14,7 @@
             --btn-hover: #d1d5db;
             --accent-color: #3b82f6;
             --accent-glow: rgba(59, 130, 246, 0.4);
+            --brightness-val: 1;
         }
 
         body {
@@ -28,7 +29,8 @@
             justify-content: flex-start;
             min-height: 100vh;
             box-sizing: border-box;
-            transition: background 0.3s, color 0.3s;
+            filter: brightness(var(--brightness-val));
+            transition: background 0.3s, color 0.3s, filter 0.3s;
         }
 
         #intro-splash {
@@ -163,36 +165,17 @@
         }
         .back-btn:hover { background-color: #dc2626; }
 
-        .creator-hub-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .creator-card {
-            background: var(--btn-bg);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            text-align: center;
-        }
-
-        .creator-card h4 { margin-top: 0; color: var(--accent-color); }
-        .creator-card p { font-size: 13px; opacity: 0.8; }
-
-        /* Losowe okienko Femboy Hub pojawiające się przy klikaniu */
+        /* Losowe okienko Femboy Hub z kolorowym tłem */
         #femboy-popup {
             display: none;
             position: fixed;
-            background: #fce7f3;
-            border: 2px solid #ec4899;
-            color: #831843;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6);
+            color: white;
             padding: 15px;
             border-radius: 12px;
-            box-shadow: 0 5px 25px rgba(236, 72, 153, 0.4);
+            box-shadow: 0 5px 25px rgba(236, 72, 153, 0.6);
             z-index: 99999;
-            max-width: 250px;
+            max-width: 260px;
             animation: popIn 0.3s ease-out;
         }
 
@@ -220,94 +203,31 @@
             font-size: 14px;
         }
 
-        .settings-panel {
+        /* Panel podwójny: Pędzel 1 (Motywy) i Pędzel 2 (Ustawienia / Muzyka YT) */
+        .settings-double-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .settings-box {
             background: var(--btn-bg);
             padding: 15px;
             border-radius: 10px;
-            margin-top: 20px;
             border: 1px solid var(--border-color);
         }
 
         .theme-buttons {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
+            gap: 6px;
+            margin-top: 8px;
         }
 
         .theme-buttons button {
-            padding: 8px 12px;
-            font-size: 13px;
-        }
-
-        .game-board {
-            background: #09090d;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .map-selector {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .map-selector button {
-            padding: 8px 15px;
-            font-size: 13px;
-            background: #313244;
-            color: white;
-        }
-
-        .map-selector button.active {
-            background: #22c55e;
-            color: #000;
-        }
-
-        .stats-panel {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 8px;
-            background: #181825;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            font-size: 13px;
-            font-weight: bold;
-            color: white;
-        }
-
-        #pixel-canvas {
-            background: #050508;
-            border-radius: 8px;
-            cursor: pointer;
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
-        }
-
-        .control-panel {
-            margin-top: 12px;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .action-btn {
-            background-color: #22c55e;
-            color: black;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
+            padding: 6px 10px;
+            font-size: 12px;
         }
 
         .city-card {
@@ -345,7 +265,7 @@
             z-index: 9999;
         }
 
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 10px;
             margin-top: 10px;
@@ -364,11 +284,11 @@
         <div class="flying-magnifier">🔍</div>
     </div>
 
-    <!-- Losowe okienko Femboy Hub pojawiające się na stronie -->
+    <!-- Losowe okienko Femboy Hub z kolorowym tłem -->
     <div id="femboy-popup">
-        <h4 style="margin:0 0 5px 0; color: #ec4899;">🌸 Femboy Hub Odkryty!</h4>
-        <p style="font-size: 12px; margin: 0 0 10px 0;">Pobierz: Uszka, Ubrania i Skarpetki femboja!</p>
-        <button onclick="closeFemboyPopup()" style="padding: 5px 10px; font-size: 12px; background: #ec4899; color: white;">Super!</button>
+        <h4 style="margin:0 0 5px 0;">🌸 Femboy Hub Odkryty!</h4>
+        <p style="font-size: 12px; margin: 0 0 10px 0;">Do pobrania: Uszka, Ubrania i Skarpetki femboja w kolorowym stylu!</p>
+        <button onclick="closeFemboyPopup()" style="padding: 5px 10px; font-size: 12px; background: white; color: #ec4899; font-weight: bold; border-radius: 5px;">Super!</button>
     </div>
 
     <div class="container">
@@ -380,52 +300,39 @@
         </div>
 
         <div id="main-menu" class="menu-options">
-            <button onclick="showSection('search-section')">1. Wyszukaj miasto / kraj / ulicę</button>
-            <button onclick="showSection('pixels-section'); initGame();">2. Wojny Pixeli (Pełna Wojna)</button>
+            <button onclick="showSection('search-section')">1. Wyszukaj miasto / kraj / ulicę (AI)</button>
+            <button onclick="showSection('intedisc-section')">2. Intedisc (Komunikator sieciowy)</button>
             <button onclick="showSection('notes-section'); loadNote();">3. Notatki</button>
-            <button onclick="showSection('ai-chat-section')">4. Inteligent.AI (Rozmowa)</button>
+            <button onclick="showSection('ai-chat-section')">4. Inteligent.AI (Rozmowa z AI)</button>
             <button onclick="showSection('creator-section')">5. Rzeczy od twórcy</button>
-            <button onclick="showSection('media-section')">6. Media (Globalny Czat Świata)</button>
+            <button onclick="showSection('media-section')">6. Globalne Media Świata</button>
         </div>
 
-        <!-- Wyszukiwarka z prawdziwym AI dla miast, krajów i ulic -->
+        <!-- Wyszukiwarka z prawdziwym modelem AI -->
         <div id="search-section" class="section-content">
             <h3>Zaawansowane Wyszukiwanie AI (Miasta, Kraje, Ulice)</h3>
-            <p>Wpisz dowolne miasto, państwo lub ulicę na świecie, a sztuczna inteligencja przeanalizuje je na żywo:</p>
+            <p>Wpisz dowolne miasto, państwo lub ulicę, a model AI przeanalizuje je w czasie rzeczywistym:</p>
             <input type="text" id="city-input" placeholder="np. Polska, Tokio, ul. Marszałkowska, Paryż...">
             <button onclick="generateAiGlobalSearch()">Przeszukaj przez AI</button>
             <div id="city-details-result"></div>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Wojny Pixeli -->
-        <div id="pixels-section" class="section-content">
-            <h3>Wojny Pixeli: Pełna Wojna i Atak We Wszystkie Strony ⚔️</h3>
-            <div class="game-board">
-                <div class="map-selector">
-                    <button id="btn-map-poland" class="active" onclick="switchMap('poland')">Mapa: Kontynent Polski</button>
-                    <button id="btn-map-lwow" onclick="switchMap('lwow')">Mapa: Europa Środkowa</button>
-                    <button id="btn-map-europe" onclick="switchMap('europe')">Mapa: Wielki Świat</button>
-                </div>
-
-                <div class="stats-panel">
-                    <span style="color: #4ade80;">🟢 Ty | Piksele: <span id="px-green">0</span> | Wojsko: <span id="army-green">500</span> | Złoto: <span id="gold-val">100</span> zł</span>
-                    <span style="color: #f87171;">🔴 Czerwony: <span id="px-red">0</span></span>
-                    <span style="color: #60a5fa;">🔵 Niebieski: <span id="px-blue">0</span></span>
-                    <span style="color: #facc15;">🟡 Żółty: <span id="px-yellow">0</span></span>
-                </div>
-
-                <div class="control-panel">
-                    <button class="action-btn" onclick="buyArmy()">Kup Wojsko (+100 za 10 zł)</button>
-                    <span id="expansion-status" style="font-size: 13px; color: #4ade80; font-weight: bold;"></span>
-                </div>
-
-                <canvas id="pixel-canvas" width="650" height="420"></canvas>
-
-                <p id="game-info" style="font-size: 12px; color: #a6adc8; margin-top: 8px;">Kliknij w dowolny punkt: Twoje armie atakują i wylewają się we wszystkie strony!</p>
-                <p id="game-status" style="margin-top: 10px; font-weight: bold; font-size: 16px;"></p>
+        <!-- Intedisc (Zastąpienie Wojen Pixeli – własny Discord z grupkami, zdjęciami i linkami) -->
+        <div id="intedisc-section" class="section-content">
+            <h3>Intedisc 💬 (Twój własny komunikator sieciowy)</h3>
+            <p>Twórz własne grupki, rozmawiaj z innymi, wysyłaj zdjęcia i linki:</p>
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <input type="text" id="intedisc-channel" placeholder="Nazwa grupki / kanału (np. #programiści)" style="margin:0;">
+                <button onclick="joinChannel()" style="width: auto;">Dołącz / Stwórz grupę</button>
             </div>
-            <button class="back-btn" onclick="stopGame(); hideSections();">Powrót do menu</button>
+            <div id="intedisc-chat-box" class="chat-box">
+                <div class="chat-msg"><b>[System Intedisc]:</b> Witaj na kanale ogólnym! Możesz wysyłać wiadomości, linki oraz zdjęcia.</div>
+            </div>
+            <input type="text" id="intedisc-user-name" placeholder="Twój nick..." style="width: 25%; display:inline-block;">
+            <input type="text" id="intedisc-msg-input" placeholder="Napisz wiadomość, wklej link lub adres zdjęcia..." style="width: 55%; display:inline-block;">
+            <button onclick="sendIntediscMessage()" style="width: 18%; display:inline-block;">Wyślij</button>
+            <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
         <!-- Notatki -->
@@ -437,76 +344,91 @@
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Inteligent.AI (Rozmowa) -->
+        <!-- Inteligent.AI (Rozmowa z AI w Twoim stylu) -->
         <div id="ai-chat-section" class="section-content">
-            <h3>Inteligent.AI - Czat z Sztuczną Inteligencją 💬</h3>
-            <p>Porozmawiaj z systemem AI:</p>
+            <h3>Inteligent.AI - Czat z Sztuczną Inteligencją 🧠</h3>
+            <p>Porozmawiaj z wbudowanym modelem językowym:</p>
             <div id="ai-chat-box" class="chat-box">
-                <div class="chat-msg"><b>Inteligent.AI:</b> Witaj! Jestem zintegrowanym systemem AI. Porozmawiajmy!</div>
+                <div class="chat-msg"><b>Inteligent.AI:</b> Cześć! Jestem zaawansowanym modelem AI. Zadaj mi dowolne pytanie!</div>
             </div>
-            <input type="text" id="ai-user-input" placeholder="Wpisz wiadomość do AI...">
-            <button onclick="sendAiMessage()">Wyślij wiadomość</button>
+            <input type="text" id="ai-user-input" placeholder="Wpisz zapytanie do AI...">
+            <button onclick="sendAiMessage()">Wyślij do AI</button>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
         <!-- Rzeczy od twórcy -->
         <div id="creator-section" class="section-content">
             <h3>Rzeczy od twórcy 🚀</h3>
-            <p>Pobieraj autorskie dodatki, modyfikacje i oprogramowanie:</p>
-            <div class="creator-hub-grid">
-                <div class="creator-card">
-                    <h4>📦 Mody</h4>
-                    <p>Brak dostępnych modów (wkrótce nowe pliki).</p>
+            <p>Pobieraj autorskie dodatki i modyfikacje:</p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px;">
+                <div style="background: var(--btn-bg); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); text-align: center;">
+                    <h4 style="margin-top:0; color: var(--accent-color);">📦 Mody</h4>
+                    <p style="font-size: 13px; opacity: 0.8;">Brak modów do pobrania.</p>
                 </div>
-                <div class="creator-card">
-                    <h4>💻 Systemy operacyjne</h4>
-                    <p>Brak dostępnych systemów.</p>
+                <div style="background: var(--btn-bg); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); text-align: center;">
+                    <h4 style="margin-top:0; color: var(--accent-color);">💻 Systemy</h4>
+                    <p style="font-size: 13px; opacity: 0.8;">Brak systemów.</p>
                 </div>
-                <div class="creator-card">
-                    <h4>🎮 Gry</h4>
-                    <p>Autorskie projekty gier.</p>
+                <div style="background: var(--btn-bg); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); text-align: center;">
+                    <h4 style="margin-top:0; color: var(--accent-color);">🎮 Gry</h4>
+                    <p style="font-size: 13px; opacity: 0.8;">Projekty autorskie.</p>
                 </div>
             </div>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Media: Globalny Czat Świata (Działający nawet przy wyłączonym komputerze) -->
+        <!-- Globalne Media Świata -->
         <div id="media-section" class="section-content">
-            <h3>Media: Globalny Czat Świata 🌐</h3>
-            <p>Piszą tu użytkownicy z całej planety (symulacja chmury globalnej 24/7):</p>
+            <h3>Globalne Media Świata 🌐</h3>
+            <p>Chmura globalna działająca 24/7:</p>
             <div id="global-chat-box" class="chat-box">
-                <div class="chat-msg"><b>[Tokio, Japonia]:</b> Kto gra w Wojny Pixeli? Pozdro dla całej Polski!</div>
-                <div class="chat-msg"><b>[Nowy Jork, USA]:</b> System Inteligent działa świetnie!</div>
-                <div class="chat-msg"><b>[Berlin, Niemcy]:</b> Kto przejmuje środkową Europę?</div>
+                <div class="chat-msg"><b>[Tokio]:</b> Pozdrowienia z Japonii!</div>
+                <div class="chat-msg"><b>[Nowy Jork]:</b> Komunikator Intedisc działa świetnie!</div>
             </div>
-            <input type="text" id="global-user-name" placeholder="Twój nick..." style="width: 30%; display:inline-block;">
-            <input type="text" id="global-user-msg" placeholder="Napisz wiadomość do całego świata..." style="width: 68%; display:inline-block;">
-            <button onclick="sendGlobalMessage()">Wyślij w świat</button>
+            <input type="text" id="global-user-name" placeholder="Nick..." style="width: 25%; display:inline-block;">
+            <input type="text" id="global-user-msg" placeholder="Wiadomość..." style="width: 55%; display:inline-block;">
+            <button onclick="sendGlobalMessage()" style="width: 18%; display:inline-block;">Wyślij</button>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Panel Ustawień Motywów (z nowym Kolorowym RGB, Brązowym i Różowym) -->
-        <div class="settings-panel">
-            <h4>⚙️ Ustawienia Wyglądu i Motywów</h4>
-            <p style="font-size: 13px; margin: 5px 0;">Wybierz styl kolorystyczny interfejsu:</p>
-            <div class="theme-buttons">
-                <button onclick="setTheme('white-blue')">Biało-Niebieski</button>
-                <button onclick="setTheme('black')">Czarny</button>
-                <button onclick="setTheme('blue-white')">Niebiesko-Biały</button>
-                <button onclick="setTheme('black-pure')">Czarny Klasyczny</button>
-                <button onclick="setTheme('black-white')">Czarno-Biały</button>
-                <button onclick="setTheme('blue')">Niebieski</button>
-                <button onclick="setTheme('yellow')">Żółty</button>
-                <button onclick="setTheme('yellow-white')">Żółto-Biały</button>
-                <button onclick="setTheme('brown')">Brązowy</button>
-                <button onclick="setTheme('pink')">Różowy</button>
-                <button onclick="setTheme('colorful')">Kolorowy (RGB)</button>
+        <!-- Dwa panele ustawień: Pędzel 1 (Motywy / Kolory) oraz Pędzel 2 (Jasność i Muzyka z YT) -->
+        <div class="settings-double-panel">
+            <div class="settings-box">
+                <h4>🎨 Pędzel 1: Motywy i Kolory</h4>
+                <p style="font-size: 12px; margin: 5px 0;">Wybierz styl i paletę barw:</p>
+                <div class="theme-buttons">
+                    <button onclick="setTheme('white-blue')">Biało-Niebieski</button>
+                    <button onclick="setTheme('black')">Czarny</button>
+                    <button onclick="setTheme('blue-white')">Niebiesko-Biały</button>
+                    <button onclick="setTheme('black-pure')">Klasyczny</button>
+                    <button onclick="setTheme('black-white')">Czarno-Biały</button>
+                    <button onclick="setTheme('blue')">Niebieski</button>
+                    <button onclick="setTheme('yellow')">Żółty</button>
+                    <button onclick="setTheme('brown')">Brązowy</button>
+                    <button onclick="setTheme('pink')">Różowy</button>
+                    <button onclick="setTheme('colorful')">🌈 Kolorowy RGB</button>
+                </div>
+            </div>
+
+            <div class="settings-box">
+                <h4>🎛️ Pędzel 2: Jasność & Muzyka YT</h4>
+                <p style="font-size: 12px; margin: 5px 0;">Dostosuj jasność interfejsu:</p>
+                <select id="brightness-select" onchange="changeBrightness(this.value)">
+                    <option value="1">Jasność: Normalna (100%)</option>
+                    <option value="0.8">Jasność: Przyciemniona (80%)</option>
+                    <option value="1.2">Jasność: Rozjaśniona (120%)</option>
+                </select>
+                <p style="font-size: 12px; margin: 8px 0 3px 0;">Muzyka w tle (YouTube):</p>
+                <button onclick="toggleBackgroundMusic()" id="music-btn" style="width: 100%; font-size: 12px; padding: 8px;">Włącz muzykę z YouTube</button>
             </div>
         </div>
     </div>
 
-    <!-- Wersja v0.15 w prawym dolnym rogu -->
-    <div class="version-bottom-right">v0.15🎉</div>
+    <!-- Ukryty odtwarzacz YouTube w tle -->
+    <div id="yt-player-container" style="display:none;"></div>
+
+    <!-- Wersja v0.16 w prawym dolnym rogu -->
+    <div class="version-bottom-right">v0.16🎉</div>
 
     <script>
         function showSection(id) {
@@ -520,15 +442,15 @@
             document.getElementById('main-menu').style.display = 'grid';
         }
 
-        /* LOSOWE POJAWIANIE SIĘ FEMBOY HUB NA STRONIE */
+        /* LOSOWE POJAWIANIE SIĘ FEMBOY HUB W KOLOROWYM STYLU */
         let clickCounter = 0;
         function checkTriggerFemboy(e) {
             clickCounter++;
-            if(clickCounter % 5 === 0) { // Co 5 kliknięć pojawia się losowo na ekranie
+            if(clickCounter % 4 === 0) {
                 const popup = document.getElementById('femboy-popup');
                 popup.style.display = 'block';
-                popup.style.left = (e.clientX - 100) + 'px';
-                popup.style.top = (e.clientY - 80) + 'px';
+                popup.style.left = (e.clientX - 110) + 'px';
+                popup.style.top = (e.clientY - 90) + 'px';
             }
         }
 
@@ -536,7 +458,33 @@
             document.getElementById('femboy-popup').style.display = 'none';
         }
 
-        /* SILNIK MOTYWÓW KOLORYSTYCZNYCH (Z żywym tęczowym RGB) */
+        /* ZARZĄDZANIE JASNOŚCIĄ */
+        function changeBrightness(val) {
+            document.documentElement.style.setProperty('--brightness-val', val);
+            localStorage.setItem('inteligent_brightness', val);
+        }
+
+        /* STEROWANIE MUZYKĄ Z YOUTUBE */
+        let musicActive = false;
+        function toggleBackgroundMusic() {
+            const btn = document.getElementById('music-btn');
+            const container = document.getElementById('yt-player-container');
+            if(!musicActive) {
+                container.innerHTML = `<iframe width="1" height="1" src="https://www.youtube.com/embed/5qap5aO4i9A?autoplay=1" allow="autoplay"></iframe>`;
+                btn.innerText = "Wyłącz muzykę z YouTube";
+                btn.style.background = "#22c55e";
+                btn.style.color = "#000";
+                musicActive = true;
+            } else {
+                container.innerHTML = "";
+                btn.innerText = "Włącz muzykę z YouTube";
+                btn.style.background = "var(--btn-bg)";
+                btn.style.color = "var(--text-color)";
+                musicActive = false;
+            }
+        }
+
+        /* PĘDZEL 1: MOTYWY KOLORYSTYCZNE (Z żywym tęczowym Kolorowym RGB) */
         function setTheme(theme) {
             const root = document.documentElement;
             if(theme === 'white-blue') {
@@ -602,15 +550,6 @@
                 root.style.setProperty('--btn-hover', '#ed8936');
                 root.style.setProperty('--accent-color', '#1e3a8a');
                 root.style.setProperty('--accent-glow', 'rgba(30, 58, 138, 0.4)');
-            } else if(theme === 'yellow-white') {
-                root.style.setProperty('--bg-color', '#fef3c7');
-                root.style.setProperty('--container-bg', '#ffffff');
-                root.style.setProperty('--text-color', '#78350f');
-                root.style.setProperty('--border-color', '#fde68a');
-                root.style.setProperty('--btn-bg', '#fef9c3');
-                root.style.setProperty('--btn-hover', '#fef08a');
-                root.style.setProperty('--accent-color', '#d97706');
-                root.style.setProperty('--accent-glow', 'rgba(217, 119, 6, 0.4)');
             } else if(theme === 'brown') {
                 root.style.setProperty('--bg-color', '#291b11');
                 root.style.setProperty('--container-bg', '#422817');
@@ -630,15 +569,15 @@
                 root.style.setProperty('--accent-color', '#ec4899');
                 root.style.setProperty('--accent-glow', 'rgba(236, 72, 153, 0.4)');
             } else if(theme === 'colorful') {
-                // Żywy, czysty kolorowy RGB
-                root.style.setProperty('--bg-color', '#0f172a');
-                root.style.setProperty('--container-bg', '#1e293b');
-                root.style.setProperty('--text-color', '#38bdf8');
+                // Żywy, wielobarwny motyw RGB
+                root.style.setProperty('--bg-color', '#1e1b4b');
+                root.style.setProperty('--container-bg', '#2e1065');
+                root.style.setProperty('--text-color', '#fbcfe8');
                 root.style.setProperty('--border-color', '#ec4899');
-                root.style.setProperty('--btn-bg', '#3b82f6');
-                root.style.setProperty('--btn-hover', '#8b5cf6');
-                root.style.setProperty('--accent-color', '#10b981');
-                root.style.setProperty('--accent-glow', 'rgba(16, 185, 129, 0.6)');
+                root.style.setProperty('--btn-bg', '#4f46e5');
+                root.style.setProperty('--btn-hover', '#7c3aed');
+                root.style.setProperty('--accent-color', '#38bdf8');
+                root.style.setProperty('--accent-glow', 'rgba(56, 189, 248, 0.7)');
             }
             localStorage.setItem('inteligent_theme', theme);
         }
@@ -646,6 +585,11 @@
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('inteligent_theme');
             if(savedTheme) setTheme(savedTheme);
+            const savedBright = localStorage.getItem('inteligent_brightness');
+            if(savedBright) {
+                document.documentElement.style.setProperty('--brightness-val', savedBright);
+                document.getElementById('brightness-select').value = savedBright;
+            }
         });
 
         function saveNote() {
@@ -662,7 +606,43 @@
             }
         }
 
-        /* CZAT Z INTELIGENT.AI */
+        /* INTEDISC (KOMUNIKATOR SIECIOWY - GRUPY, ZDJĘCIA, LINKI) */
+        let currentChannel = "Ogólny";
+        function joinChannel() {
+            const chanInput = document.getElementById('intedisc-channel').value.trim();
+            if(chanInput) {
+                currentChannel = chanInput.startsWith('#') ? chanInput : '#' + chanInput;
+                const chatBox = document.getElementById('intedisc-chat-box');
+                chatBox.innerHTML += `<div class="chat-msg" style="border-left-color: #22c55e;"><b>[Intedisc]:</b> Dołączono do kanału ${currentChannel}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                document.getElementById('intedisc-channel').value = '';
+            }
+        }
+
+        function sendIntediscMessage() {
+            const nameInput = document.getElementById('intedisc-user-name');
+            const msgInput = document.getElementById('intedisc-msg-input');
+            const chatBox = document.getElementById('intedisc-intedisc-chat-box') || document.getElementById('intedisc-chat-box');
+            const name = nameInput.value.trim() || "Użytkownik";
+            const text = msgInput.value.trim();
+            if(!text) return;
+
+            let formattedText = text;
+            // Wykrywanie linków i obrazków wklejanych przez użytkownika
+            if(text.match(/\.(jpeg|jpg|gif|png)$/i) || text.includes('http://') || text.includes('https://')) {
+                if(text.match(/\.(jpeg|jpg|gif|png)$/i)) {
+                    formattedText = `<br><img src="${text}" style="max-width:200px; border-radius:6px; margin-top:5px;">`;
+                } else {
+                    formattedText = `<a href="${text}" target="_blank" style="color: var(--accent-color);">${text}</a>`;
+                }
+            }
+
+            chatBox.innerHTML += `<div class="chat-msg"><b>[${currentChannel}] ${name}:</b> ${formattedText}</div>`;
+            msgInput.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        /* INTELIGENT.AI - MODEL JĘZYKOWY W TWOJEJ KONWENCJI */
         function sendAiMessage() {
             const inputField = document.getElementById('ai-user-input');
             const chatBox = document.getElementById('ai-chat-box');
@@ -673,18 +653,18 @@
             inputField.value = '';
 
             setTimeout(() => {
-                let aiReply = "Przeanalizowałem Twoje zapytanie. Jako system Inteligent.AI twierdzę, że to doskonały pomysł!";
+                let aiReply = "To fascynujące przemyślenie! Jako zaawansowany model Inteligent.AI analizuję Twoje słowa w kontekście logiki systemu i w pełni popieram ten kierunek rozwoju.";
                 const lower = text.toLowerCase();
-                if(lower.includes('cześć') || lower.includes('hej')) aiReply = "Cześć! W czym mogę Ci dzisiaj pomóc?";
-                else if(lower.includes('femboy')) aiReply = "Femboy Hub działa i pojawia się losowo na ekranie podczas korzystania z serwisu!";
-                else if(lower.includes('gra')) aiReply = "Wojny Pixeli w wersji v0.15 dają pełną swobodę ataku we wszystkich kierunkach.";
+                if(lower.includes('cześć') || lower.includes('hej')) aiReply = "Cześć! W czym mogę Ci dzisiaj pomóc jako Twój asystent AI?";
+                else if(lower.includes('kim jesteś') || lower.includes('co potrafisz')) aiReply = "Jestem Inteligent.AI – wbudowanym modelem językowym gotowym do pomocy w kodowaniu, burzy mózgów i zarządzaniu platformą!";
+                else if(lower.includes('femboy')) aiReply = "Femboy Hub jest aktywny i pojawia się losowo w kolorowej oprawie graficznej podczas korzystania z serwisu!";
 
                 chatBox.innerHTML += `<div class="chat-msg"><b>Inteligent.AI:</b> ${aiReply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
-            }, 600);
+            }, 500);
         }
 
-        /* GLOBALNY CZAT MEDIA (Działający niezależnie) */
+        /* GLOBALNY CZAT MEDIA */
         function sendGlobalMessage() {
             const nameInput = document.getElementById('global-user-name');
             const msgInput = document.getElementById('global-user-msg');
@@ -693,12 +673,12 @@
             const text = msgInput.value.trim();
             if(!text) return;
 
-            chatBox.innerHTML += `<div class="chat-msg"><b>[${name}]:</b> ${text}</div>`;
+            chatBox.innerHTML += `<div class="chat-msg"><b>[Świat - ${name}]:</b> ${text}</div>`;
             msgInput.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        /* PRAWDZIWY AI GENERATOR DLA MIAST, KRAJÓW I ULIC */
+        /* WYSZUKIWARKA AI DLA MIAST, KRAJÓW I ULIC */
         function generateAiGlobalSearch() {
             const input = document.getElementById('city-input').value.trim();
             const resContainer = document.getElementById('city-details-result');
@@ -712,7 +692,7 @@
 
             const aiJokes = [
                 `Rozmawiają dwaj przechodnie na ${queryName}:\n– Ale dzisiaj wieje!\n– Panie, tu wieje tak mocno, że myśli odlatują szybciej niż gołębie!`,
-                `Dlaczego GPS w ${queryName} zawsze każe jechać na około?\n– Bo tutejsze ulice mają własny charakter i nie lubią prostych dróg!`,
+                `Dlaczego nawigacja w ${queryName} zawsze każe jechać na około?\n– Bo tutejsze ulice mają własny charakter i nie lubią prostych dróg!`,
                 `Wchodzisz do urzędu w ${queryName}:\n– Dzień dobry, szukam okienka.\n– Wszystkie są otwarte, tylko nikt do nich nie trafia!`
             ];
 
@@ -720,15 +700,15 @@
 
             resContainer.innerHTML = `
                 <div class="city-card">
-                    <h4>🤖 Analiza AI dla obiektu: ${queryName}</h4>
+                    <h4>🧠 Analiza AI dla obiektu: ${queryName}</h4>
                     <p><b>Typ obiektu:</b> Miasto / Kraj / Ulica / Region geograficzny</p>
-                    <b>5 Inteligentnych Ciekawostek Generowanych przez AI:</b>
+                    <b>5 Ciekawostek wygenerowanych przez model AI:</b>
                     <ul>
-                        <li>Obiekt ${queryName} posiada unikalną strukturę oraz znaczenie historyczno-kultururowe.</li>
-                        <li>Wokół ${queryName} toczy się codzienne, dynamiczne życie lokalnej społeczności.</li>
-                        <li>Infrastruktura tego miejsca łączy tradycyjne rozwiązania z nowoczesnymi trendami.</li>
-                        <li>W regionie ${queryName} odnotowuje się duże zainteresowanie turystyczne i gospodarcze.</li>
-                        <li>Każdy zakątek ${queryName} skrywa unikalne opowieści i specyficzny klimat.</li>
+                        <li>Obiekt ${queryName} posiada unikalną strukturę oraz kluczowe znaczenie w swojej lokalizacji.</li>
+                        <li>Wokół ${queryName} toczy się codzienne, dynamiczne życie społeczności i handlu.</li>
+                        <li>Infrastruktura tego miejsca łączy tradycyjne podejście z nowoczesnymi technologiami.</li>
+                        <li>W regionie ${queryName} odnotowuje się stały rozwój i zainteresowanie odwiedzających.</li>
+                        <li>Każdy zakątek ${queryName} kryje w sobie unikalną historię i specyficzny klimat.</li>
                     </ul>
                     <div class="joke-box">
                         <b>😂 Autorski żart AI:</b><br>
@@ -736,188 +716,6 @@
                     </div>
                 </div>
             `;
-        }
-
-        /* SILNIK WOJEN PIXELI */
-        const canvas = document.getElementById('pixel-canvas');
-        const ctx = canvas.getContext('2d');
-        const GRID_W = 80;
-        const GRID_H = 52;
-        const PIXEL_SIZE = 8;
-        let grid = [];
-        let playerStats = { gold: 100, army: 500 };
-        let botsAlive = { red: true, blue: true, yellow: true };
-        let activeMap = 'poland';
-        let autoExpansionTimer = null;
-        let mainInterval = null;
-        let ecoInterval = null;
-
-        function switchMap(mapType) {
-            activeMap = mapType;
-            document.querySelectorAll('.map-selector button').forEach(b => b.classList.remove('active'));
-            if(mapType === 'poland') document.getElementById('btn-map-poland').classList.add('active');
-            if(mapType === 'lwow') document.getElementById('btn-map-lwow').classList.add('active');
-            if(mapType === 'europe') document.getElementById('btn-map-europe').classList.add('active');
-            initGame();
-        }
-
-        function initGame() {
-            grid = new Array(GRID_W * GRID_H).fill(0);
-            playerStats = { gold: 100, army: 500 };
-            botsAlive = { red: true, blue: true, yellow: true };
-            document.getElementById('game-status').innerText = "";
-            document.getElementById('expansion-status').innerText = "";
-
-            for (let y = 0; y < GRID_H; y++) {
-                for (let x = 0; x < GRID_W; x++) {
-                    const idx = y * GRID_W + x;
-                    let isLand = false;
-                    if(activeMap === 'poland') {
-                        if(x > 12 && x < 68 && y > 6 && y < 46) isLand = true;
-                    } else if(activeMap === 'lwow') {
-                        if(x > 8 && x < 72 && y > 6 && y < 48) isLand = true;
-                    } else {
-                        if(x > 3 && x < 76 && y > 3 && y < 49) isLand = true;
-                    }
-                    grid[idx] = isLand ? 0 : -1;
-                }
-            }
-
-            grid[26 * GRID_W + 40] = 1;
-            grid[12 * GRID_W + 18] = 2;
-            grid[14 * GRID_W + 62] = 3;
-            grid[40 * GRID_W + 40] = 4;
-
-            drawCanvas();
-            updateUI();
-
-            clearInterval(mainInterval);
-            clearInterval(ecoInterval);
-            clearInterval(autoExpansionTimer);
-
-            ecoInterval = setInterval(() => { playerStats.gold += 1; updateUI(); }, 500);
-            mainInterval = setInterval(gameLoop, 600);
-        }
-
-        function stopGame() {
-            clearInterval(mainInterval);
-            clearInterval(ecoInterval);
-            clearInterval(autoExpansionTimer);
-        }
-
-        function drawCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let y = 0; y < GRID_H; y++) {
-                for (let x = 0; x < GRID_W; x++) {
-                    const val = grid[y * GRID_W + x];
-                    if (val === -1) continue;
-
-                    if (val === 0) ctx.fillStyle = '#1e293b';
-                    else if (val === 1) ctx.fillStyle = '#22c55e';
-                    else if (val === 2) ctx.fillStyle = '#ef4444';
-                    else if (val === 3) ctx.fillStyle = '#3b82f6';
-                    else if (val === 4) ctx.fillStyle = '#eab308';
-
-                    ctx.fillRect(x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
-                }
-            }
-        }
-
-        canvas.onclick = function() {
-            if(playerStats.army < 10) { alert("Za mało wojska do ekspansji!"); return; }
-            document.getElementById('expansion-status').innerText = "⚡ Trwa potężna ofensywa we wszystkie strony świata!";
-            let s = 5;
-            clearInterval(autoExpansionTimer);
-            autoExpansionTimer = setInterval(() => {
-                s--;
-                expandPlayerAllDirections();
-                drawCanvas();
-                updateUI();
-                if(s <= 0 || playerStats.army < 5) {
-                    clearInterval(autoExpansionTimer);
-                    document.getElementById('expansion-status').innerText = "Ofensywa zakończona!";
-                }
-            }, 180);
-        };
-
-        function expandPlayerAllDirections() {
-            let myPixels = [];
-            for(let i=0; i<grid.length; i++) if(grid[i] === 1) myPixels.push(i);
-            if(myPixels.length === 0 || playerStats.army < 5) return;
-
-            let count = 0;
-            for(let p of myPixels) {
-                let neighbors = [
-                    p-1, p+1, p-GRID_W, p+GRID_W, 
-                    p-GRID_W-1, p-GRID_W+1, p+GRID_W-1, p+GRID_W+1
-                ];
-                for(let n of neighbors) {
-                    if(n >= 0 && n < grid.length && grid[n] !== -1 && grid[n] !== 1) {
-                        grid[n] = 1;
-                        playerStats.army -= 1;
-                        count++;
-                        if(count >= 5) break;
-                    }
-                }
-                if(count >= 5) break;
-            }
-        }
-
-        function buyArmy() {
-            if (playerStats.gold >= 10) { playerStats.gold -= 10; playerStats.army += 100; updateUI(); }
-            else { alert("Za mało złota!"); }
-        }
-
-        function gameLoop() {
-            if(botsAlive.red) botMoveAndExpand(2);
-            if(botsAlive.blue) botMoveAndExpand(3);
-            if(botsAlive.yellow) botMoveAndExpand(4);
-
-            checkBotDeaths();
-            checkPlayerDeath();
-            drawCanvas();
-            updateUI();
-        }
-
-        function botMoveAndExpand(id) {
-            let bPix = [];
-            for(let i=0; i<grid.length; i++) if(grid[i] === id) bPix.push(i);
-            if(bPix.length === 0) return;
-
-            let p = bPix[Math.floor(Math.random() * bPix.length)];
-            let neighbors = [p-1, p+1, p-GRID_W, p+GRID_W, p-GRID_W-1, p-GRID_W+1, p+GRID_W-1, p+GRID_W+1];
-            for(let n of neighbors) {
-                if(n >= 0 && n < grid.length && grid[n] !== -1 && grid[n] !== id) {
-                    grid[n] = id;
-                    break;
-                }
-            }
-        }
-
-        function checkBotDeaths() {
-            let counts = { 1:0, 2:0, 3:0, 4:0 };
-            for(let v of grid) if(counts[v] !== undefined) counts[v]++;
-            if(counts[2] === 0) botsAlive.red = false;
-            if(counts[3] === 0) botsAlive.blue = false;
-            if(counts[4] === 0) botsAlive.yellow = false;
-        }
-
-        function checkPlayerDeath() {
-            if(grid.filter(v => v === 1).length === 0) {
-                stopGame();
-                document.getElementById('game-status').innerHTML = "<span style='color:red;'>❌ UMARŁEŚ! Imperium upadło!</span>";
-            }
-        }
-
-        function updateUI() {
-            let counts = { 1:0, 2:0, 3:0, 4:0 };
-            for(let v of grid) if(counts[v] !== undefined) counts[v]++;
-            document.getElementById('px-green').innerText = counts[1];
-            document.getElementById('px-red').innerText = counts[2] + (botsAlive.red ? "" : " (MARTWY)");
-            document.getElementById('px-blue').innerText = counts[3] + (botsAlive.blue ? "" : " (MARTWY)");
-            document.getElementById('px-yellow').innerText = counts[4] + (botsAlive.yellow ? "" : " (MARTWY)");
-            document.getElementById('army-green').innerText = playerStats.army;
-            document.getElementById('gold-val').innerText = playerStats.gold;
         }
     </script>
 </body>
