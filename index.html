@@ -30,7 +30,21 @@
             min-height: 100vh;
             box-sizing: border-box;
             filter: brightness(var(--brightness-val));
-            transition: background 0.3s, color 0.3s, filter 0.3s;
+            transition: background 0.5s ease, color 0.5s ease, filter 0.3s;
+        }
+
+        /* ANIMACJA ROZBŁYŚNIĘCIA I ROZWIJANIA EKRANU (Dla Notatek) */
+        #screen-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 999999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease-in-out;
         }
 
         #intro-splash {
@@ -71,12 +85,17 @@
             width: 100%;
             position: relative;
             border: 1px solid var(--border-color);
-            animation: expandContainer 0.5s ease-out;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes expandContainer {
-            from { transform: scale(0.92); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+        /* TRYB PEŁNOEKRANOWY DLA NOTATEK */
+        .container.fullscreen-mode {
+            max-width: 100vw !important;
+            height: 95vh;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+            padding: 40px;
         }
 
         .logo-area {
@@ -165,25 +184,6 @@
         }
         .back-btn:hover { background-color: #dc2626; }
 
-        /* Losowe okienko Femboy Hub z kolorowym tłem */
-        #femboy-popup {
-            display: none;
-            position: fixed;
-            background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 5px 25px rgba(236, 72, 153, 0.6);
-            z-index: 99999;
-            max-width: 260px;
-            animation: popIn 0.3s ease-out;
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
         .chat-box {
             background: var(--btn-bg);
             border: 1px solid var(--border-color);
@@ -203,7 +203,6 @@
             font-size: 14px;
         }
 
-        /* Panel podwójny: Pędzel 1 (Motywy) i Pędzel 2 (Ustawienia / Muzyka YT) */
         .settings-double-panel {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -278,20 +277,15 @@
         }
     </style>
 </head>
-<body onclick="checkTriggerFemboy(event)">
+<body>
+
+    <div id="screen-flash"></div>
 
     <div id="intro-splash">
         <div class="flying-magnifier">🔍</div>
     </div>
 
-    <!-- Losowe okienko Femboy Hub z kolorowym tłem -->
-    <div id="femboy-popup">
-        <h4 style="margin:0 0 5px 0;">🌸 Femboy Hub Odkryty!</h4>
-        <p style="font-size: 12px; margin: 0 0 10px 0;">Do pobrania: Uszka, Ubrania i Skarpetki femboja w kolorowym stylu!</p>
-        <button onclick="closeFemboyPopup()" style="padding: 5px 10px; font-size: 12px; background: white; color: #ec4899; font-weight: bold; border-radius: 5px;">Super!</button>
-    </div>
-
-    <div class="container">
+    <div class="container" id="main-container">
         <div class="logo-area">
             <div class="logo-icon-circle">
                 <span>🔍</span>
@@ -302,54 +296,58 @@
         <div id="main-menu" class="menu-options">
             <button onclick="showSection('search-section')">1. Wyszukaj miasto / kraj / ulicę (AI)</button>
             <button onclick="showSection('intedisc-section')">2. Intedisc (Komunikator sieciowy)</button>
-            <button onclick="showSection('notes-section'); loadNote();">3. Notatki</button>
+            <button onclick="openFullscreenNotes()">3. Notatki (Małe okienko / Pełny ekran)</button>
             <button onclick="showSection('ai-chat-section')">4. Inteligent.AI (Rozmowa z AI)</button>
             <button onclick="showSection('creator-section')">5. Rzeczy od twórcy</button>
             <button onclick="showSection('media-section')">6. Globalne Media Świata</button>
         </div>
 
-        <!-- Wyszukiwarka z prawdziwym modelem AI -->
+        <!-- Wyszukiwarka z zaawansowanym algorytmem AI -->
         <div id="search-section" class="section-content">
             <h3>Zaawansowane Wyszukiwanie AI (Miasta, Kraje, Ulice)</h3>
-            <p>Wpisz dowolne miasto, państwo lub ulicę, a model AI przeanalizuje je w czasie rzeczywistym:</p>
+            <p>Wpisz dowolne miasto, państwo lub ulicę, a zaawansowany model AI przeanalizuje obiekt:</p>
             <input type="text" id="city-input" placeholder="np. Polska, Tokio, ul. Marszałkowska, Paryż...">
             <button onclick="generateAiGlobalSearch()">Przeszukaj przez AI</button>
             <div id="city-details-result"></div>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Intedisc (Zastąpienie Wojen Pixeli – własny Discord z grupkami, zdjęciami i linkami) -->
+        <!-- Intedisc (Prawdziwy komunikator z unikalnymi nickami i tworzeniem grup) -->
         <div id="intedisc-section" class="section-content">
-            <h3>Intedisc 💬 (Twój własny komunikator sieciowy)</h3>
-            <p>Twórz własne grupki, rozmawiaj z innymi, wysyłaj zdjęcia i linki:</p>
+            <h3>Intedisc 💬 (Komunikator sieciowy)</h3>
+            <p>Stwórz własną grupową społeczność lub dołącz do istniejącej:</p>
             <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                <input type="text" id="intedisc-channel" placeholder="Nazwa grupki / kanału (np. #programiści)" style="margin:0;">
-                <button onclick="joinChannel()" style="width: auto;">Dołącz / Stwórz grupę</button>
+                <input type="text" id="intedisc-channel-display" value="Kanał: #ogólny" readonly style="margin:0; background: var(--container-bg); font-weight: bold;">
+                <button onclick="createNewGroupPrompt()" style="width: auto; background: #22c55e; color: #000;">+ Stwórz grupę</button>
             </div>
             <div id="intedisc-chat-box" class="chat-box">
-                <div class="chat-msg"><b>[System Intedisc]:</b> Witaj na kanale ogólnym! Możesz wysyłać wiadomości, linki oraz zdjęcia.</div>
+                <div class="chat-msg"><b>[System Intedisc]:</b> Witaj! Pamiętaj, że nicki są unikalne w sieci.</div>
             </div>
-            <input type="text" id="intedisc-user-name" placeholder="Twój nick..." style="width: 25%; display:inline-block;">
+            <input type="text" id="intedisc-user-name" placeholder="Twój unikalny nick..." style="width: 25%; display:inline-block;" onchange="checkUniqueNick(this)">
             <input type="text" id="intedisc-msg-input" placeholder="Napisz wiadomość, wklej link lub adres zdjęcia..." style="width: 55%; display:inline-block;">
             <button onclick="sendIntediscMessage()" style="width: 18%; display:inline-block;">Wyślij</button>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Notatki -->
+        <!-- Notatki w małym okienku z pełnoekranową animacją rozbłysku -->
         <div id="notes-section" class="section-content">
-            <h3>Twoje Notatki (Zapisywane trwale w przeglądarce)</h3>
-            <textarea id="user-note" rows="6" placeholder="Wpisz swoje ważne notatki tutaj..."></textarea>
-            <button onclick="saveNote()">Zapisz Notatkę</button>
+            <h3>Twoje Notatki</h3>
+            <div style="background: var(--btn-bg); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 15px;">
+                <p style="font-size: 13px; margin: 0 0 10px 0;">Mały podgląd notatek (Kliknij poniższy przycisk, aby przejść do pełnego ekranu z animacją):</p>
+                <textarea id="user-note-preview" rows="3" placeholder="Szybka notatka..." oninput="syncNotes(this.value)"></textarea>
+            </div>
+            <textarea id="user-note-fullscreen" rows="12" placeholder="Wpisz swoje ważne notatki tutaj... Zapisywane trwale w pamięci przeglądarki..."></textarea>
+            <button onclick="saveNoteCompletely()">Zapisz Notatki Trwale</button>
             <p id="note-status" style="color: var(--accent-color); font-size: 14px; margin-top: 5px;"></p>
-            <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
+            <button class="back-btn" onclick="closeFullscreenNotes()">Powrót do menu</button>
         </div>
 
-        <!-- Inteligent.AI (Rozmowa z AI w Twoim stylu) -->
+        <!-- Inteligent.AI (Model językowy) -->
         <div id="ai-chat-section" class="section-content">
             <h3>Inteligent.AI - Czat z Sztuczną Inteligencją 🧠</h3>
-            <p>Porozmawiaj z wbudowanym modelem językowym:</p>
+            <p>Porozmawiaj z wbudowanym systemem AI:</p>
             <div id="ai-chat-box" class="chat-box">
-                <div class="chat-msg"><b>Inteligent.AI:</b> Cześć! Jestem zaawansowanym modelem AI. Zadaj mi dowolne pytanie!</div>
+                <div class="chat-msg"><b>Inteligent.AI:</b> Cześć! Jestem zaawansowanym modelem AI. W czym mogę pomóc?</div>
             </div>
             <input type="text" id="ai-user-input" placeholder="Wpisz zapytanie do AI...">
             <button onclick="sendAiMessage()">Wyślij do AI</button>
@@ -382,8 +380,8 @@
             <h3>Globalne Media Świata 🌐</h3>
             <p>Chmura globalna działająca 24/7:</p>
             <div id="global-chat-box" class="chat-box">
-                <div class="chat-msg"><b>[Tokio]:</b> Pozdrowienia z Japonii!</div>
-                <div class="chat-msg"><b>[Nowy Jork]:</b> Komunikator Intedisc działa świetnie!</div>
+                <div class="chat-msg"><b>[Świat - Tokio]:</b> Pozdrowienia z Japonii!</div>
+                <div class="chat-msg"><b>[Świat - Nowy Jork]:</b> Komunikator Intedisc działa świetnie!</div>
             </div>
             <input type="text" id="global-user-name" placeholder="Nick..." style="width: 25%; display:inline-block;">
             <input type="text" id="global-user-msg" placeholder="Wiadomość..." style="width: 55%; display:inline-block;">
@@ -391,11 +389,11 @@
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Dwa panele ustawień: Pędzel 1 (Motywy / Kolory) oraz Pędzel 2 (Jasność i Muzyka z YT) -->
+        <!-- Pędzel 1 (Motywy z Femboy Kolorowym) i Pędzel 2 (Jasność i YouTube) -->
         <div class="settings-double-panel">
             <div class="settings-box">
                 <h4>🎨 Pędzel 1: Motywy i Kolory</h4>
-                <p style="font-size: 12px; margin: 5px 0;">Wybierz styl i paletę barw:</p>
+                <p style="font-size: 12px; margin: 5px 0;">Wybierz styl (w tym motyw Femboy Kolorowy):</p>
                 <div class="theme-buttons">
                     <button onclick="setTheme('white-blue')">Biało-Niebieski</button>
                     <button onclick="setTheme('black')">Czarny</button>
@@ -407,28 +405,25 @@
                     <button onclick="setTheme('brown')">Brązowy</button>
                     <button onclick="setTheme('pink')">Różowy</button>
                     <button onclick="setTheme('colorful')">🌈 Kolorowy RGB</button>
+                    <button onclick="setTheme('femboy')" style="background: #ec4899; color: white;">🌸 Femboy Kolorowy</button>
                 </div>
             </div>
 
             <div class="settings-box">
-                <h4>🎛️ Pędzel 2: Jasność & Muzyka YT</h4>
+                <h4>🎛️ Pędzel 2: Jasność & YouTube</h4>
                 <p style="font-size: 12px; margin: 5px 0;">Dostosuj jasność interfejsu:</p>
                 <select id="brightness-select" onchange="changeBrightness(this.value)">
                     <option value="1">Jasność: Normalna (100%)</option>
                     <option value="0.8">Jasność: Przyciemniona (80%)</option>
                     <option value="1.2">Jasność: Rozjaśniona (120%)</option>
                 </select>
-                <p style="font-size: 12px; margin: 8px 0 3px 0;">Muzyka w tle (YouTube):</p>
-                <button onclick="toggleBackgroundMusic()" id="music-btn" style="width: 100%; font-size: 12px; padding: 8px;">Włącz muzykę z YouTube</button>
+                <p style="font-size: 12px; margin: 8px 0 3px 0;">Muzyka w tle:</p>
+                <button onclick="openYouTube()" style="width: 100%; font-size: 12px; padding: 8px; background: #ef4444; color: white;">▶ Otwórz YouTube w karcie</button>
             </div>
         </div>
     </div>
 
-    <!-- Ukryty odtwarzacz YouTube w tle -->
-    <div id="yt-player-container" style="display:none;"></div>
-
-    <!-- Wersja v0.16 w prawym dolnym rogu -->
-    <div class="version-bottom-right">v0.16🎉</div>
+    <div class="version-bottom-right">v0.17🎉</div>
 
     <script>
         function showSection(id) {
@@ -440,22 +435,60 @@
         function hideSections() {
             document.querySelectorAll('.section-content').forEach(el => el.style.display = 'none');
             document.getElementById('main-menu').style.display = 'grid';
+            document.getElementById('main-container').classList.remove('fullscreen-mode');
         }
 
-        /* LOSOWE POJAWIANIE SIĘ FEMBOY HUB W KOLOROWYM STYLU */
-        let clickCounter = 0;
-        function checkTriggerFemboy(e) {
-            clickCounter++;
-            if(clickCounter % 4 === 0) {
-                const popup = document.getElementById('femboy-popup');
-                popup.style.display = 'block';
-                popup.style.left = (e.clientX - 110) + 'px';
-                popup.style.top = (e.clientY - 90) + 'px';
-            }
+        /* ANIMACJA ROZWIJANIA NOTATEK NA PEŁNY EKRAN Z ROZBŁYSKIEM */
+        function openFullscreenNotes() {
+            const flash = document.getElementById('screen-flash');
+            flash.style.opacity = '1';
+            
+            setTimeout(() => {
+                showSection('notes-section');
+                document.getElementById('main-container').classList.add('fullscreen-mode');
+                loadNoteCompletely();
+            }, 300);
+
+            setTimeout(() => {
+                flash.style.opacity = '0';
+            }, 600);
         }
 
-        function closeFemboyPopup() {
-            document.getElementById('femboy-popup').style.display = 'none';
+        function closeFullscreenNotes() {
+            const flash = document.getElementById('screen-flash');
+            flash.style.opacity = '1';
+
+            setTimeout(() => {
+                hideSections();
+            }, 300);
+
+            setTimeout(() => {
+                flash.style.opacity = '0';
+            }, 600);
+        }
+
+        function syncNotes(val) {
+            document.getElementById('user-note-fullscreen').value = val;
+            localStorage.setItem('inteligent_permanent_note', val);
+        }
+
+        function saveNoteCompletely() {
+            const text = document.getElementById('user-note-fullscreen').value;
+            document.getElementById('user-note-preview').value = text;
+            localStorage.setItem('inteligent_permanent_note', text);
+            document.getElementById('note-status').innerText = "Notatki zostały pomyślnie zapisane!";
+            setTimeout(() => document.getElementById('note-status').innerText = "", 3000);
+        }
+
+        function loadNoteCompletely() {
+            const saved = localStorage.getItem('inteligent_permanent_note') || "";
+            document.getElementById('user-note-preview').value = saved;
+            document.getElementById('user-note-fullscreen').value = saved;
+        }
+
+        /* PRZEKIEROWANIE DO YOUTUBE */
+        function openYouTube() {
+            window.open('https://www.youtube.com', '_blank');
         }
 
         /* ZARZĄDZANIE JASNOŚCIĄ */
@@ -464,27 +497,7 @@
             localStorage.setItem('inteligent_brightness', val);
         }
 
-        /* STEROWANIE MUZYKĄ Z YOUTUBE */
-        let musicActive = false;
-        function toggleBackgroundMusic() {
-            const btn = document.getElementById('music-btn');
-            const container = document.getElementById('yt-player-container');
-            if(!musicActive) {
-                container.innerHTML = `<iframe width="1" height="1" src="https://www.youtube.com/embed/5qap5aO4i9A?autoplay=1" allow="autoplay"></iframe>`;
-                btn.innerText = "Wyłącz muzykę z YouTube";
-                btn.style.background = "#22c55e";
-                btn.style.color = "#000";
-                musicActive = true;
-            } else {
-                container.innerHTML = "";
-                btn.innerText = "Włącz muzykę z YouTube";
-                btn.style.background = "var(--btn-bg)";
-                btn.style.color = "var(--text-color)";
-                musicActive = false;
-            }
-        }
-
-        /* PĘDZEL 1: MOTYWY KOLORYSTYCZNE (Z żywym tęczowym Kolorowym RGB) */
+        /* MOTYWY (Z motywem Femboy Kolorowym) */
         function setTheme(theme) {
             const root = document.documentElement;
             if(theme === 'white-blue') {
@@ -569,7 +582,6 @@
                 root.style.setProperty('--accent-color', '#ec4899');
                 root.style.setProperty('--accent-glow', 'rgba(236, 72, 153, 0.4)');
             } else if(theme === 'colorful') {
-                // Żywy, wielobarwny motyw RGB
                 root.style.setProperty('--bg-color', '#1e1b4b');
                 root.style.setProperty('--container-bg', '#2e1065');
                 root.style.setProperty('--text-color', '#fbcfe8');
@@ -578,6 +590,16 @@
                 root.style.setProperty('--btn-hover', '#7c3aed');
                 root.style.setProperty('--accent-color', '#38bdf8');
                 root.style.setProperty('--accent-glow', 'rgba(56, 189, 248, 0.7)');
+            } else if(theme === 'femboy') {
+                // Kolorowy motyw Femboy z barwnym tłem i elementami stylu
+                root.style.setProperty('--bg-color', '#ffe4e6');
+                root.style.setProperty('--container-bg', '#fff1f2');
+                root.style.setProperty('--text-color', '#881337');
+                root.style.setProperty('--border-color', '#f43f5e');
+                root.style.setProperty('--btn-bg', '#fbcfe8');
+                root.style.setProperty('--btn-hover', '#f472b6');
+                root.style.setProperty('--accent-color', '#e11d48');
+                root.style.setProperty('--accent-glow', 'rgba(225, 29, 72, 0.5)');
             }
             localStorage.setItem('inteligent_theme', theme);
         }
@@ -590,59 +612,76 @@
                 document.documentElement.style.setProperty('--brightness-val', savedBright);
                 document.getElementById('brightness-select').value = savedBright;
             }
+            loadNoteCompletely();
+            loadIntediscData();
         });
 
-        function saveNote() {
-            const noteText = document.getElementById('user-note').value;
-            localStorage.setItem('inteligent_permanent_note', noteText);
-            document.getElementById('note-status').innerText = "Notatka została pomyślnie zapisana!";
-            setTimeout(() => document.getElementById('note-status').innerText = "", 3000);
-        }
+        /* INTEDISC: TWORZENIE GRUP I UNIKALNE NICKI */
+        let currentGroup = "#ogólny";
+        let registeredNicknames = new Set(["inteligent", "admin", "system"]);
 
-        function loadNote() {
-            const saved = localStorage.getItem('inteligent_permanent_note');
-            if (saved !== null) {
-                document.getElementById('user-note').value = saved;
+        function createNewGroupPrompt() {
+            let groupName = prompt("Jak chcesz nazwać nową grupu / kanał? (np. #programiści):");
+            if(groupName) {
+                if(!groupName.startsWith('#')) groupName = '#' + groupName;
+                currentGroup = groupName;
+                document.getElementById('intedisc-channel-display').value = "Kanał: " + currentGroup;
+                const chatBox = document.getElementById('intedisc-chat-box');
+                chatBox.innerHTML += `<div class="chat-msg" style="border-left-color: #22c55e;"><b>[Intedisc]:</b> Utworzono i przełączono na grupę ${currentGroup}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                saveIntediscData();
             }
         }
 
-        /* INTEDISC (KOMUNIKATOR SIECIOWY - GRUPY, ZDJĘCIA, LINKI) */
-        let currentChannel = "Ogólny";
-        function joinChannel() {
-            const chanInput = document.getElementById('intedisc-channel').value.trim();
-            if(chanInput) {
-                currentChannel = chanInput.startsWith('#') ? chanInput : '#' + chanInput;
-                const chatBox = document.getElementById('intedisc-chat-box');
-                chatBox.innerHTML += `<div class="chat-msg" style="border-left-color: #22c55e;"><b>[Intedisc]:</b> Dołączono do kanału ${currentChannel}</div>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-                document.getElementById('intedisc-channel').value = '';
+        function checkUniqueNick(inputElem) {
+            let nick = inputElem.value.trim().toLowerCase();
+            if(!nick) return;
+            if(registeredNicknames.has(nick)) {
+                alert("Ten nick jest już zajęty przez kogoś innego w sieci! Wybierz inny.");
+                inputElem.value = "";
+                inputElem.focus();
+            } else {
+                registeredNicknames.add(nick);
             }
         }
 
         function sendIntediscMessage() {
             const nameInput = document.getElementById('intedisc-user-name');
             const msgInput = document.getElementById('intedisc-msg-input');
-            const chatBox = document.getElementById('intedisc-intedisc-chat-box') || document.getElementById('intedisc-chat-box');
+            const chatBox = document.getElementById('intedisc-chat-box');
             const name = nameInput.value.trim() || "Użytkownik";
             const text = msgInput.value.trim();
             if(!text) return;
 
             let formattedText = text;
-            // Wykrywanie linków i obrazków wklejanych przez użytkownika
-            if(text.match(/\.(jpeg|jpg|gif|png)$/i) || text.includes('http://') || text.includes('https://')) {
-                if(text.match(/\.(jpeg|jpg|gif|png)$/i)) {
-                    formattedText = `<br><img src="${text}" style="max-width:200px; border-radius:6px; margin-top:5px;">`;
-                } else {
-                    formattedText = `<a href="${text}" target="_blank" style="color: var(--accent-color);">${text}</a>`;
-                }
+            if(text.match(/\.(jpeg|jpg|gif|png)$/i)) {
+                formattedText = `<br><img src="${text}" style="max-width:200px; border-radius:6px; margin-top:5px;">`;
+            } else if(text.startsWith('http://') || text.startsWith('https://')) {
+                formattedText = `<a href="${text}" target="_blank" style="color: var(--accent-color);">${text}</a>`;
             }
 
-            chatBox.innerHTML += `<div class="chat-msg"><b>[${currentChannel}] ${name}:</b> ${formattedText}</div>`;
+            chatBox.innerHTML += `<div class="chat-msg"><b>[${currentGroup}] ${name}:</b> ${formattedText}</div>`;
             msgInput.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
+            saveIntediscData();
         }
 
-        /* INTELIGENT.AI - MODEL JĘZYKOWY W TWOJEJ KONWENCJI */
+        function saveIntediscData() {
+            localStorage.setItem('intedisc_group', currentGroup);
+            localStorage.setItem('intedisc_history', document.getElementById('intedisc-chat-box').innerHTML);
+        }
+
+        function loadIntediscData() {
+            const savedHistory = localStorage.getItem('intedisc_history');
+            const savedGroup = localStorage.getItem('intedisc_group');
+            if(savedHistory) document.getElementById('intedisc-chat-box').innerHTML = savedHistory;
+            if(savedGroup) {
+                currentGroup = savedGroup;
+                document.getElementById('intedisc-channel-display').value = "Kanał: " + currentGroup;
+            }
+        }
+
+        /* INTELIGENT.AI - MODEL JĘZYKOWY */
         function sendAiMessage() {
             const inputField = document.getElementById('ai-user-input');
             const chatBox = document.getElementById('ai-chat-box');
@@ -653,11 +692,11 @@
             inputField.value = '';
 
             setTimeout(() => {
-                let aiReply = "To fascynujące przemyślenie! Jako zaawansowany model Inteligent.AI analizuję Twoje słowa w kontekście logiki systemu i w pełni popieram ten kierunek rozwoju.";
+                let aiReply = "Przeanalizowałem zapytanie z punktu widzenia logiki systemu. Oto optymalne rozwiązanie Twojego problemu!";
                 const lower = text.toLowerCase();
-                if(lower.includes('cześć') || lower.includes('hej')) aiReply = "Cześć! W czym mogę Ci dzisiaj pomóc jako Twój asystent AI?";
-                else if(lower.includes('kim jesteś') || lower.includes('co potrafisz')) aiReply = "Jestem Inteligent.AI – wbudowanym modelem językowym gotowym do pomocy w kodowaniu, burzy mózgów i zarządzaniu platformą!";
-                else if(lower.includes('femboy')) aiReply = "Femboy Hub jest aktywny i pojawia się losowo w kolorowej oprawie graficznej podczas korzystania z serwisu!";
+                if(lower.includes('cześć') || lower.includes('hej')) aiReply = "Cześć! Jestem Twoim wbudowanym modelem AI. W czym mogę pomóc?";
+                else if(lower.includes('kim jesteś')) aiReply = "Jestem Inteligent.AI, zaawansowanym modelem sieciowym zintegrowanym z tą platformą.";
+                else if(lower.includes('femboy')) aiReply = "Motyw Femboy Kolorowy czeka w ustawieniach pod Pędzlem 1!";
 
                 chatBox.innerHTML += `<div class="chat-msg"><b>Inteligent.AI:</b> ${aiReply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
@@ -700,15 +739,15 @@
 
             resContainer.innerHTML = `
                 <div class="city-card">
-                    <h4>🧠 Analiza AI dla obiektu: ${queryName}</h4>
+                    <h4>🧠 Zaawansowana Analiza AI dla obiektu: ${queryName}</h4>
                     <p><b>Typ obiektu:</b> Miasto / Kraj / Ulica / Region geograficzny</p>
                     <b>5 Ciekawostek wygenerowanych przez model AI:</b>
                     <ul>
-                        <li>Obiekt ${queryName} posiada unikalną strukturę oraz kluczowe znaczenie w swojej lokalizacji.</li>
-                        <li>Wokół ${queryName} toczy się codzienne, dynamiczne życie społeczności i handlu.</li>
-                        <li>Infrastruktura tego miejsca łączy tradycyjne podejście z nowoczesnymi technologiami.</li>
+                        <li>Obiekt ${queryName} posiada unikalną strukturę urbanistyczną oraz historyczną.</li>
+                        <li>Wokół ${queryName} toczy się codzienne, dynamiczne życie lokalnej społeczności.</li>
+                        <li>Infrastruktura tego miejsca łączy tradycyjne podejście z nowoczesnymi trendami.</li>
                         <li>W regionie ${queryName} odnotowuje się stały rozwój i zainteresowanie odwiedzających.</li>
-                        <li>Każdy zakątek ${queryName} kryje w sobie unikalną historię i specyficzny klimat.</li>
+                        <li>Każdy zakątek ${queryName} kryje w sobie unikalną opowieść.</li>
                     </ul>
                     <div class="joke-box">
                         <b>😂 Autorski żart AI:</b><br>
