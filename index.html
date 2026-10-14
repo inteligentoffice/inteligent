@@ -21,21 +21,21 @@
         .container {
             text-align: center;
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 780px;
+            max-width: 850px;
             width: 95%;
         }
 
         .logo-area {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .logo-icon {
-            font-size: 45px;
+            font-size: 40px;
         }
         .logo-text {
-            font-size: 38px;
+            font-size: 36px;
             font-weight: 900;
             font-style: italic;
             letter-spacing: -1px;
@@ -88,7 +88,7 @@
             background-color: #c9302c;
         }
 
-        /* Sekcja Gry Wojny Pixeli */
+        /* Sekcja Gry Wojny Pixeli - Wersja Miast */
         .game-board {
             background: #1e1e2e;
             color: white;
@@ -102,68 +102,73 @@
             justify-content: space-around;
             flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-size: 15px;
             font-weight: bold;
         }
 
-        #poland-map {
-            width: 100%;
-            max-width: 560px;
-            height: auto;
-            margin: 0 auto;
-            display: block;
+        .grid-map {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            margin: 15px 0;
+            max-height: 420px;
+            overflow-y: auto;
+            padding: 5px;
+            background: #11111b;
+            border-radius: 8px;
         }
 
-        .voivodeship {
-            fill: #313244;
-            stroke: #11111b;
-            stroke-width: 1.5;
+        .city-tile {
+            background-color: #313244;
+            border: 1px solid #45475a;
+            border-radius: 6px;
+            padding: 10px 5px;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
             cursor: pointer;
-            transition: fill 0.2s;
+            transition: 0.15s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 45px;
         }
 
-        .voivodeship:hover {
-            fill: #585b70;
+        .city-tile:hover {
+            background-color: #585b70;
+            transform: scale(1.03);
         }
 
-        /* Kolory Frakcji */
-        .voivodeship.player {
-            fill: #22c55e !important; /* Zielony - Ty */
+        /* Frakcje / Kolory */
+        .city-tile.player {
+            background-color: #22c55e !important; /* Zielony - Ty */
+            border-color: #15803d;
         }
 
-        .voivodeship.bot-red {
-            fill: #ef4444 !important; /* Czerwony - Bot */
+        .city-tile.bot-red {
+            background-color: #ef4444 !important; /* Czerwony - Bot */
+            border-color: #b91c1c;
         }
 
-        .voivodeship.bot-blue {
-            fill: #3b82f6 !important; /* Niebieski - Bot */
+        .city-tile.bot-blue {
+            background-color: #3b82f6 !important; /* Niebieski - Bot */
+            border-color: #1d4ed8;
         }
 
-        .voivodeship.bot-yellow {
-            fill: #eab308 !important; /* Żółty - Bot */
+        .city-tile.bot-yellow {
+            background-color: #eab308 !important; /* Żółty - Bot */
+            border-color: #a16207;
+            color: #000;
         }
 
-        .map-text {
-            fill: #ffffff;
-            font-size: 8.5px;
+        .version-tag {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 10px;
             font-weight: bold;
-            pointer-events: none;
-            text-anchor: middle;
-        }
-
-        .city-dot {
-            fill: #ffffff;
-            stroke: #000;
-            stroke-width: 1;
-            pointer-events: none;
-        }
-
-        .city-label {
-            fill: #ffd700;
-            font-size: 7px;
-            font-weight: bold;
-            pointer-events: none;
+            text-align: right;
         }
 
         #secret-popup {
@@ -217,9 +222,9 @@
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Opcja 2: WOJNY PIXELI (Pełna mapa z miastami i odbieraniem terenów) -->
+        <!-- Opcja 2: WOJNY PIXELI (Setki miast i pełna walka) -->
         <div id="pixels-section" class="section-content">
-            <h3>Wojny Pixeli: Bitwa o Polskę ⚔️</h3>
+            <h3>Wojny Pixeli: Bitwa Miast Polski ⚔️</h3>
             <div class="game-board">
                 <div class="score-board">
                     <span style="color: #4ade80;">🟢 Ty: <span id="score-green">0</span></span>
@@ -227,87 +232,16 @@
                     <span style="color: #60a5fa;">🔵 Niebieski: <span id="score-blue">0</span></span>
                     <span style="color: #facc15;">🟡 Żółty: <span id="score-yellow">0</span></span>
                 </div>
-                <p style="font-size: 13px; color: #a6adc8;">Boty atakują co 1 sek! Możesz odbierać im tereny, klikając w ich województwa!</p>
+                <p style="font-size: 13px; color: #a6adc8;">Boty atakują co 1 sek sekundę! Klikaj w dowolne miasto (swoje, bota lub neutralne), aby przejąć kontrolę!</p>
                 
-                <!-- Mapa Polski z miastami -->
-                <svg id="poland-map" viewBox="0 0 520 490">
-                    <!-- Województwa -->
-                    <g onclick="claimVoivodeship(event)">
-                        <path class="voivodeship" id="zachodniopomorskie" data-name="Zachodniopomorskie" d="M 40,90 L 110,75 L 135,145 L 85,170 L 35,140 Z"></path>
-                        <text class="map-text" x="75" y="125">Zachodniopomorskie</text>
+                <!-- Siatka setek miast Polski -->
+                <div class="grid-map" id="cities-grid">
+                    <!-- Generowane automatycznie przez JavaScript -->
+                </div>
 
-                        <path class="voivodeship" id="pomorskie" data-name="Pomorskie" d="M 110,75 L 195,65 L 225,135 L 135,145 Z"></path>
-                        <text class="map-text" x="165" y="105">Pomorskie</text>
-
-                        <path class="voivodeship" id="warminsko-mazurskie" data-name="Warmińsko-Mazurskie" d="M 195,65 L 290,75 L 280,150 L 225,135 Z"></path>
-                        <text class="map-text" x="240" y="110">Warmińsko-Maz.</text>
-
-                        <path class="voivodeship" id="podlaskie" data-name="Podlaskie" d="M 290,75 L 360,95 L 345,185 L 280,150 Z"></path>
-                        <text class="map-text" x="315" y="135">Podlaskie</text>
-
-                        <path class="voivodeship" id="lubuskie" data-name="Lubuskie" d="M 35,140 L 85,170 L 90,250 L 30,225 Z"></path>
-                        <text class="map-text" x="60" y="195">Lubuskie</text>
-
-                        <path class="voivodeship" id="wielkopolskie" data-name="Wielkopolskie" d="M 85,170 L 135,145 L 225,135 L 240,240 L 90,250 Z"></path>
-                        <text class="map-text" x="160" y="190">Wielkopolskie</text>
-
-                        <path class="voivodeship" id="kujawsko-pomorskie" data-name="Kujawsko-Pomorskie" d="M 225,135 L 280,150 L 260,220 L 240,240 Z"></path>
-                        <text class="map-text" x="250" y="180">Kuj-Pom</text>
-
-                        <path class="voivodeship" id="mazowieckie" data-name="Mazowieckie" d="M 280,150 L 345,185 L 330,270 L 260,220 Z"></path>
-                        <text class="map-text" x="305" y="215">Mazowieckie</text>
-
-                        <path class="voivodeship" id="lubelskie" data-name="Lubelskie" d="M 345,185 L 390,205 L 375,310 L 330,270 Z"></path>
-                        <text class="map-text" x="355" y="250">Lubelskie</text>
-
-                        <path class="voivodeship" id="dolnoslaskie" data-name="Dolnośląskie" d="M 30,225 L 90,250 L 135,315 L 80,350 L 40,305 Z"></path>
-                        <text class="map-text" x="80" y="290">Dolnośląskie</text>
-
-                        <path class="voivodeship" id="lodzkie" data-name="Łódzkie" d="M 240,240 L 260,220 L 330,270 L 315,335 L 220,310 Z"></path>
-                        <text class="map-text" x="275" y="280">Łódzkie</text>
-
-                        <path class="voivodeship" id="opolskie" data-name="Opolskie" d="M 135,315 L 170,305 L 185,375 L 130,365 Z"></path>
-                        <text class="map-text" x="155" y="340">Opolskie</text>
-
-                        <path class="voivodeship" id="slaskie" data-name="Śląskie" d="M 170,305 L 220,310 L 215,385 L 185,375 Z"></path>
-                        <text class="map-text" x="195" y="345">Śląskie</text>
-
-                        <path class="voivodeship" id="swietokrzyskie" data-name="Świętokrzyskie" d="M 315,335 L 330,270 L 375,310 L 350,385 L 295,380 Z"></path>
-                        <text class="map-text" x="330" y="340">Świętokrzyskie</text>
-
-                        <path class="voivodeship" id="malopolskie" data-name="Małopolskie" d="M 220,310 L 295,380 L 290,440 L 210,425 Z"></path>
-                        <text class="map-text" x="250" y="375">Małopolskie</text>
-
-                        <path class="voivodeship" id="podkarpackie" data-name="Podkarpackie" d="M 350,385 L 375,310 L 410,345 L 395,445 L 290,440 Z"></path>
-                        <text class="map-text" x="355" y="380">Podkarpackie</text>
-                    </g>
-
-                    <!-- Oznaczenia miast na mapie -->
-                    <g>
-                        <!-- Warszawa (w Mazowieckiem) -->
-                        <circle class="city-dot" cx="305" cy="215" r="3"></circle>
-                        <text class="city-label" x="312" y="217">Warszawa</text>
-
-                        <!-- Łódź (w Łódzkiem) -->
-                        <circle class="city-dot" cx="265" cy="285" r="3"></circle>
-                        <text class="city-label" x="220" y="295">Łódź</text>
-
-                        <!-- Piotrków Trybunalski (w Łódzkiem) -->
-                        <circle class="city-dot" cx="290" cy="305" r="2.5"></circle>
-                        <text class="city-label" x="298" y="308">Piotrków Tryb.</text>
-
-                        <!-- Radomsko (w Łódzkiem) -->
-                        <circle class="city-dot" cx="275" cy="335" r="2.5"></circle>
-                        <text class="city-label" x="230" y="340">Radomsko</text>
-
-                        <!-- Płock (w Mazowieckiem) -->
-                        <circle class="city-dot" cx="270" cy="190" r="2.5"></circle>
-                        <text class="city-label" x="235" y="195">Płock</text>
-                    </g>
-                </svg>
-
-                <p id="game-status" style="margin-top: 15px; font-weight: bold; font-size: 16px;"></p>
+                <p id="game-status" style="margin-top: 10px; font-weight: bold; font-size: 15px;"></p>
             </div>
+            <div class="version-tag">wersja v0.07</div>
             <button class="back-btn" onclick="stopGame(); hideSections();">Powrót do menu</button>
         </div>
 
@@ -366,76 +300,94 @@
             }, 2000);
         }
 
-        /* LOGIKA BITWY Z ODBIERANIEM TERENÓW I BOTAMI CO 1 SEKUNDĘ */
+        /* LOGIKA BITWY MIAST (Wersja v0.07) */
+        const polishCities = [
+            "Warszawa", "Łódź", "Radomsko", "Piotrków Tryb.", "Płock", "Kraków", 
+            "Wrocław", "Poznań", "Gdańsk", "Szczecin", "Bydgoszcz", "Lublin", 
+            "Katowice", "Białystok", "Gdynia", "Częstochowa", "Radom", "Sosnowiec", 
+            "Toruń", "Kielce", "Gliwice", "Zabrze", "Olsztyn", "Bielsko-Biała", 
+            "Bytom", "Zielona Góra", "Rybnik", "Ruda Śląska", "Tychy", "Opole", 
+            "Gorzów Wlkp.", "Elbląg", "Płock", "Tarnów", "Chorzów", "Kalisz", 
+            "Koszalin", "Legnica", "Grudziądz", "Supsk", "Jaworzno", "Jastrzębie-Zdrój", 
+            "Nowy Sącz", "Jelenia Góra", "Siedlce", "Mysłowice", "Konin", "Piła", 
+            "Piotrków", "Inowrocław", "Lubin", "Ostrów Wlkp.", "Suwałki", "Stargard", 
+            "Gniezno", "Ostrołęka", "Siemianowice", "Pabianice", "Tomaszów Maz.", "Stalowa Wola"
+        ];
+
         let scores = { green: 0, red: 0, blue: 0, yellow: 0 };
         let botInterval = null;
 
         function startGame() {
             scores = { green: 0, red: 0, blue: 0, yellow: 0 };
             document.getElementById('game-status').innerText = "";
+            
+            const grid = document.getElementById('cities-grid');
+            grid.innerHTML = '';
 
-            document.querySelectorAll('.voivodeship').forEach(el => {
-                el.className.baseVal = "voivodeship";
+            // Tworzenie kafelków dla każdego miasta
+            polishCities.forEach((cityName, index) => {
+                const tile = document.createElement('div');
+                tile.className = 'city-tile';
+                tile.innerText = cityName;
+                tile.dataset.owner = 'neutral';
+                tile.onclick = () => playerConquer(tile);
+                grid.appendChild(tile);
             });
 
             updateScores();
 
+            // Boty atakują co dokładnie 1 sekundę
             clearInterval(botInterval);
-            botInterval = setInterval(botsAttack, 1000); // Boty atakują co dokładnie 1 sekundę
+            botInterval = setInterval(botsAttack, 1000);
         }
 
         function stopGame() {
             clearInterval(botInterval);
         }
 
-        function claimVoivodeship(event) {
-            const element = event.target.closest('.voivodeship');
-            if (!element) return;
+        function playerConquer(tile) {
+            const currentOwner = tile.dataset.owner;
+            if (currentOwner === 'green') return; // Już Twoje
 
-            // Sprawdzamy, do kogo należało województwo przed kliknięciem gracza i odejmujemy punkty poprzedniemu właścicielowi
-            if (element.classList.contains('player')) return; // Już Twoje
+            // Odejmujemy punkt poprzedniemu właścicielowi
+            if (currentOwner === 'red') scores.red--;
+            if (currentOwner === 'blue') scores.blue--;
+            if (currentOwner === 'yellow') scores.yellow--;
 
-            if (element.classList.contains('bot-red')) scores.red--;
-            if (element.classList.contains('bot-blue')) scores.blue--;
-            if (element.classList.contains('bot-yellow')) scores.yellow--;
-
-            // Czyscimy stare klasy i ustawiamy na gracza (Zielony)
-            element.className.baseVal = "voivodeship player";
+            // Przejmujesz miasto
+            tile.dataset.owner = 'green';
+            tile.className = 'city-tile player';
             scores.green++;
 
             updateScores();
-            checkGameEnd();
         }
 
         function botsAttack() {
-            const allVoivodeships = Array.from(document.querySelectorAll('.voivodeship'));
-            // Boty mogą wybierać te tereny, które NIE są jeszcze zielone (Twoje)
-            const available = allVoivodeships.filter(e => !e.classList.contains('player'));
-            
-            if (available.length === 0) {
-                checkGameEnd();
-                return;
-            }
+            const tiles = Array.from(document.querySelectorAll('.city-tile'));
+            // Boty mogą atakować dowolne miasto, które nie jest aktualnie zielone (Twoje)
+            const available = tiles.filter(t => t.dataset.owner !== 'green');
 
-            const botTypes = ['bot-red', 'bot-blue', 'bot-yellow'];
+            if (available.length === 0) return;
+
+            const botTypes = ['red', 'blue', 'yellow'];
             const randomBot = botTypes[Math.floor(Math.random() * botTypes.length)];
-            const randomTarget = available[Math.floor(Math.random() * available.length)];
+            const targetTile = available[Math.floor(Math.random() * available.length)];
+            const prevOwner = targetTile.dataset.owner;
 
-            // Odejmujemy punkt poprzedniemu właścicielowi, jeśli to był inny bot
-            if (randomTarget.classList.contains('bot-red')) scores.red--;
-            if (randomTarget.classList.contains('bot-blue')) scores.blue--;
-            if (randomTarget.classList.contains('bot-yellow')) scores.yellow--;
+            // Odejmujemy punkt poprzedniemu właścicielowi
+            if (prevOwner === 'green') scores.green--;
+            if (prevOwner === 'red') scores.red--;
+            if (prevOwner === 'blue') scores.blue--;
+            if (prevOwner === 'yellow') scores.yellow--;
 
-            // Ustawiamy nowy kolor bota
-            randomTarget.className.baseVal = "voivodeship " + randomBot;
+            // Ustawiamy nowego właściciela bota
+            targetTile.dataset.owner = randomBot;
+            targetTile.className = `city-tile bot-${randomBot}`;
 
             // Dodajemy punkt odpowiedniemu botowi
-            if (randomBot === 'bot-red') scores.red++;
-            if (randomBot === 'bot-blue') scores.blue++;
-            if (randomBot === 'bot-yellow') scores.yellow++;
+            scores[randomBot]++;
 
             updateScores();
-            checkGameEnd();
         }
 
         function updateScores() {
@@ -443,14 +395,6 @@
             document.getElementById('score-red').innerText = scores.red;
             document.getElementById('score-blue').innerText = scores.blue;
             document.getElementById('score-yellow').innerText = scores.yellow;
-        }
-
-        function checkGameEnd() {
-            const totalClaimed = scores.green + scores.red + scores.blue + scores.yellow;
-            // Gra kończy się, gdy wszystkie 16 województw zostanie zajętych i zablokowanych na chwilę
-            if (totalClaimed >= 16 && (scores.green + scores.red + scores.blue + scores.yellow >= 16)) {
-                // Sprawdzamy dopiero gdy minie chwila, ale tu wystarczy podliczyć
-            }
         }
     </script>
 </body>
