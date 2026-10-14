@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inteligent</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        /* Styl logo z Twojego projektu */
+        .logo-area {
+            margin-bottom: 30px;
+        }
+        .logo-icon {
+            font-size: 50px;
+        }
+        .logo-text {
+            font-size: 42px;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: -1px;
+            color: #111;
+            margin: 0;
+        }
+
+        /* Przyciski opcji */
+        .menu-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button, .btn-link {
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            background-color: #222;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button:hover, .btn-link:hover {
+            background-color: #444;
+            transform: translateY(-2px);
+        }
+
+        /* Sekcje treści */
+        .section-content {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+        }
+
+        .back-btn {
+            background-color: #d9534f;
+            margin-top: 15px;
+            width: 100%;
+        }
+        .back-btn:hover {
+            background-color: #c9302c;
+        }
+
+        /* Styl dla opcji 4 (Wyskakujące :D) */
+        #secret-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            font-weight: bold;
+            color: #ff3366;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 30px 60px;
+            border-radius: 20px;
+            z-index: 1000;
+            box-shadow: 0 0 30px rgba(255, 51, 102, 0.5);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo-area">
+            <div class="logo-icon">🔍</div>
+            <h1 class="logo-text">inteligent</h1>
+        </div>
+
+        <!-- 4 Główne Opcje -->
+        <div id="main-menu" class="menu-options">
+            <button onclick="showSection('search-section')">1. Wyszukaj miasto</button>
+            <button onclick="showSection('pixels-section')">2. Wojny Pixeli</button>
+            <button onclick="showSection('notes-section')">3. Notatki</button>
+            <button onclick="triggerSecret()">4. ? :D</button>
+        </div>
+
+        <!-- Opcja 1: Wyszukaj miasto -->
+        <div id="search-section" class="section-content">
+            <h3>Wyszukiwarka Miast</h3>
+            <p>Wpisz miasto, które chcesz sprawdzić:</p>
+            <input type="text" id="city-input" placeholder="np. Warszawa, Kraków...">
+            <button onclick="searchCity()">Szukaj w bazie</button>
+            <div id="city-result" style="margin-top: 10px; font-weight: bold;"></div>
+            <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
+        </div>
+
+        <!-- Opcja 2: Wojny pixeli -->
+        <div id="pixels-section" class="section-content">
+            <h3>Wojny Pixeli (Mapa Polski)</h3>
+            <p>Wybierz region/miasto na mapie Polski i rozpocznij walkę o terytorium z botami lub znajomymi!</p>
+            <div style="background: #e2e8f0; height: 150px; display: flex; align-items: center; justify-content: center; border-radius: 5px; color: #666; font-style: italic;">
+                [Tutaj w przyszłości pojawi się interaktywna mapa Polski]
+            </div>
+            <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
+        </div>
+
+        <!-- Opcja 3: Notatki -->
+        <div id="notes-section" class="section-content">
+            <h3>Twoje Notatki</h3>
+            <textarea id="user-note" rows="4" placeholder="Wpisz swoją notatkę tutaj..."></textarea>
+            <button onclick="saveNote()">Zapisz i wyślij</button>
+            <p id="note-status" style="color: green; font-size: 14px;"></p>
+            <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
+        </div>
+    </div>
+
+    <!-- Ukryty element dla opcji 4 -->
+    <div id="secret-popup">:D</div>
+
+    <script>
+        function showSection(sectionId) {
+            document.getElementById('main-menu').style.display = 'none';
+            document.querySelectorAll('.section-content').forEach(el => el.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function hideSections() {
+            document.querySelectorAll('.section-content').forEach(el => el.style.display = 'none');
+            document.getElementById('main-menu').style.display = 'grid';
+        }
+
+        // Logika dla opcji 1
+        function searchCity() {
+            const city = document.getElementById('city-input').value;
+            const resultDiv = document.getElementById('city-result');
+            if(city.trim() === "") {
+                resultDiv.innerText = "Wpisz nazwę miasta!";
+                resultDiv.style.color = "red";
+            } else {
+                resultDiv.innerText = `Znaleziono dane dla miasta: ${city}. Status: Bezpieczne terytorium.`;
+                resultDiv.style.color = "green";
+            }
+        }
+
+        // Logika dla opcji 3
+        function saveNote() {
+            const noteText = document.getElementById('user-note').value;
+            if(noteText.trim() !== "") {
+                localStorage.setItem('inteligent_note', noteText);
+                document.getElementById('note-status').innerText = "Notatka została zapisana pomyślnie!";
+            } else {
+                document.getElementById('note-status').innerText = "Notatka jest pusta!";
+                document.getElementById('note-status').style.color = "red";
+            }
+        }
+
+        // Logika dla opcji 4 (Pojawia się i znika po 2 sekundach)
+        function triggerSecret() {
+            const popup = document.getElementById('secret-popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 2000); // 2000 milisekund = 2 sekundy
+        }
+    </script>
+</body>
+</html>
