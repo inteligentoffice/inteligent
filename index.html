@@ -350,9 +350,9 @@
     <!-- POPUP ZĘBATEJ (USTAWIENIA I JASNOŚĆ) -->
     <div id="settings-popup" class="dropdown-popup">
         <h4 style="margin-top:0; color: var(--accent-color);">⚙️ Ustawienia Systemu</h4>
-        <p style="font-size: 12px; margin: 5px 0;">Wpisz jasność ekranu (np. 50 do 200%):</p>
+        <p style="font-size: 12px; margin: 5px 0;">Wpisz jasność ekranu (np. od 50 do 200%):</p>
         <div style="display: flex; gap: 5px; align-items: center;">
-            <input type="number" id="brightness-input" value="100" min="20" max="300" style="margin:0;" oninput="customBrightness(this.value)">
+            <input type="number" id="brightness-input" value="100" min="50" max="300" style="margin:0;" oninput="customBrightness(this.value)">
             <span style="font-size: 13px; font-weight: bold;">%</span>
         </div>
         <p style="font-size: 12px; margin: 10px 0 3px 0;">Szybki dostęp:</p>
@@ -464,7 +464,7 @@
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- TikTok (Nowa opcja społecznościowa) -->
+        <!-- TikTok -->
         <div id="tiktok-section" class="section-content">
             <h3>TikTok 📱 (Krótkie wideo i trendy)</h3>
             <p>Przeglądaj najnowsze materiały wideo i wrzucaj własne linki:</p>
@@ -478,10 +478,9 @@
         </div>
     </div>
 
-    <div class="version-bottom-right">v0.18🎉</div>
+    <div class="version-bottom-right">v0.18.1🎉</div>
 
     <script>
-        /* LOGOWANIE I TWORZENIE KONTA */
         let activeUser = "";
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -497,10 +496,13 @@
             if(savedTheme) setTheme(savedTheme);
 
             const savedBright = localStorage.getItem('inteligent_brightness');
-            if(savedBright) {
-                document.documentElement.style.setProperty('--brightness-val', savedBright / 100);
-                document.getElementById('brightness-input').value = savedBright;
-            }
+            // Zapewnienie, że jasność nigdy nie spadnie do 0 (domyślnie 100 jeśli puste lub za małe)
+            let brightNum = savedBright ? parseFloat(savedBright) : 100;
+            if(brightNum < 50) brightNum = 100;
+            
+            document.documentElement.style.setProperty('--brightness-val', brightNum / 100);
+            document.getElementById('brightness-input').value = brightNum;
+
             loadNoteCompletely();
             loadIntediscData();
         });
@@ -520,7 +522,6 @@
             document.getElementById('global-user-name').value = activeUser;
         }
 
-        /* STEROWANIE POPUPAMI IKON */
         function togglePopup(id) {
             const popup = document.getElementById(id);
             const otherId = id === 'brush-popup' ? 'settings-popup' : 'brush-popup';
@@ -542,7 +543,6 @@
             document.getElementById('main-container').classList.remove('fullscreen-mode');
         }
 
-        /* ANIMACJA ROZWIJANIA NOTATEK */
         function openFullscreenNotes() {
             const flash = document.getElementById('screen-flash');
             flash.style.opacity = '1';
@@ -596,12 +596,11 @@
 
         function customBrightness(val) {
             let num = parseFloat(val);
-            if(isNaN(num)) num = 100;
+            if(isNaN(num) || num < 50) num = 50;
             document.documentElement.style.setProperty('--brightness-val', num / 100);
             localStorage.setItem('inteligent_brightness', num);
         }
 
-        /* MOTYWY (Z czystym różowym Femboy) */
         function setTheme(theme) {
             const root = document.documentElement;
             if(theme === 'white-blue') {
@@ -695,7 +694,6 @@
                 root.style.setProperty('--accent-color', '#38bdf8');
                 root.style.setProperty('--accent-glow', 'rgba(56, 189, 248, 0.7)');
             } else if(theme === 'femboy') {
-                // Czysty różowy motyw Femboy
                 root.style.setProperty('--bg-color', '#fce7f3');
                 root.style.setProperty('--container-bg', '#ffffff');
                 root.style.setProperty('--text-color', '#9d174d');
@@ -709,7 +707,6 @@
             document.getElementById('brush-popup').style.display = 'none';
         }
 
-        /* INTEDISC: TWORZENIE GRUP */
         let currentGroup = "#ogólny";
         function createNewGroupPrompt() {
             let groupName = prompt("Podaj nazwę nowej grupy / kanału (np. #programiści):");
@@ -758,7 +755,6 @@
             }
         }
 
-        /* INTELIGENT.AI - PRAWDZIWY INTELIGENTNY MODEL ROZMOWY */
         function sendAiMessage() {
             const inputField = document.getElementById('ai-user-input');
             const chatBox = document.getElementById('ai-chat-box');
@@ -789,7 +785,6 @@
             }, 600);
         }
 
-        /* GLOBALNY CZAT MEDIA */
         function sendGlobalMessage() {
             const msgInput = document.getElementById('global-user-msg');
             const chatBox = document.getElementById('global-chat-box');
@@ -801,7 +796,6 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        /* TIKTOK SHARE */
         function shareTikTok() {
             const linkInput = document.getElementById('tiktok-link-input');
             const feed = document.getElementById('tiktok-feed');
@@ -811,7 +805,6 @@
             linkInput.value = '';
         }
 
-        /* WYSZUKIWARKA AI DLA MIAST, KRAJÓW I ULIC */
         function generateAiGlobalSearch() {
             const input = document.getElementById('city-input').value.trim();
             const resContainer = document.getElementById('city-details-result');
@@ -853,4 +846,3 @@
     </script>
 </body>
 </html>
-
