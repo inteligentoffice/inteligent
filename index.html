@@ -88,7 +88,7 @@
             background-color: #c9302c;
         }
 
-        /* Sekcja Gry Wojny Pixeli - 4 Frakcje */
+        /* Sekcja Gry Wojny Pixeli */
         .game-board {
             background: #1e1e2e;
             color: white;
@@ -109,7 +109,7 @@
 
         #poland-map {
             width: 100%;
-            max-width: 520px;
+            max-width: 550px;
             height: auto;
             margin: 0 auto;
             display: block;
@@ -117,8 +117,8 @@
 
         .voivodeship {
             fill: #313244;
-            stroke: #45475a;
-            stroke-width: 2;
+            stroke: #ffffff;
+            stroke-width: 1.5;
             cursor: pointer;
             transition: fill 0.3s;
         }
@@ -127,25 +127,21 @@
             fill: #585b70;
         }
 
-        /* Kolory 4 Frakcji */
+        /* Kolory Frakcji */
         .voivodeship.player {
             fill: #22c55e !important; /* Zielony */
-            stroke: #16a34a !important;
         }
 
         .voivodeship.bot-red {
             fill: #ef4444 !important; /* Czerwony */
-            stroke: #dc2626 !important;
         }
 
         .voivodeship.bot-blue {
             fill: #3b82f6 !important; /* Niebieski */
-            stroke: #2563eb !important;
         }
 
         .voivodeship.bot-yellow {
             fill: #eab308 !important; /* Żółty */
-            stroke: #ca8a04 !important;
         }
 
         #secret-popup {
@@ -199,9 +195,9 @@
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Opcja 2: WOJNY PIXELI (4 KOLORY / 3 BOTY) -->
+        <!-- Opcja 2: WOJNY PIXELI (Prawdziwy Kształt Polski) -->
         <div id="pixels-section" class="section-content">
-            <h3>Wojny Pixeli: Bitwa 4 Frakcji ⚔️</h3>
+            <h3>Wojny Pixeli: Bitwa o Polskę ⚔️</h3>
             <div class="game-board">
                 <div class="score-board">
                     <span style="color: #4ade80;">🟢 Ty: <span id="score-green">0</span></span>
@@ -209,57 +205,73 @@
                     <span style="color: #60a5fa;">🔵 Niebieski: <span id="score-blue">0</span></span>
                     <span style="color: #facc15;">🟡 Żółty: <span id="score-yellow">0</span></span>
                 </div>
-                <p style="font-size: 14px; color: #a6adc8;">Przejmuj tereny Polski! Trzy boty walczą jednocześnie!</p>
+                <p style="font-size: 14px; color: #a6adc8;">Przejmuj województwa na realistycznej mapie Polski!</p>
                 
-                <!-- Interaktywna Mapa Polski -->
-                <svg id="poland-map" viewBox="0 0 600 550">
-                    <path class="voivodeship" id="pomorskie" d="M 200,30 L 320,20 L 350,90 L 260,120 L 180,90 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="250" y="70" fill="white" font-size="12" pointer-events="none">Pomorskie</text>
+                <!-- Realistyczna Mapa Polski (SVG) -->
+                <svg id="poland-map" viewBox="0 0 600 560">
+                    <!-- Zachodniopomorskie -->
+                    <path class="voivodeship" id="zachodniopomorskie" d="M 40,110 Q 90,40 170,50 L 175,120 L 110,165 L 45,150 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="85" y="105" fill="white" font-size="11" pointer-events="none">Zachodniopomorskie</text>
 
-                    <path class="voivodeship" id="zachodniopomorskie" d="M 80,50 L 200,30 L 180,90 L 130,150 L 60,120 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="100" y="90" fill="white" font-size="11" pointer-events="none">Zachodnio-pom.</text>
+                    <!-- Pomorskie -->
+                    <path class="voivodeship" id="pomorskie" d="M 170,50 Q 250,20 310,70 L 290,140 L 175,120 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="210" y="80" fill="white" font-size="11" pointer-events="none">Pomorskie</text>
 
-                    <path class="voivodeship" id="warminsko-mazurskie" d="M 320,20 L 470,30 L 480,120 L 350,90 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="370" y="65" fill="white" font-size="11" pointer-events="none">Warmińsko-Maz.</text>
+                    <!-- Warmińsko-Mazurskie -->
+                    <path class="voivodeship" id="warminsko-mazurskie" d="M 310,70 Q 400,40 450,80 L 430,160 L 290,140 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="335" y="110" fill="white" font-size="11" pointer-events="none">Warmińsko-Mazurskie</text>
 
-                    <path class="voivodeship" id="podlaskie" d="M 470,30 L 560,70 L 540,200 L 450,180 L 480,120 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="480" y="120" fill="white" font-size="12" pointer-events="none">Podlaskie</text>
+                    <!-- Podlaskie -->
+                    <path class="voivodeship" id="podlaskie" d="M 450,80 Q 530,90 540,180 L 435,210 L 430,160 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="455" y="145" fill="white" font-size="11" pointer-events="none">Podlaskie</text>
 
-                    <path class="voivodeship" id="lubuskie" d="M 60,120 L 130,150 L 120,240 L 50,210 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="70" y="180" fill="white" font-size="12" pointer-events="none">Lubuskie</text>
+                    <!-- Lubuskie -->
+                    <path class="voivodeship" id="lubuskie" d="M 45,150 L 110,165 L 115,250 L 50,230 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="55" y="195" fill="white" font-size="11" pointer-events="none">Lubuskie</text>
 
-                    <path class="voivodeship" id="wielkopolskie" d="M 130,150 L 260,120 L 280,240 L 180,260 L 120,240 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="170" y="190" fill="white" font-size="12" pointer-events="none">Wielkopolskie</text>
+                    <!-- Wielkopolskie -->
+                    <path class="voivodeship" id="wielkopolskie" d="M 110,165 L 175,120 L 290,140 L 260,265 L 115,250 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="165" y="200" fill="white" font-size="12" pointer-events="none">Wielkopolskie</text>
 
-                    <path class="voivodeship" id="kujawsko-pomorskie" d="M 260,120 L 350,90 L 370,170 L 280,180 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="280" y="150" fill="white" font-size="10" pointer-events="none">Kujawsko-Pom.</text>
+                    <!-- Kujawsko-Pomorskie -->
+                    <path class="voivodeship" id="kujawsko-pomorskie" d="M 290,140 L 430,160 L 370,225 L 260,265 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="290" y="190" fill="white" font-size="11" pointer-events="none">Kujawsko-Pomorskie</text>
 
-                    <path class="voivodeship" id="mazowieckie" d="M 350,90 L 480,120 L 450,180 L 460,280 L 330,270 L 370,170 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="380" y="200" fill="white" font-size="13" pointer-events="none">Mazowieckie</text>
+                    <!-- Mazowieckie -->
+                    <path class="voivodeship" id="mazowieckie" d="M 430,160 L 435,210 L 520,240 L 430,330 L 325,300 L 370,225 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="400" y="245" fill="white" font-size="12" pointer-events="none">Mazowieckie</text>
 
-                    <path class="voivodeship" id="dolnoslaskie" d="M 50,210 L 120,240 L 180,260 L 150,340 L 70,300 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="80" y="270" fill="white" font-size="12" pointer-events="none">Dolnośląskie</text>
+                    <!-- Dolnośląskie -->
+                    <path class="voivodeship" id="dolnoslaskie" d="M 50,230 L 115,250 L 180,295 L 120,360 L 55,310 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="75" y="295" fill="white" font-size="11" pointer-events="none">Dolnośląskie</text>
 
-                    <path class="voivodeship" id="lodzkie" d="M 280,240 L 330,270 L 320,340 L 240,330 L 180,260 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="250" y="295" fill="white" font-size="12" pointer-events="none">Łódzkie</text>
+                    <!-- Łódzkie -->
+                    <path class="voivodeship" id="lodzkie" d="M 260,265 L 370,225 L 325,300 L 280,350 L 180,295 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="250" y="300" fill="white" font-size="11" pointer-events="none">Łódzkie</text>
 
-                    <path class="voivodeship" id="lubelskie" d="M 450,180 L 540,200 L 530,330 L 430,320 L 460,280 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="460" y="260" fill="white" font-size="12" pointer-events="none">Lubelskie</text>
+                    <!-- Lubelskie -->
+                    <path class="voivodeship" id="lubelskie" d="M 520,240 L 530,340 L 420,380 L 430,330 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="450" y="310" fill="white" font-size="11" pointer-events="none">Lubelskie</text>
 
-                    <path class="voivodeship" id="opolskie" d="M 180,260 L 240,330 L 210,380 L 150,340 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="175" y="330" fill="white" font-size="10" pointer-events="none">Opolskie</text>
+                    <!-- Opolskie -->
+                    <path class="voivodeship" id="opolskie" d="M 180,295 L 235,335 L 195,390 L 120,360 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="155" y="350" fill="white" font-size="10" pointer-events="none">Opolskie</text>
 
-                    <path class="voivodeship" id="slaskie" d="M 240,330 L 320,340 L 300,420 L 210,380 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="250" y="370" fill="white" font-size="12" pointer-events="none">Śląskie</text>
+                    <!-- Śląskie -->
+                    <path class="voivodeship" id="slaskie" d="M 235,335 L 280,350 L 285,425 L 195,390 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="225" y="380" fill="white" font-size="11" pointer-events="none">Śląskie</text>
 
-                    <path class="voivodeship" id="swietokrzyskie" d="M 320,340 L 430,320 L 400,390 L 300,380 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="330" y="360" fill="white" font-size="10" pointer-events="none">Świętokrzyskie</text>
+                    <!-- Świętokrzyskie -->
+                    <path class="voivodeship" id="swietokrzyskie" d="M 325,300 L 430,330 L 420,380 L 285,425 L 280,350 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="320" y="360" fill="white" font-size="10" pointer-events="none">Świętokrzyskie</text>
 
-                    <path class="voivodeship" id="malopolskie" d="M 300,380 L 400,390 L 380,480 L 280,460 L 300,420 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="310" y="430" fill="white" font-size="12" pointer-events="none">Małopolskie</text>
+                    <!-- Małopolskie -->
+                    <path class="voivodeship" id="malopolskie" d="M 285,425 L 420,380 L 390,490 L 270,480 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="310" y="445" fill="white" font-size="11" pointer-events="none">Małopolskie</text>
 
-                    <path class="voivodeship" id="podkarpackie" d="M 400,390 L 530,330 L 500,490 L 380,480 Z" onclick="claimVoivodeship(this)"></path>
-                    <text x="420" y="440" fill="white" font-size="11" pointer-events="none">Podkarpackie</text>
+                    <!-- Podkarpackie -->
+                    <path class="voivodeship" id="podkarpackie" d="M 420,380 L 530,340 L 500,510 L 390,490 Z" onclick="claimVoivodeship(this)"></path>
+                    <text x="430" y="450" fill="white" font-size="11" pointer-events="none">Podkarpackie</text>
                 </svg>
 
                 <p id="game-status" style="margin-top: 15px; font-weight: bold; font-size: 18px;"></p>
@@ -322,7 +334,7 @@
             }, 2000);
         }
 
-        /* LOGIKA BITWY 4 FRAKCJI */
+        /* LOGIKA BITWY 4 FRAKCJI NA REALISTYCZNEJ MAPIE */
         let scores = { green: 0, red: 0, blue: 0, yellow: 0 };
         let botInterval = null;
 
@@ -336,7 +348,7 @@
             });
 
             clearInterval(botInterval);
-            botInterval = setInterval(botsAttack, 1200); // Boty atakują co 1.2s
+            botInterval = setInterval(botsAttack, 1200);
         }
 
         function stopGame() {
@@ -360,7 +372,6 @@
             }
 
             const botTypes = ['bot-red', 'bot-blue', 'bot-yellow'];
-            // Losowy bot przeprowadza atak
             const randomBot = botTypes[Math.floor(Math.random() * botTypes.length)];
             const randomTarget = available[Math.floor(Math.random() * available.length)];
 
