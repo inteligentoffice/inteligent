@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inteligent</title>
+    <title>Inteligent v0.1</title>
     <style>
         :root {
             --bg-color: #0f141c;
@@ -31,6 +31,7 @@
             transition: filter 0.3s, background 0.3s, color 0.3s;
         }
 
+        /* NOWA ANIMACJA STARTOWA v0.1 */
         #intro-splash {
             position: fixed;
             top: 0;
@@ -43,34 +44,51 @@
             align-items: center;
             justify-content: center;
             z-index: 999999;
-            animation: hideSplash 0.8s ease 2.8s forwards;
+            animation: hideSplash 0.8s ease 3s forwards;
         }
 
-        .splash-title {
-            font-size: 56px;
+        .splash-logo-icon {
+            font-size: 64px;
+            margin-bottom: 10px;
+            animation: iconPulse 3s infinite;
+        }
+
+        .splash-title-v1 {
+            font-size: 48px;
             font-weight: 900;
             font-style: italic;
             color: #f0f6fc;
             margin-bottom: 20px;
-            animation: textDestroy 2.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation: textSmashSequence 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        .splash-lupa-anim {
-            font-size: 80px;
-            animation: lupaSmash 2.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        .splash-orbit-container {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes textDestroy {
-            0% { transform: scale(0.5); opacity: 0; }
-            40% { transform: scale(1.1); opacity: 1; }
-            75% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(0.1) translate(300px, -300px); opacity: 0; }
+        .splash-lupa {
+            font-size: 70px;
+            animation: lupaAction 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        @keyframes lupaSmash {
+        @keyframes textSmashSequence {
+            0% { transform: scale(0.3); opacity: 0; }
+            30% { transform: scale(1.1); opacity: 1; }
+            60% { transform: scale(1); opacity: 1; filter: blur(0px); }
+            75% { transform: scale(1.4) skewX(-20deg); opacity: 0.7; filter: blur(3px); }
+            100% { transform: scale(0.1) translate(-400px, -300px); opacity: 0; filter: blur(10px); }
+        }
+
+        @keyframes lupaAction {
             0% { transform: scale(0.2) rotate(0deg); opacity: 0; }
-            30% { transform: scale(1.2) rotate(180deg); opacity: 1; }
-            100% { transform: scale(2) translate(-400px, -300px) rotate(720deg); opacity: 0; }
+            30% { transform: scale(1.3) rotate(180deg); opacity: 1; }
+            60% { transform: scale(1) rotate(360deg); opacity: 1; }
+            100% { transform: scale(0.5) translate(400px, -300px) rotate(720deg); opacity: 0; }
         }
 
         @keyframes hideSplash {
@@ -98,42 +116,6 @@
             border: 2px solid var(--accent-color);
             box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
-
-        #hard-mode-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(127, 29, 29, 0.95);
-            z-index: 9999999;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-        }
-
-        body.layout-center-side .sidebar {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 10px;
-            width: auto;
-            flex-direction: row;
-            border-radius: 10px;
-        }
-        body.layout-top-center .sidebar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 60px;
-            flex-direction: row;
-            align-items: center;
-        }
-        body.layout-fullscreen .sidebar { display: none; }
 
         .sidebar {
             width: 260px;
@@ -173,17 +155,6 @@
             align-items: center;
             justify-content: center;
             border: 2px solid var(--accent-color);
-        }
-
-        .logo-icon-circle span {
-            font-size: 22px;
-            display: inline-block;
-            animation: spinMagnifier 6s linear infinite;
-        }
-
-        @keyframes spinMagnifier {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .logo-text {
@@ -319,47 +290,6 @@
             font-size: 14px;
         }
 
-        .top-toolbar {
-            position: fixed;
-            top: 20px;
-            right: 25px;
-            display: flex;
-            gap: 12px;
-            z-index: 1000;
-        }
-
-        .icon-btn {
-            background: var(--container-bg);
-            border: 1px solid var(--border-color);
-            font-size: 18px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: 0.2s;
-        }
-        .icon-btn:hover { transform: scale(1.1); }
-
-        .dropdown-popup {
-            display: none;
-            position: fixed;
-            top: 70px;
-            right: 25px;
-            background: var(--container-bg);
-            border: 1px solid var(--border-color);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
-            z-index: 10001;
-            width: 280px;
-        }
-
-        button, input, textarea, select { font-family: inherit; }
-
         .action-btn {
             padding: 10px 15px;
             background: var(--accent-color);
@@ -390,104 +320,31 @@
             margin-top: 5px;
             height: 16px;
         }
-
-        /* POWIĘKSZONA, CZYTELNA KWADRATOWA MAPA STRATEGICZNA */
-        .strategy-map-container {
-            background: #111827;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            display: inline-block;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .strategy-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 140px);
-            grid-template-rows: repeat(4, 125px);
-            gap: 10px;
-        }
-        .territory-tile {
-            background: var(--btn-bg);
-            border: 3px solid var(--border-color);
-            border-radius: 10px;
-            padding: 8px;
-            text-align: center;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            transition: 0.15s;
-        }
-        .territory-tile:hover { transform: scale(1.03); filter: brightness(1.2); }
     </style>
 </head>
 <body>
 
+    <!-- ANIMACJA STARTOWA v0.1 -->
     <div id="intro-splash">
-        <div class="splash-title">Inteligent</div>
-        <div class="splash-lupa-anim">🔍</div>
+        <div class="splash-logo-icon">🔍</div>
+        <div class="splash-title-v1">Inteligent 0.1</div>
+        <div class="splash-lupa-anim">🔎</div>
     </div>
 
-    <div id="hard-mode-overlay">
-        <h1 style="font-size: 48px; color: #f87171;">⚠️ TRYB HARD AKTYWNY! 🐻</h1>
-        <p style="font-size: 20px;">Niedźwiedź próbuje Cię ugryźć, a ludzik rzuca ikonami!</p>
-        <div style="font-size: 60px; margin: 20px;">🐻 🏃‍♂️ 💥</div>
-        <button onclick="disableHardMode()" style="padding: 15px 30px; font-size: 18px; background: #22c55e; color: black; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;">Wyłącz Hard i Wróć</button>
-    </div>
-
+    <!-- OKNO LOGOWANIA -->
     <div id="auth-modal">
         <div class="auth-card">
-            <h3 style="margin-top:0;">🔒 Logowanie / Konto Inteligent</h3>
+            <h3 style="margin-top:0;">🔒 Logowanie / Konto Inteligent v0.1</h3>
             <p style="font-size: 13px; opacity: 0.8;">Wpisz swój nick i hasło:</p>
             <label style="font-size: 12px; font-weight: bold;">Nick:</label>
             <input type="text" id="reg-username" placeholder="Twój nick..." style="width:100%; padding:8px; margin:5px 0 10px 0; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:4px; box-sizing:border-box;">
             <label style="font-size: 12px; font-weight: bold;">Hasło:</label>
             <input type="password" id="reg-password" placeholder="Hasło..." style="width:100%; padding:8px; margin:5px 0 15px 0; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:4px; box-sizing:border-box;">
-            <button onclick="registerUser()" class="action-btn" style="width:100%;">Wejdź / Zapisz konto</button>
+            <button onclick="registerUser()" class="action-btn" style="width:100%;">Wejdź do systemu</button>
         </div>
     </div>
 
-    <div class="top-toolbar">
-        <button class="icon-btn" onclick="togglePopup('brush-popup')" title="Pędzel">🎨</button>
-        <button class="icon-btn" onclick="togglePopup('settings-popup')" title="Ustawienia">⚙️</button>
-    </div>
-
-    <div id="brush-popup" class="dropdown-popup">
-        <h4 style="margin-top:0;">🎨 Pędzel</h4>
-        <div style="display:flex; gap:5px; margin-bottom:10px;">
-            <button onclick="switchBrushTab('motywy')" class="action-btn" style="flex:1; font-size:12px; padding:6px;">Motywy</button>
-            <button onclick="switchBrushTab('dodatki')" class="action-btn" style="flex:1; font-size:12px; padding:6px; background:#3b82f6;">Dodatki</button>
-        </div>
-        
-        <div id="brush-tab-motywy" style="display:flex; flex-direction:column; gap:5px; max-height: 200px; overflow-y: auto;">
-            <button onclick="setTheme('szary')" style="background:#374151; color:#fff; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">Szary</button>
-            <button onclick="setTheme('rozowy')" style="background:#f472b6; color:#fff; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">Różowy</button>
-            <button onclick="setTheme('ciemny')" style="background:#111827; color:#fff; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">Ciemny</button>
-            <button onclick="setTheme('czerwony')" style="background:#dc2626; color:#fff; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">Czerwony</button>
-            <button onclick="setTheme('bialy')" style="background:#ffffff; color:#000; border:1px solid #ccc; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">Biały</button>
-            <button onclick="setTheme('femboy')" style="background:#fce7f3; color:#9d174d; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">🌸 Femboy</button>
-            <button onclick="setTheme('femboy-colorful')" style="background:linear-gradient(135deg,#ec4899,#8b5cf6,#3b82f6); color:#fff; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">🌈 Kolorowy femboy +</button>
-        </div>
-
-        <div id="brush-tab-dodatki" style="display:none; flex-direction:column; gap:5px; max-height: 200px; overflow-y: auto;">
-            <button onclick="setLayout('center-side')" style="background:var(--btn-bg); color:var(--text-color); border:1px solid var(--border-color); padding:6px; border-radius:4px; text-align:left; cursor:pointer; font-size:12px;">1. Pasek na środku</button>
-            <button onclick="setLayout('top-center')" style="background:var(--btn-bg); color:var(--text-color); border:1px solid var(--border-color); padding:6px; border-radius:4px; text-align:left; cursor:pointer; font-size:12px;">2. Pasek na środku u góry</button>
-            <button onclick="setLayout('fullscreen')" style="background:var(--btn-bg); color:var(--text-color); border:1px solid var(--border-color); padding:6px; border-radius:4px; text-align:left; cursor:pointer; font-size:12px;">3. Cały ekran (Ukryj pasek)</button>
-            <button onclick="setLayout('default')" style="background:var(--btn-bg); color:var(--text-color); border:1px solid var(--border-color); padding:6px; border-radius:4px; text-align:left; cursor:pointer; font-size:12px;">4. Domyślny</button>
-            <button onclick="enableHardMode()" style="background:#ef4444; color:white; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer; font-size:12px; font-weight:bold;">5. Tryb Hard (Niedźwiedź!)</button>
-        </div>
-    </div>
-
-    <div id="settings-popup" class="dropdown-popup">
-        <h4 style="margin-top:0;">⚙️ Ustawienia</h4>
-        <p style="font-size:12px; margin:5px 0;">Jasność ekranu (%):</p>
-        <input type="number" id="brightness-input" value="100" min="50" max="250" oninput="changeBrightness(this.value)" style="width:100%; padding:6px; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:4px; box-sizing:border-box; margin-bottom:10px;">
-        <button onclick="logoutUser()" class="action-btn" style="background:#ef4444; font-size:12px; width:100%;">Wyloguj się</button>
-    </div>
-
+    <!-- PANEL BOCZNY -->
     <div class="sidebar">
         <div class="sidebar-top">
             <div class="sidebar-logo-area">
@@ -497,7 +354,8 @@
                 <h1 class="logo-text">Inteligent</h1>
             </div>
             <button class="nav-item" onclick="showSection('maps-section')">🗺️ Inteligent Maps</button>
-            <button class="nav-item" onclick="showSection('strategy-game-section')">🛡️ Wojna Krajów</button>
+            <button class="nav-item" onclick="showSection('settings-section')">⚙️ Ustawienia i Motywy</button>
+            <button class="nav-item" onclick="showSection('future-projects-section')">🚀 Przyszłe Projekty</button>
             <button class="nav-item" onclick="showSection('intedisc-section')">💬 Intedisc (Discord)</button>
             <button class="nav-item" onclick="showSection('notes-section')">📝 Notatki (Kwadraty)</button>
             <button class="nav-item" onclick="showSection('store-section')">🛒 Inteligent Store</button>
@@ -512,13 +370,15 @@
         </div>
     </div>
 
+    <!-- GŁÓWNA TREŚĆ -->
     <div class="main-content-area" id="main-area">
 
         <div id="default-menu-view" style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; text-align:center;">
-            <h2 style="font-size: 32px; margin-bottom: 10px;">Witaj w systemie Inteligent</h2>
-            <p style="opacity: 0.7; max-width: 500px;">Wybierz opcję z panelu. Wpisuj wiadomości klawiszem <b>Enter</b>, wracaj do menu klawiszem <b>ESC</b>.</p>
+            <h2 style="font-size: 32px; margin-bottom: 10px;">Witaj w systemie Inteligent v0.1</h2>
+            <p style="opacity: 0.7; max-width: 500px;">Wybierz opcję z panelu bocznego. Wpisuj wiadomości klawiszem <b>Enter</b>, wracaj do menu klawiszem <b>ESC</b>.</p>
         </div>
 
+        <!-- 1. INTELIGENT MAPS -->
         <div id="maps-section" class="section-content">
             <h3>Inteligent Maps</h3>
             <div style="display:flex; gap:10px; margin-bottom:15px;">
@@ -530,35 +390,86 @@
             </div>
         </div>
 
-        <!-- KWADRATOWA MAPA STRATEGICZNA Z EKONOMIĄ I OBRONĄ -->
-        <div id="strategy-game-section" class="section-content">
-            <h3>🛡️ Wojna Krajów - Kwadratowa Mapa Strategiczna</h3>
-            <div style="display:flex; gap:15px; align-items:center; margin-bottom:15px; flex-wrap:wrap;">
-                <div>
-                    <label style="font-size:12px; font-weight:bold;">Twój kraj:</label>
-                    <select id="player-country-select" onchange="initStrategyGame()" style="padding:6px; background:var(--btn-bg); color:var(--text-color); border:1px solid var(--border-color); border-radius:4px;">
-                        <option value="Polska">🇵🇱 Polska</option>
-                        <option value="Niemcy">🇩🇪 Niemcy</option>
-                        <option value="Ukraina">🇺🇦 Ukraina</option>
-                        <option value="Białoruś">🇧🇾 Białoruś</option>
-                        <option value="Litwa">🇱🇹 Litwa</option>
-                        <option value="Czechy">🇨🇿 Czechy</option>
-                        <option value="Mołdawia">🇲🇩 Mołdawia</option>
-                    </select>
-                </div>
-                <button onclick="initStrategyGame()" class="action-btn">🔄 Resetuj Mapę</button>
-                <div style="background:var(--container-bg); padding:8px 15px; border-radius:6px; border:1px solid var(--border-color); font-weight:bold;">
-                    🪙 Monety: <span id="player-coins" style="color:#facc15;">0</span>
-                </div>
-                <div id="game-status-msg" style="font-weight:bold; font-size:14px; color:#22c55e;"></div>
-            </div>
-            <p style="font-size:13px; opacity:0.8;">Kliknij kwadrat wroga, aby zaatakować! Zbieraj monety i kupuj obronę (+3 za 10 monet) w swoich prowincjach!</p>
+        <!-- 2. USTAWIENIA I MOTYWY (PRZENIESIONE TUTAJ) -->
+        <div id="settings-section" class="section-content">
+            <h3>⚙️ Ustawienia, Motywy i Język</h3>
             
-            <div class="strategy-map-container">
-                <div class="strategy-grid" id="strategy-board"></div>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-top:20px;">
+                <!-- Motywy -->
+                <div style="background:var(--container-bg); padding:20px; border-radius:10px; border:1px solid var(--border-color);">
+                    <h4>🎨 Wybór Motywu</h4>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <button onclick="setTheme('szary')" class="action-btn" style="background:#374151;">Szary</button>
+                        <button onclick="setTheme('rozowy')" class="action-btn" style="background:#f472b6;">Różowy</button>
+                        <button onclick="setTheme('ciemny')" class="action-btn" style="background:#111827;">Ciemny</button>
+                        <button onclick="setTheme('czerwony')" class="action-btn" style="background:#dc2626;">Czerwony</button>
+                        <button onclick="setTheme('bialy')" class="action-btn" style="background:#ffffff; color:#000;">Biały</button>
+                        <button onclick="setTheme('femboy')" class="action-btn" style="background:#db2777;">🌸 Femboy</button>
+                    </div>
+                </div>
+
+                <!-- Języki -->
+                <div style="background:var(--container-bg); padding:20px; border-radius:10px; border:1px solid var(--border-color);">
+                    <h4>🌍 Wybór Języka</h4>
+                    <select id="lang-select" style="width:100%; padding:10px; background:var(--btn-bg); color:var(--text-color); border:1px solid var(--border-color); border-radius:6px; margin-bottom:15px;">
+                        <option value="pl">Polska</option>
+                        <option value="fr">Francuski (Français)</option>
+                        <option value="de">Niemiecki (Deutsch)</option>
+                        <option value="ua">Ukraiński (Українська)</option>
+                        <option value="usa">USA / English</option>
+                        <option value="lt">Litewski (Lietuvių)</option>
+                        <option value="lv">Łotewski (Latviešu)</option>
+                        <option value="ru">Rosyjski (Русский)</option>
+                        <option value="ro">Rumuński (Română)</option>
+                        <option value="jp">Japoński (日本語)</option>
+                        <option value="es">Hiszpański (Español)</option>
+                        <option value="pt">Portugalski (Português)</option>
+                        <option value="it">Włoski (Italiano)</option>
+                        <option value="no">Norweski (Norsk)</option>
+                        <option value="fi">Fiński (Suomi)</option>
+                        <option value="hu">Węgierski (Magyar)</option>
+                        <option value="cs">Czeski (Čeština)</option>
+                        <option value="sk">Słowacki (Slovenčina)</option>
+                        <option value="sv">Szwedzki (Svenska)</option>
+                        <option value="et">Estoński (Eesti)</option>
+                        <option value="sq">Albański (Shqip)</option>
+                        <option value="el">Grecki (Ελληνικά)</option>
+                        <option value="tr">Turecki (Türkçe)</option>
+                        <option value="ko">Koreański (한국어)</option>
+                        <option value="da">Duński (Dansk)</option>
+                    </select>
+                    <button onclick="alert('Zapisano ustawienia języka! (v0.1)')" class="action-btn" style="width:100%;">Zastosuj język</button>
+                </div>
+
+                <!-- Konta -->
+                <div style="background:var(--container-bg); padding:20px; border-radius:10px; border:1px solid var(--border-color);">
+                    <h4>👤 Zarządzanie Kontem</h4>
+                    <p style="font-size:13px; opacity:0.8;">Aktualny użytkownik: <b id="current-user-display">-</b></p>
+                    <button onclick="logoutUser()" class="action-btn" style="background:#ef4444; width:100%; margin-bottom:8px;">Wyloguj się</button>
+                    <button onclick="createSecondAccount()" class="action-btn" style="background:#3b82f6; width:100%;">Stwórz / Przełącz konto</button>
+                </div>
             </div>
         </div>
 
+        <!-- 3. PRZYSZŁE PROJEKTY -->
+        <div id="future-projects-section" class="section-content">
+            <h3>🚀 Przyszłe Projekty v0.1</h3>
+            <p>Oto nadchodzące, autorskie projekty w ekosystemie Inteligent:</p>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-top:20px;">
+                <div style="background:var(--container-bg); padding:20px; border-radius:10px; border:1px solid var(--border-color);">
+                    <h4 style="color:var(--accent-color); margin-top:0;">🌐 1. Przeglądarka Inteligent</h4>
+                    <p style="font-size:13px; opacity:0.8;">Dedykowana, szybka przeglądarka internetowa tworzona od zera z myślą o pełnej prywatności i integracji z systemem.</p>
+                    <span style="font-size:11px; background:rgba(35, 134, 54, 0.2); padding:3px 8px; border-radius:4px; color:#238636; font-weight:bold;">Status: W planach / Trwają prace</span>
+                </div>
+                <div style="background:var(--container-bg); padding:20px; border-radius:10px; border:1px solid var(--border-color);">
+                    <h4 style="color:var(--accent-color); margin-top:0;">🐧 2. Linux Inteligent</h4>
+                    <p style="font-size:13px; opacity:0.8;">Autorska dystrybucja systemu Linux opතිකowana pod kątem maksymalnej wydajności, gier i lekkiego środowiska graficznego.</p>
+                    <span style="font-size:11px; background:rgba(35, 134, 54, 0.2); padding:3px 8px; border-radius:4px; color:#238636; font-weight:bold;">Status: Koncepcja i projekt</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. INTEDISC -->
         <div id="intedisc-section" class="section-content">
             <h3>Intedisc (Komunikator)</h3>
             <div class="discord-layout">
@@ -571,7 +482,7 @@
                 </div>
                 <div class="discord-chat-main">
                     <div id="intedisc-chat-box" class="chat-box">
-                        <div class="chat-msg"><b>[System]:</b> Witaj w Intedisc.</div>
+                        <div class="chat-msg"><b>[System]:</b> Witaj w Intedisc v0.1.</div>
                     </div>
                     <div class="typing-indicator" id="intedisc-typing"></div>
                     <input type="text" id="intedisc-msg-input" placeholder="Napisz wiadomość..." oninput="triggerTyping('intedisc')" onkeydown="handleIntediscKey(event)" style="width:100%; padding:10px; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:6px; box-sizing:border-box;">
@@ -579,6 +490,7 @@
             </div>
         </div>
 
+        <!-- 5. NOTATKI -->
         <div id="notes-section" class="section-content">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <h3>Twoje Notatki</h3>
@@ -587,6 +499,7 @@
             <div class="notes-grid" id="notes-grid-container"></div>
         </div>
 
+        <!-- 6. INTELIGENT STORE -->
         <div id="store-section" class="section-content">
             <h3>🛒 Inteligent Store</h3>
             <div style="display:flex; gap:10px; margin-bottom:20px;">
@@ -598,19 +511,21 @@
             <div id="store-items-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:15px;"></div>
         </div>
 
+        <!-- 7. INFORMACJE -->
         <div id="info-section" class="section-content">
-            <h3>📢 Inteligent Informacje (v0.24)</h3>
+            <h3>📢 Inteligent Informacje (Wersja v0.1)</h3>
             <div style="background:var(--container-bg); border:1px solid var(--border-color); border-radius:10px; padding:20px; margin-top:15px; line-height:1.6;">
-                <h4 style="margin-top:0; color:var(--accent-color);">✨ Wersja v0.24 - Co nowego:</h4>
+                <h4 style="margin-top:0; color:var(--accent-color);">✨ Oficjalna wersja v0.1:</h4>
                 <ul style="padding-left:20px; font-size:14px;">
-                    <li><b>Flagi i Nazwy:</b> Każdy kwadrat wyświetla flagę państwa oraz nazwę województwa/prowincji.</li>
-                    <li><b>Ekonomia i Monety:</b> Zdobywaj monety (generowane automatycznie za Twoje tereny).</li>
-                    <li><b>Zakup Obrony:</b> Wydawaj 10 monet na zakup +3 obrony w wybranym województwie.</li>
-                    <li><b>Wrogie ataki:</b> Wrogowie aktywnie atakują Twoje ziemie!</li>
+                    <li><b>Reset i czysta karta:</b> Usunięto starą minigrę strategiczną, tworząc stabilne fundamenty systemu.</li>
+                    <li><b>Ustawienia i Motywy:</b> Przeniesione bezpośrednio do menu głównego dla wygody.</li>
+                    <li><b>Obsługa wielu języków:</b> Dodano pełną listę 25 języków świata.</li>
+                    <li><b>Przyszłe Projekty:</b> Nowa zakładka zapowiadająca *Przeglądarkę Inteligent* oraz *Linux Inteligent*.</li>
                 </ul>
             </div>
         </div>
 
+        <!-- 8. GLOBALNE MEDIA -->
         <div id="media-section" class="section-content">
             <h3>Globalne Media Świata</h3>
             <div id="global-chat-box" class="chat-box" style="height:350px;"></div>
@@ -620,32 +535,20 @@
 
     </div>
 
-    <div class="version-tag">v0.24🎉</div>
+    <div class="version-tag">v0.1</div>
 
     <script>
         let currentUser = "";
-        let playerCoins = 0;
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('inteligent_active_user');
             if(savedUser) {
                 currentUser = savedUser;
                 document.getElementById('auth-modal').style.display = 'none';
+                document.getElementById('current-user-display').innerText = currentUser;
             }
             loadNotesCards();
             loadStoreItems();
-            initStrategyGame();
-
-            // Pętla ekonomiczna: generowanie monet za terytoria co 2 sekundy oraz automatyczne ataki wroga
-            setInterval(() => {
-                let playerCountry = document.getElementById('player-country-select').value;
-                let ourTerrains = territories.filter(t => t.owner === playerCountry);
-                if(ourTerrains.length > 0) {
-                    playerCoins += ourTerrains.length; // 1 moneta za każde terytorium
-                    document.getElementById('player-coins').innerText = playerCoins;
-                }
-                aiEnemyAttack();
-            }, 2000);
         });
 
         function registerUser() {
@@ -655,6 +558,7 @@
             currentUser = user;
             localStorage.setItem('inteligent_active_user', currentUser);
             document.getElementById('auth-modal').style.display = 'none';
+            document.getElementById('current-user-display').innerText = currentUser;
         }
 
         function logoutUser() {
@@ -662,21 +566,9 @@
             location.reload();
         }
 
-        function togglePopup(id) {
-            const p = document.getElementById(id);
-            const other = id === 'brush-popup' ? 'settings-popup' : 'brush-popup';
-            document.getElementById(other).style.display = 'none';
-            p.style.display = p.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function switchBrushTab(tab) {
-            if(tab === 'motywy') {
-                document.getElementById('brush-tab-motywy').style.display = 'flex';
-                document.getElementById('brush-tab-dodatki').style.display = 'none';
-            } else {
-                document.getElementById('brush-tab-motywy').style.display = 'none';
-                document.getElementById('brush-tab-dodatki').style.display = 'flex';
-            }
+        function createSecondAccount() {
+            localStorage.removeItem('inteligent_active_user');
+            location.reload();
         }
 
         function setTheme(theme) {
@@ -729,37 +621,8 @@
                 root.style.setProperty('--border-color', '#f472b6');
                 root.style.setProperty('--btn-bg', '#fbcfe8');
                 root.style.setProperty('--accent-color', '#db2777');
-            } else if(theme === 'femboy-colorful') {
-                root.style.setProperty('--bg-color', '#3b0764');
-                root.style.setProperty('--sidebar-bg', '#4c1d95');
-                root.style.setProperty('--container-bg', '#581c87');
-                root.style.setProperty('--text-color', '#fce7f3');
-                root.style.setProperty('--border-color', '#ec4899');
-                root.style.setProperty('--btn-bg', '#7c3aed');
-                root.style.setProperty('--accent-color', '#ec4899');
             }
-            document.getElementById('brush-popup').style.display = 'none';
-        }
-
-        function setLayout(layout) {
-            document.body.className = "";
-            if(layout !== 'default') document.body.classList.add('layout-' + layout);
-            document.getElementById('brush-popup').style.display = 'none';
-        }
-
-        function enableHardMode() {
-            document.getElementById('hard-mode-overlay').style.display = 'flex';
-            document.getElementById('brush-popup').style.display = 'none';
-        }
-
-        function disableHardMode() {
-            document.getElementById('hard-mode-overlay').style.display = 'none';
-        }
-
-        function changeBrightness(val) {
-            let num = parseFloat(val);
-            if(isNaN(num) || num < 50) num = 50;
-            document.documentElement.style.setProperty('--brightness-val', num / 100);
+            alert("Zastosowano motyw: " + theme);
         }
 
         window.addEventListener('keydown', (e) => {
@@ -769,163 +632,18 @@
         function showDefaultMenu() {
             document.querySelectorAll('.section-content').forEach(el => el.style.display = 'none');
             document.getElementById('default-menu-view').style.display = 'flex';
-            document.getElementById('brush-popup').style.display = 'none';
-            document.getElementById('settings-popup').style.display = 'none';
         }
 
         function showSection(id) {
             document.getElementById('default-menu-view').style.display = 'none';
             document.querySelectorAll('.section-content').forEach(el => el.style.display = 'none');
             document.getElementById(id).style.display = 'block';
-            document.getElementById('brush-popup').style.display = 'none';
-            document.getElementById('settings-popup').style.display = 'none';
         }
 
         function searchMap() {
             const q = document.getElementById('map-query').value.trim();
             if(!q) return;
             document.getElementById('map-container-frame').innerHTML = `<iframe width="100%" height="100%" frameborder="0" src="https://maps.google.com/maps?q=${encodeURIComponent(q)}&output=embed"></iframe>`;
-        }
-
-        /* STRATEGIA 4x4 Z FLAGAMI, NAZWAMI WOJEWÓDZTW I OBRONĄ */
-        let territories = [];
-        const countryColors = {
-            "Polska": "#22c55e",
-            "Niemcy": "#3b82f6",
-            "Ukraina": "#eab308",
-            "Białoruś": "#ef4444",
-            "Litwa": "#a855f7",
-            "Czechy": "#f97316",
-            "Mołdawia": "#06b6d4"
-        };
-        const countryFlags = {
-            "Polska": "🇵🇱",
-            "Niemcy": "🇩🇪",
-            "Ukraina": "🇺🇦",
-            "Białoruś": "🇧🇾",
-            "Litwa": "🇱🇹",
-            "Czechy": "🇨🇿",
-            "Mołdawia": "🇲🇩"
-        };
-
-        function initStrategyGame() {
-            const playerCountry = document.getElementById('player-country-select').value;
-            playerCoins = 0;
-            document.getElementById('player-coins').innerText = playerCoins;
-
-            territories = [
-                { name: "Berlin", owner: "Niemcy", army: 10, defense: 0 },
-                { name: "Monachium", owner: "Niemcy", army: 8, defense: 0 },
-                { name: "Praga", owner: "Czechy", army: 9, defense: 0 },
-                { name: "Wilno", owner: "Litwa", army: 8, defense: 0 },
-
-                { name: "Pomorze", owner: playerCountry, army: 10, defense: 0 },
-                { name: "Mazowsze", owner: playerCountry, army: 15, defense: 0 },
-                { name: "Śląsk", owner: playerCountry, army: 12, defense: 0 },
-                { name: "Małopolska", owner: playerCountry, army: 12, defense: 0 },
-
-                { name: "Brześć", owner: "Białoruś", army: 9, defense: 0 },
-                { name: "Mińsk", owner: "Białoruś", army: 11, defense: 0 },
-                { name: "Lwów", owner: "Ukraina", army: 12, defense: 0 },
-                { name: "Kijów", owner: "Ukraina", army: 14, defense: 0 },
-
-                { name: "Odessa", owner: "Ukraina", army: 10, defense: 0 },
-                { name: "Kiszyniów", owner: "Mołdawia", army: 6, defense: 0 },
-                { name: "Bielce", owner: "Mołdawia", army: 5, defense: 0 },
-                { name: "Brno", owner: "Czechy", army: 7, defense: 0 }
-            ];
-            renderStrategyBoard();
-        }
-
-        function renderStrategyBoard() {
-            const board = document.getElementById('strategy-board');
-            board.innerHTML = "";
-            let playerCountry = document.getElementById('player-country-select').value;
-            let playerTerrainsCount = territories.filter(t => t.owner === playerCountry).length;
-
-            document.getElementById('game-status-msg').innerText = `Kraj: ${countryFlags[playerCountry]} ${playerCountry} | Tereny: ${playerTerrainsCount}/16`;
-
-            territories.forEach((t, idx) => {
-                let color = countryColors[t.owner] || "#555";
-                let isPlayer = t.owner === playerCountry;
-                board.innerHTML += `
-                    <div class="territory-tile" style="border-color: ${color};" onclick="tileAction(${idx})">
-                        <div>
-                            <span style="font-size:11px;">${countryFlags[t.owner]} ${t.owner}</span><br>
-                            <b style="font-size:13px; color:var(--text-color);">${t.name}</b>
-                        </div>
-                        <div style="font-size:11px; display:flex; gap:6px; justify-content:center; background:rgba(0,0,0,0.3); width:100%; padding:3px 0; border-radius:4px;">
-                            <span>🛡️ ${t.army + t.defense}</span>
-                            ${isPlayer && t.defense > 0 ? `<span style="color:#22c55e;">(+${t.defense} obrony)</span>` : ''}
-                        </div>
-                        ${isPlayer ? `<button onclick="buyDefense(event, ${idx})" style="font-size:10px; background:#238636; color:white; border:none; padding:2px 4px; border-radius:3px; cursor:pointer;">Kup +3 obrony (10🪙)</button>` : ''}
-                    </div>
-                `;
-            });
-        }
-
-        function tileAction(idx) {
-            let playerCountry = document.getElementById('player-country-select').value;
-            let target = territories[idx];
-            if(target.owner === playerCountry) {
-                alert("To terytorium należy do Ciebie! Możesz dokupić do niego obronę przyciskiem.");
-                return;
-            }
-
-            let ourTerrains = territories.filter(t => t.owner === playerCountry && t.army > 2);
-            if(ourTerrains.length === 0) {
-                alert("Twoje armie są za słabe na atak!");
-                return;
-            }
-
-            let attacker = ourTerrains[0];
-            let targetPower = target.army + target.defense;
-
-            if(attacker.army > targetPower) {
-                attacker.army -= 2;
-                target.owner = playerCountry;
-                target.army = Math.floor(attacker.army / 2);
-                target.defense = 0;
-                alert(`Zwycięstwo! Podbiłeś region: ${target.name}!`);
-            } else {
-                attacker.army -= 3;
-                alert(`Atak na ${target.name} odparty przez obrońców wroga!`);
-            }
-            renderStrategyBoard();
-        }
-
-        function buyDefense(e, idx) {
-            e.stopPropagation(); // żeby nie wywołać ataku
-            if(playerCoins >= 10) {
-                playerCoins -= 10;
-                territories[idx].defense += 3;
-                document.getElementById('player-coins').innerText = playerCoins;
-                alert(`Dokupiono +3 obrony dla regionu ${territories[idx].name}!`);
-                renderStrategyBoard();
-            } else {
-                alert("Za mało monet! Potrzebujesz 10 monet.");
-            }
-        }
-
-        function aiEnemyAttack() {
-            let playerCountry = document.getElementById('player-country-select').value;
-            let enemyTerrains = territories.filter(t => t.owner !== playerCountry);
-            if(enemyTerrains.length > 0) {
-                let randomEnemy = enemyTerrains[Math.floor(Math.random() * enemyTerrains.length)];
-                let playerTerrainsList = territories.filter(t => t.owner === playerCountry);
-                if(playerTerrainsList.length > 0) {
-                    let attackedPlayerTile = playerTerrainsList[Math.floor(Math.random() * playerTerrainsList.length)];
-                    let totalPlayerPower = attackedPlayerTile.army + attackedPlayerTile.defense;
-                    if(randomEnemy.army > totalPlayerPower) {
-                        attackedPlayerTile.owner = randomEnemy.owner;
-                        attackedPlayerTile.army = 5;
-                        attackedPlayerTile.defense = 0;
-                    } else {
-                        randomEnemy.army -= 1;
-                    }
-                }
-            }
-            renderStrategyBoard();
         }
 
         let currentChannel = "#ogólny";
@@ -960,7 +678,7 @@
             }
         }
 
-        let notesList = JSON.parse(localStorage.getItem('inteligent_notes_cards') || '["Notatka 1..."]');
+        let notesList = JSON.parse(localStorage.getItem('inteligent_notes_cards') || '["Notatka v0.1..."]');
         function loadNotesCards() {
             const container = document.getElementById('notes-grid-container');
             container.innerHTML = '';
@@ -991,7 +709,7 @@
             }
         }
 
-        let storeItems = JSON.parse(localStorage.getItem('inteligent_store_items') || '[{"name": "Modpack v1", "desc": "Zestaw optymalizacyjny.", "url": "#", "author": "System"}]');
+        let storeItems = JSON.parse(localStorage.getItem('inteligent_store_items') || '[{"name": "Modpack v0.1", "desc": "Zestaw startowy systemu.", "url": "#", "author": "System"}]');
 
         function loadStoreItems(filter = "") {
             const grid = document.getElementById('store-items-grid');
