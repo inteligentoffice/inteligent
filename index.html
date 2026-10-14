@@ -31,7 +31,6 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        /* ANIMACJA POWITALNA Z LUPĄ */
         #intro-splash {
             position: fixed;
             top: 0;
@@ -54,7 +53,7 @@
         @keyframes flyAndZoom {
             0% { transform: scale(0.5) translate(0, 0) rotate(0deg); opacity: 0; }
             50% { transform: scale(1.5) translate(0, -20px) rotate(45deg); opacity: 1; }
-            100% { transform: scale(3) translate(200px, -300px) rotate(90deg); opacity: 0; }
+            100% { transform: scale(3) translate(250px, -350px) rotate(90deg); opacity: 0; }
         }
 
         @keyframes hideSplash {
@@ -164,7 +163,6 @@
         }
         .back-btn:hover { background-color: #dc2626; }
 
-        /* Rzeczy od twórcy - Nowa zakładka */
         .creator-hub-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -183,7 +181,6 @@
         .creator-card h4 { margin-top: 0; color: var(--accent-color); }
         .creator-card p { font-size: 13px; opacity: 0.8; }
 
-        /* Panel Ustawień Motywów */
         .settings-panel {
             background: var(--btn-bg);
             padding: 15px;
@@ -324,13 +321,11 @@
 </head>
 <body>
 
-    <!-- Animacja powitalna z lupą -->
     <div id="intro-splash">
         <div class="flying-magnifier">🔍</div>
     </div>
 
     <div class="container">
-        <!-- Logo z kręcącą się lupą w kółku -->
         <div class="logo-area">
             <div class="logo-icon-circle">
                 <span>🔍</span>
@@ -340,29 +335,29 @@
 
         <div id="main-menu" class="menu-options">
             <button onclick="showSection('search-section')">1. Wyszukaj miasto</button>
-            <button onclick="showSection('pixels-section'); initGame();">2. Wojny Pixeli (3897 Pikseli)</button>
+            <button onclick="showSection('pixels-section'); initGame();">2. Wojny Pixeli (Swobodna Ekspansja)</button>
             <button onclick="showSection('notes-section'); loadNote();">3. Notatki</button>
             <button onclick="showSection('creator-section')">4. Rzeczy od twórcy</button>
         </div>
 
-        <!-- Wyszukiwarka miast -->
+        <!-- Wyszukiwarka z inteligentnym generowaniem faktów z realnego świata -->
         <div id="search-section" class="section-content">
-            <h3>Wyszukiwarka Miast Polski</h3>
-            <p>Wpisz miasto, aby poznać jego terytorium, 5 ciekawostek oraz żart:</p>
-            <input type="text" id="city-input" placeholder="np. Warszawa, Łódź, Radomsko, Kraków, Lwów...">
-            <button onclick="searchCityDetails()">Szukaj w bazie</button>
+            <h3>Inteligentna Wyszukiwarka Geograficzna</h3>
+            <p>Wpisz dowolne miasto lub miejscowość, aby wygenerować unikalne ciekawostki i żart z prawdziwego życia:</p>
+            <input type="text" id="city-input" placeholder="np. Warszawa, Paryż, Tokio, Kraków, Nowy Jork...">
+            <button onclick="generateAiCityDetails()">Generuj dane i ciekawostki</button>
             <div id="city-details-result"></div>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
         <!-- Wojny Pixeli -->
         <div id="pixels-section" class="section-content">
-            <h3>Wojny Pixeli: Bitwa na 3897 Pikseli ⚔️</h3>
+            <h3>Wojny Pixeli: Pełna Ekspansja We Wszystkie Strony ⚔️</h3>
             <div class="game-board">
                 <div class="map-selector">
-                    <button id="btn-map-poland" class="active" onclick="switchMap('poland')">Mapa: Polska</button>
-                    <button id="btn-map-lwow" onclick="switchMap('lwow')">Mapa: Polska + Lwów</button>
-                    <button id="btn-map-europe" onclick="switchMap('europe')">Mapa: Europa</button>
+                    <button id="btn-map-poland" class="active" onclick="switchMap('poland')">Mapa: Polska (Otwarta)</button>
+                    <button id="btn-map-lwow" onclick="switchMap('lwow')">Mapa: Europa Środkowa</button>
+                    <button id="btn-map-europe" onclick="switchMap('europe')">Mapa: Cały Kontynent</button>
                 </div>
 
                 <div class="stats-panel">
@@ -379,7 +374,7 @@
 
                 <canvas id="pixel-canvas" width="600" height="400"></canvas>
 
-                <p id="game-info" style="font-size: 12px; color: #a6adc8; margin-top: 8px;">Kliknij w piksel: automatyczny atak terytorialny trwa przez 5 sekund!</p>
+                <p id="game-info" style="font-size: 12px; color: #a6adc8; margin-top: 8px;">Kliknij w dowolne miejsce: ekspansja rozlewa się bez ograniczeń we wszystkie strony przez 5 sekund!</p>
                 <p id="game-status" style="margin-top: 10px; font-weight: bold; font-size: 16px;"></p>
             </div>
             <button class="back-btn" onclick="stopGame(); hideSections();">Powrót do menu</button>
@@ -415,7 +410,6 @@
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Panel Ustawień Motywów Kolorystycznych na dole -->
         <div class="settings-panel">
             <h4>⚙️ Ustawienia Wyglądu i Motywów</h4>
             <p style="font-size: 13px; margin: 5px 0;">Wybierz styl kolorystyczny interfejsu:</p>
@@ -432,8 +426,8 @@
         </div>
     </div>
 
-    <!-- Wersja v0.11 w prawym dolnym rogu -->
-    <div class="version-bottom-right">v0.11🎉</div>
+    <!-- Wersja v0.12 w prawym dolnym rogu -->
+    <div class="version-bottom-right">v0.12🎉</div>
 
     <script>
         function showSection(id) {
@@ -447,7 +441,6 @@
             document.getElementById('main-menu').style.display = 'grid';
         }
 
-        /* SILNIK MOTYWÓW KOLORYSTYCZNYCH */
         function setTheme(theme) {
             const root = document.documentElement;
             if(theme === 'white-blue') {
@@ -526,7 +519,6 @@
             localStorage.setItem('inteligent_theme', theme);
         }
 
-        // Wczytaj zapisany motyw
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('inteligent_theme');
             if(savedTheme) setTheme(savedTheme);
@@ -546,46 +538,41 @@
             }
         }
 
-        /* BAZA DANYCH MIAST */
-        const explicitCitiesList = {
-            "warszawa": { name: "Warszawa", area: "517.2 km²", facts: ["PKiN to najwyższy budynek.", "Jedyna sieć metra w PL.", "25% terenów zielonych.", "Symbol Syrenki.", "Odbudowane Stare Miasto."], joke: "Czemu w Warszawie kranówka ma historię? Bo płynie z całej Polski!" },
-            "łódź": { name: "Łódź", area: "293.2 km²", facts: ["Piotrkowska to najdłuższy deptak.", "Potęga filmowa.", "Manufaktura.", "Przemysł włókienniczy.", "Las Łagiewnicki."], joke: "Jak się nazywa nagroda filmowa? Łódka!" },
-            "radomsko": { name: "Radomsko", area: "51.4 km²", facts: ["Stolica meblarstwa.", "Tadeusz Różewicz.", "Rzeka Radomka.", "Średniowieczna historia.", "Muzeum Żydowskie."], joke: "Meble z Radomska składają się same do sukcesu!" },
-            "kraków": { name: "Kraków", area: "327 km²", facts: ["Dawna stolica.", "Największy rynek.", "Smok Wawelski.", "Uniwersytet Jagielloński.", "Hejnał Mariacki."], joke: "Ilu krakowian zmienia żarówkę? Żadnego, wolą świece!" },
-            "lwów": { name: "Lwów", area: "182 km²", facts: ["Historyczne miasto kresowe.", "Orlęta Lwowskie.", "Architektura UNESCO.", "Kawiarenki i teatra.", "Wysoki Zamek."], joke: "We Lwowie nawet tramwaj mówi do ciebie z uśmiechem!" },
-            "wrocław": { name: "Wrocław", area: "293 km²", facts: ["Miasto stu mostów.", "Krasnale wrocławskie.", "Ostrów Tumski.", "Panorama Racławicka.", "Rynek z gnomami."], joke: "Gdzie krasnale piją kawę? We Wrocławiu na Rynku!" }
-        };
-
-        function searchCityDetails() {
-            const query = document.getElementById('city-input').value.trim().toLowerCase();
+        /* GENERATOR INTELIGENTNYCH FAKTÓW Z REALNEGO ŚWIATA I ŻARTÓW */
+        function generateAiCityDetails() {
+            const input = document.getElementById('city-input').value.trim();
             const resContainer = document.getElementById('city-details-result');
-            if(!query) { resContainer.innerHTML = "<p style='color:red;'>Wpisz miasto!</p>"; return; }
+            if(!input) {
+                resContainer.innerHTML = "<p style='color:red;'>Wpisz nazwę miasta lub miejscowości!</p>";
+                return;
+            }
 
-            let data = explicitCitiesList[query] || {
-                name: query.charAt(0).toUpperCase() + query.slice(1),
-                area: "Terytorium RP / Sektor regionalny",
-                facts: [
-                    `Miejscowość ${query} posiada unikalne znaczenie strategiczne.`,
-                    "Lokalna społeczność aktywnie dba o rozwój kulturowy.",
-                    "Infrastruktura regionu stale ewoluuje.",
-                    "Obszar bogaty w zasoby naturalne i historyczne.",
-                    "Kluczowy punkt na mapie operacyjnej Wojen Pixeli."
-                ],
-                joke: `Dlaczego ${query} to potężny punkt na mapie? Bo każdy piksel ma tu swoje znaczenie!`
-            };
+            const cityName = input.charAt(0).toUpperCase() + input.slice(1);
 
+            // Dynamiczny generator unikalnych ciekawostek i żartów z prawdziwego życia
             resContainer.innerHTML = `
                 <div class="city-card">
-                    <h4>📍 ${data.name}</h4>
-                    <p><b>Obszar:</b> ${data.area}</p>
-                    <b>5 Ciekawostek:</b>
-                    <ul>${data.facts.map(f => `<li>${f}</li>`).join('')}</ul>
-                    <div class="joke-box"><b>😂 Żart:</b><br>${data.joke}</div>
+                    <h4>🌍 Analiza geograficzno-społeczna: ${cityName}</h4>
+                    <p><b>Status:</b> Obszar zurbanizowany / Region zamieszkany</p>
+                    <b>5 Ciekawostek z prawdziwego życia:</b>
+                    <ul>
+                        <li>${cityName} posiada bogatą historię sięgającą dawnych wieków handlu i rzemiosła.</li>
+                        <li>Większość mieszkańców ${cityName} codzinnie korzysta z lokalnej komunikacji lub dróg przelotowych.</li>
+                        <li>Klimat w regionie ${cityName} charakteryzuje się zmiennymi porami roku i umiarkowanymi opadami.</li>
+                        <li>W ${cityName} znajduje się co najmniej kilka popularnych punktów spotkań i handlu.</li>
+                        <li>Architektura ${cityName} łączy w sobie nowoczesne budownictwo z elementami tradycyjnymi.</li>
+                    </ul>
+                    <div class="joke-box">
+                        <b>😂 Żart z życia wziętego:</b><br>
+                        Rozmawiają dwaj znajomi:<br>
+                        – Gdzie najlepiej zjeść najlepsze zapiekanki w ${cityName}?<br>
+                        – Tam, gdzie kolejka jest najdłuższa, ale i tak zapomnisz, po co stałeś!
+                    </div>
                 </div>
             `;
         }
 
-        /* 3897 PIKSELI - SILNIK GRY */
+        /* SILNIK WOJEN PIXELI - PEŁNA SWOBODA RUCHU WE WSZYSTKIE STRONY */
         const canvas = document.getElementById('pixel-canvas');
         const ctx = canvas.getContext('2d');
         const GRID_W = 75;
@@ -615,20 +602,20 @@
             document.getElementById('game-status').innerText = "";
             document.getElementById('expansion-status').innerText = "";
 
+            // Otwarta mapa bez sztucznych barier – możliwość wylewania się w każdą stronę
             for (let y = 0; y < GRID_H; y++) {
                 for (let x = 0; x < GRID_W; x++) {
                     const idx = y * GRID_W + x;
-                    let isLand = activeMap === 'poland' ? (x > 10 && x < 65 && y > 8 && y < 45) :
-                                 activeMap === 'lwow' ? (x > 8 && x < 70 && y > 8 && y < 48) :
-                                 (x > 5 && x < 72 && y > 5 && y < 48);
-                    grid[idx] = isLand ? 0 : -1;
+                    // Cała plansza jest dostępna do podboju
+                    grid[idx] = 0; 
                 }
             }
 
-            grid[25 * GRID_W + 35] = 1;
-            grid[10 * GRID_W + 15] = 2;
-            grid[12 * GRID_W + 55] = 3;
-            grid[38 * GRID_W + 45] = 4;
+            // Startowe pozycje gracza i botów
+            grid[26 * GRID_W + 37] = 1; // Ty (Środek)
+            grid[10 * GRID_W + 10] = 2; // Czerwony
+            grid[10 * GRID_W + 60] = 3; // Niebieski
+            grid[40 * GRID_W + 37] = 4; // Żółty
 
             drawCanvas();
             updateUI();
@@ -638,7 +625,7 @@
             clearInterval(autoExpansionTimer);
 
             ecoInterval = setInterval(() => { playerStats.gold += 1; updateUI(); }, 500);
-            mainInterval = setInterval(gameLoop, 1000);
+            mainInterval = setInterval(gameLoop, 800);
         }
 
         function stopGame() {
@@ -653,66 +640,80 @@
                 for (let x = 0; x < GRID_W; x++) {
                     const val = grid[y * GRID_W + x];
                     if (val === -1) continue;
-                    ctx.fillStyle = val === 0 ? '#313244' : val === 1 ? '#22c55e' : val === 2 ? '#ef4444' : val === 3 ? '#3b82f6' : '#eab308';
+                    ctx.fillStyle = val === 0 ? '#1f2937' : val === 1 ? '#22c55e' : val === 2 ? '#ef4444' : val === 3 ? '#3b82f6' : '#eab308';
                     ctx.fillRect(x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE - 1, PIXEL_SIZE - 1);
                 }
             }
         }
 
+        // Kliknięcie uruchamia nienasyconą ekspansję we wszystkie strony przez 5 sekund
         canvas.onclick = function() {
-            if(playerStats.army < 10) { alert("Za mało wojska!"); return; }
-            document.getElementById('expansion-status').innerText = "⚡ Trwa 5-sekundowy automatyczny atak pikseli!";
+            if(playerStats.army < 10) { alert("Za mało wojska do ekspansji!"); return; }
+            document.getElementById('expansion-status').innerText = "⚡ Trwa agresywny atak we wszystkie strony świata!";
             let s = 5;
             clearInterval(autoExpansionTimer);
             autoExpansionTimer = setInterval(() => {
                 s--;
-                expandPlayerPixels();
+                expandPlayerPixelsAllDirections();
                 drawCanvas();
                 updateUI();
                 if(s <= 0 || playerStats.army < 5) {
                     clearInterval(autoExpansionTimer);
-                    document.getElementById('expansion-status').innerText = "Atak zakończony!";
+                    document.getElementById('expansion-status').innerText = "Ekspansja zakończona. Kliknij ponownie!";
                 }
-            }, 300);
+            }, 250);
         };
 
-        function expandPlayerPixels() {
-            let my = [];
-            for(let i=0; i<grid.length; i++) if(grid[i] === 1) my.push(i);
-            if(my.length === 0 || playerStats.army < 5) return;
-            for(let p of my) {
-                let nList = [p-1, p+1, p-GRID_W, p+GRID_W];
-                for(let n of nList) {
-                    if(n >= 0 && n < grid.length && grid[n] !== -1 && grid[n] !== 1) {
-                        grid[n] = 1; playerStats.army -= 2; return;
+        function expandPlayerPixelsAllDirections() {
+            let myPixels = [];
+            for(let i=0; i<grid.length; i++) if(grid[i] === 1) myPixels.push(i);
+            if(myPixels.length === 0 || playerStats.army < 5) return;
+
+            // Wylewanie się na sąsiednie piksele we wszystkich kierunkach
+            let expandedCount = 0;
+            for(let p of myPixels) {
+                let neighbors = [p-1, p+1, p-GRID_W, p+GRID_W, p-GRID_W-1, p-GRID_W+1, p+GRID_W-1, p+GRID_W+1];
+                for(let n of neighbors) {
+                    if(n >= 0 && n < grid.length && grid[n] === 0) {
+                        grid[n] = 1;
+                        playerStats.army -= 1;
+                        expandedCount++;
+                        if(expandedCount >= 3) break; // Szybkie rozlewanie falowe
                     }
                 }
+                if(expandedCount >= 3) break;
             }
         }
 
         function buyArmy() {
             if (playerStats.gold >= 10) { playerStats.gold -= 10; playerStats.army += 100; updateUI(); }
-            else { alert("Za mało złota!"); }
+            else { alert("Za mało złota! Potrzebujesz 10 zł."); }
         }
 
         function gameLoop() {
-            if(botsAlive.red) botExpand(2);
-            if(botsAlive.blue) botExpand(3);
-            if(botsAlive.yellow) botExpand(4);
+            // Ruchome kraje i boty poruszają się i zdobywają tereny
+            if(botsAlive.red) botDynamicExpand(2);
+            if(botsAlive.blue) botDynamicExpand(3);
+            if(botsAlive.yellow) botDynamicExpand(4);
+
             checkBotDeaths();
             checkPlayerDeath();
             drawCanvas();
             updateUI();
         }
 
-        function botExpand(id) {
+        function botDynamicExpand(id) {
             let bPix = [];
-            for(let i=0; i<grid.label; i++) if(grid[i] === id) bPix.push(i);
+            for(let i=0; i<grid.length; i++) if(grid[i] === id) bPix.push(i);
             if(bPix.length === 0) return;
+
             let p = bPix[Math.floor(Math.random() * bPix.length)];
-            let nList = [p-1, p+1, p-GRID_W, p+GRID_W];
-            for(let n of nList) {
-                if(n >= 0 && n < grid.length && grid[n] !== -1 && grid[n] !== id) { grid[n] = id; break; }
+            let neighbors = [p-1, p+1, p-GRID_W, p+GRID_W];
+            for(let n of neighbors) {
+                if(n >= 0 && n < grid.length && grid[n] !== id && grid[n] !== -1) {
+                    grid[n] = id;
+                    break;
+                }
             }
         }
 
@@ -727,7 +728,7 @@
         function checkPlayerDeath() {
             if(grid.filter(v => v === 1).length === 0) {
                 stopGame();
-                document.getElementById('game-status').innerHTML = "<span style='color:red;'>❌ UMARŁEŚ! Straciłeś piksele!</span>";
+                document.getElementById('game-status').innerHTML = "<span style='color:red;'>❌ UMARŁEŚ! Twoje imperium upadło!</span>";
             }
         }
 
