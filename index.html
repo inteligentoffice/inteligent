@@ -31,7 +31,7 @@
             transition: filter 0.3s, background 0.3s, color 0.3s;
         }
 
-        /* ULEPSZONA ANIMACJA STARTOWA: Lupa kręci się wokół Google, YouTube i TikTok, które potem odlatują, a lupa ląduje w logo */
+        /* NOWA ANIMACJA STARTOWA Z NAPISEM I NISZCZENIEM PRZEZ LUPĘ */
         #intro-splash {
             position: fixed;
             top: 0;
@@ -40,54 +40,47 @@
             height: 100vh;
             background: #0f141c;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 999999;
-            animation: hideSplash 0.8s ease 2.4s forwards;
+            animation: hideSplash 0.8s ease 2.8s forwards;
         }
 
-        .splash-center {
-            position: relative;
-            width: 160px;
-            height: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .splash-title {
+            font-size: 56px;
+            font-weight: 900;
+            font-style: italic;
+            color: #f0f6fc;
+            margin-bottom: 20px;
+            animation: textDestroy 2.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        .splash-lupa {
-            font-size: 64px;
-            animation: lupaFlyToLogo 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            z-index: 10;
+        .splash-lupa-anim {
+            font-size: 80px;
+            animation: lupaSmash 2.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        .orbit-icon {
-            position: absolute;
-            font-size: 32px;
-            animation: orbitAndFly 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        @keyframes textDestroy {
+            0% { transform: scale(0.5); opacity: 0; }
+            40% { transform: scale(1.1); opacity: 1; filter: blur(0px); }
+            75% { transform: scale(1); opacity: 1; filter: blur(0px); }
+            85% { transform: scale(1.3) skewX(-20deg); opacity: 0.8; filter: blur(2px); }
+            100% { transform: scale(0.1) translate(300px, -300px); opacity: 0; filter: blur(10px); }
         }
 
-        #ic-google { transform-origin: center; }
-        #ic-youtube { transform-origin: center; animation-delay: 0.1s; }
-        #ic-tiktok { transform-origin: center; animation-delay: 0.2s; }
-
-        @keyframes orbitAndFly {
-            0% { transform: rotate(0deg) translate(70px) rotate(0deg); opacity: 1; }
-            70% { transform: rotate(360deg) translate(70px) rotate(-360deg); opacity: 1; }
-            100% { transform: rotate(720deg) translate(250px, -200px) scale(0.2); opacity: 0; }
-        }
-
-        @keyframes lupaFlyToLogo {
-            0% { transform: scale(1) translate(0, 0); }
-            70% { transform: scale(1.4) translate(0, 0) rotate(0deg); }
-            100% { transform: scale(0.65) translate(-42vw, -41vh) rotate(360deg); }
+        @keyframes lupaSmash {
+            0% { transform: scale(0.2) rotate(0deg); opacity: 0; }
+            30% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+            70% { transform: scale(1) rotate(360deg); opacity: 1; }
+            100% { transform: scale(2) translate(-400px, -300px) rotate(720deg); opacity: 0; }
         }
 
         @keyframes hideSplash {
             to { visibility: hidden; opacity: 0; pointer-events: none; }
         }
 
-        /* EKRAN LOGOWANIA */
+        /* OKNA AUTORYZACJI I WYBORU KONT */
         #auth-modal {
             position: fixed;
             top: 0;
@@ -110,7 +103,47 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
 
-        /* PANEL BOCZNY (Aternos Style) */
+        /* TRYB HARD (MINIGRA Z NIEDŹWIEDZIEM I LUDZIKIEM) */
+        #hard-mode-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(127, 29, 29, 0.95);
+            z-index: 9999999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        /* UKŁADY PANELU (LAYOUTY) */
+        body.layout-center-side .sidebar {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 10px;
+            width: auto;
+            flex-direction: row;
+            border-radius: 10px;
+        }
+        body.layout-top-center .sidebar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 60px;
+            flex-direction: row;
+            align-items: center;
+        }
+        body.layout-fullscreen .sidebar {
+            display: none;
+        }
+
+        /* PANEL BOCZNY (STANDARD) */
         .sidebar {
             width: 260px;
             background-color: var(--sidebar-bg);
@@ -186,11 +219,8 @@
             gap: 10px;
         }
 
-        .nav-item:hover {
-            background-color: var(--btn-hover);
-        }
+        .nav-item:hover { background-color: var(--btn-hover); }
 
-        /* DOLNY ROG: TIKTOK, YOUTUBE, GOOGLE */
         .sidebar-bottom-icons {
             display: flex;
             justify-content: space-around;
@@ -211,12 +241,8 @@
             justify-content: center;
             transition: 0.2s;
         }
+        .bottom-icon-btn:hover { transform: scale(1.1); }
 
-        .bottom-icon-btn:hover {
-            transform: scale(1.1);
-        }
-
-        /* GŁÓWNY OBSZAR ROBOCZY */
         .main-content-area {
             flex-grow: 1;
             background-color: var(--bg-color);
@@ -226,17 +252,8 @@
             box-sizing: border-box;
         }
 
-        .section-content {
-            display: none;
-            animation: fadeIn 0.3s ease-out;
-        }
+        .section-content { display: none; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* NOTATKI W KWADRATACH */
         .notes-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -252,7 +269,6 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
         .note-card textarea {
@@ -267,7 +283,6 @@
             resize: none;
         }
 
-        /* INTEDISC (DISCORD STYLE) */
         .discord-layout {
             display: flex;
             height: 75vh;
@@ -314,7 +329,6 @@
             font-size: 14px;
         }
 
-        /* GÓRNY PASEK USTAWIENIOWY */
         .top-toolbar {
             position: fixed;
             top: 20px;
@@ -338,7 +352,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             transition: 0.2s;
         }
-
         .icon-btn:hover { transform: scale(1.1); }
 
         .dropdown-popup {
@@ -352,12 +365,10 @@
             border-radius: 10px;
             box-shadow: 0 5px 25px rgba(0,0,0,0.5);
             z-index: 10001;
-            width: 260px;
+            width: 280px;
         }
 
-        button, input, textarea, select {
-            font-family: inherit;
-        }
+        button, input, textarea, select { font-family: inherit; }
 
         .action-btn {
             padding: 10px 15px;
@@ -381,68 +392,93 @@
             border-radius: 6px;
             border: 1px solid var(--border-color);
         }
+
+        .typing-indicator {
+            font-style: italic;
+            opacity: 0.7;
+            font-size: 12px;
+            margin-top: 5px;
+            height: 16px;
+        }
     </style>
 </head>
 <body>
 
     <!-- ANIMACJA STARTOWA -->
     <div id="intro-splash">
-        <div class="splash-center">
-            <div id="ic-google" class="orbit-icon">🌐</div>
-            <div id="ic-youtube" class="orbit-icon">▶️</div>
-            <div id="ic-tiktok" class="orbit-icon">🎵</div>
-            <div class="splash-lupa">🔍</div>
-        </div>
+        <div class="splash-title">Inteligent</div>
+        <div class="splash-lupa-anim">🔍</div>
     </div>
 
-    <!-- OKNO LOGOWANIA -->
+    <!-- TRYB HARD (MINIGRA Z NIEDŹWIEDZIEM) -->
+    <div id="hard-mode-overlay">
+        <h1 style="font-size: 48px; color: #f87171;">⚠️ TRYB HARD AKTYWNY! 🐻</h1>
+        <p style="font-size: 20px;">Niedźwiedź próbuje Cię ugryźć, a ludzik rzuca ikonami!</p>
+        <div style="font-size: 60px; margin: 20px;">🐻 🏃‍♂️ 💥</div>
+        <button onclick="disableHardMode()" style="padding: 15px 30px; font-size: 18px; background: #22c55e; color: black; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;">Wyłącz Hard i Wróć</button>
+    </div>
+
+    <!-- OKNO LOGOWANIA / WYBORU KONT -->
     <div id="auth-modal">
-        <div class="auth-card">
-            <h3 style="margin-top:0;">🔒 Tworzenie Konta Inteligent</h3>
-            <p style="font-size: 13px; opacity: 0.8;">Wpisz swój unikalny nick oraz hasło:</p>
+        <div class="auth-card" id="auth-card-content">
+            <h3 style="margin-top:0;">🔒 Logowanie / Konto Inteligent</h3>
+            <p style="font-size: 13px; opacity: 0.8;">Wpisz swój nick i hasło:</p>
             <label style="font-size: 12px; font-weight: bold;">Nick:</label>
             <input type="text" id="reg-username" placeholder="Twój nick..." style="width:100%; padding:8px; margin:5px 0 10px 0; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:4px; box-sizing:border-box;">
             <label style="font-size: 12px; font-weight: bold;">Hasło:</label>
             <input type="password" id="reg-password" placeholder="Hasło..." style="width:100%; padding:8px; margin:5px 0 15px 0; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:4px; box-sizing:border-box;">
-            <button onclick="registerUser()" class="action-btn" style="width:100%;">Zarejestruj się / Wejdź</button>
+            <button onclick="registerUser()" class="action-btn" style="width:100%; margin-bottom: 8px;">Wejdź / Zapisz konto</button>
+            <button onclick="showAccountSwitcher()" style="width:100%; background:transparent; border:1px solid var(--border-color); color:var(--text-color); padding:8px; border-radius:4px; cursor:pointer;">Przełącz na inne konto</button>
         </div>
     </div>
 
     <!-- GÓRNY PASEK USTAWIEŃ -->
     <div class="top-toolbar">
-        <button class="icon-btn" onclick="togglePopup('brush-popup')" title="Motywy">🎨</button>
-        <button class="icon-btn" onclick="togglePopup('settings-popup')" title="Ustawienia i Jasność">⚙️</button>
+        <button class="icon-btn" onclick="togglePopup('brush-popup')" title="Pędzel">🎨</button>
+        <button class="icon-btn" onclick="togglePopup('settings-popup')" title="Ustawienia">⚙️</button>
     </div>
 
-    <!-- POPUP MOTYWÓW -->
+    <!-- POPUP PĘDZLA (MOTYWY + DODATKI) -->
     <div id="brush-popup" class="dropdown-popup">
-        <h4 style="margin-top:0;">🎨 Wybierz Motyw</h4>
-        <div style="display:flex; flex-direction:column; gap:5px; max-height: 250px; overflow-y: auto;">
-            <button onclick="setTheme('dark')" style="background:#161b22; color:#fff; border:1px solid #30363d; padding:7px; border-radius:4px; text-align:left; cursor:pointer;">Ciemny</button>
-            <button onclick="setTheme('light')" style="background:#fff; color:#000; border:1px solid #ccc; padding:7px; border-radius:4px; text-align:left; cursor:pointer;">Jasny</button>
-            <button onclick="setTheme('femboy')" style="background:#fce7f3; color:#9d174d; border:1px solid #f472b6; padding:7px; border-radius:4px; text-align:left; cursor:pointer;">🌸 Femboy</button>
-            <button onclick="setTheme('femboy-colorful')" style="background:linear-gradient(135deg,#ec4899,#8b5cf6,#3b82f6); color:#fff; border:none; padding:7px; border-radius:4px; text-align:left; cursor:pointer; font-weight:bold;">🌈 Kolorowy femboy +</button>
-            <button onclick="setTheme('blue-white')" style="background:#3b82f6; color:#fff; border:none; padding:7px; border-radius:4px; text-align:left; cursor:pointer;">Niebiesko-biały</button>
-            <button onclick="setTheme('yellow-blue')" style="background:#f59e0b; color:#1e3a8a; border:none; padding:7px; border-radius:4px; text-align:left; cursor:pointer;">Żółto-niebieski</button>
-            <button onclick="setTheme('yellow')" style="background:#ffb703; color:#000; border:none; padding:7px; border-radius:4px; text-align:left; cursor:pointer;">Żółty</button>
-            <button onclick="setTheme('blue')" style="background:#0284c7; color:#fff; border:none; padding:7px; border-radius:4px; text-align:left; cursor:pointer;">Niebieski</button>
-            <button onclick="setTheme('red')" style="background:#ef4444; color:#fff; border:none; padding:7px; border-radius:4px; text-align:left; cursor:pointer;">Czerwony</button>
-            <button onclick="setTheme('orange')" style="background:#f97316; color:#fff; border:none; padding:7px; border-radius:4px; text-align:left; cursor:pointer;">Pomarańczowy</button>
-            <button onclick="setTheme('purple')" style="background:#8b5cf6; color:#fff; border:none; padding:7px; border-radius:4px; text-align:left; cursor:pointer;">Fioletowy</button>
-            <button onclick="setTheme('yellow-purple-black')" style="background:#111; color:#facc15; border:1px solid #8b5cf6; padding:7px; border-radius:4px; text-align:left; cursor:pointer;">Żółto-fioletowo-czarny</button>
-            <button onclick="setTheme('yellow-purple')" style="background:#eab308; color:#581c87; border:none; padding:7px; border-radius:4px; text-align:left; cursor:pointer;">Żółto-fioletowy</button>
-            <button onclick="setTheme('minecraft')" style="background:#386641; color:#f4f1de; border:2px solid #283618; padding:7px; border-radius:4px; text-align:left; cursor:pointer; font-family:monospace;">⛏️ Minecraftowo</button>
+        <h4 style="margin-top:0;">🎨 Pędzel</h4>
+        <div style="display:flex; gap:5px; margin-bottom:10px;">
+            <button onclick="switchBrushTab('motywy')" class="action-btn" style="flex:1; font-size:12px; padding:6px;">Motywy</button>
+            <button onclick="switchBrushTab('dodatki')" class="action-btn" style="flex:1; font-size:12px; padding:6px; background:#3b82f6;">Dodatki</button>
+        </div>
+        
+        <div id="brush-tab-motywy" style="display:flex; flex-direction:column; gap:5px; max-height: 200px; overflow-y: auto;">
+            <button onclick="setTheme('szary')" style="background:#374151; color:#fff; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">Szary</button>
+            <button onclick="setTheme('rozowy')" style="background:#f472b6; color:#fff; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">Różowy</button>
+            <button onclick="setTheme('ciemny')" style="background:#111827; color:#fff; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">Ciemny</button>
+            <button onclick="setTheme('czerwony')" style="background:#dc2626; color:#fff; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">Czerwony</button>
+            <button onclick="setTheme('bialy')" style="background:#ffffff; color:#000; border:1px solid #ccc; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">Biały</button>
+            <button onclick="setTheme('femboy')" style="background:#fce7f3; color:#9d174d; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">🌸 Femboy</button>
+            <button onclick="setTheme('femboy-colorful')" style="background:linear-gradient(135deg,#ec4899,#8b5cf6,#3b82f6); color:#fff; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer;">🌈 Kolorowy femboy +</button>
+        </div>
+
+        <div id="brush-tab-dodatki" style="display:none; flex-direction:column; gap:5px; max-height: 200px; overflow-y: auto;">
+            <button onclick="setLayout('center-side')" style="background:var(--btn-bg); color:var(--text-color); border:1px solid var(--border-color); padding:6px; border-radius:4px; text-align:left; cursor:pointer; font-size:12px;">1. Pasek na środku</button>
+            <button onclick="setLayout('top-center')" style="background:var(--btn-bg); color:var(--text-color); border:1px solid var(--border-color); padding:6px; border-radius:4px; text-align:left; cursor:pointer; font-size:12px;">2. Pasek na środku u góry</button>
+            <button onclick="setLayout('fullscreen')" style="background:var(--btn-bg); color:var(--text-color); border:1px solid var(--border-color); padding:6px; border-radius:4px; text-align:left; cursor:pointer; font-size:12px;">3. Cały ekran (Ukryj pasek)</button>
+            <button onclick="setLayout('default')" style="background:var(--btn-bg); color:var(--text-color); border:1px solid var(--border-color); padding:6px; border-radius:4px; text-align:left; cursor:pointer; font-size:12px;">4. Sam prefonozujesz (Domyślny)</button>
+            <button onclick="enableHardMode()" style="background:#ef4444; color:white; border:none; padding:6px; border-radius:4px; text-align:left; cursor:pointer; font-size:12px; font-weight:bold;">5. Tryb Hard (Niedźwiedź!)</button>
         </div>
     </div>
 
-    <!-- POPUP USTAWIEŃ -->
+    <!-- POPUP USTAWIEŃ (Z WYLOGOWANIEM I TWORZENIEM DRUGIEGO KONTA) -->
     <div id="settings-popup" class="dropdown-popup">
         <h4 style="margin-top:0;">⚙️ Ustawienia</h4>
         <p style="font-size:12px; margin:5px 0;">Jasność ekranu (%):</p>
-        <input type="number" id="brightness-input" value="100" min="50" max="250" oninput="changeBrightness(this.value)" style="width:100%; padding:6px; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:4px; box-sizing:border-box;">
+        <input type="number" id="brightness-input" value="100" min="50" max="250" oninput="changeBrightness(this.value)" style="width:100%; padding:6px; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:4px; box-sizing:border-box; margin-bottom:10px;">
+        
+        <div style="display:flex; flex-direction:column; gap:5px;">
+            <button onclick="logoutUser()" class="action-btn" style="background:#ef4444; font-size:12px;">Wyloguj się</button>
+            <button onclick="createSecondAccount()" class="action-btn" style="background:#3b82f6; font-size:12px;">Stwórz 2. konto</button>
+            <button onclick="showAccountSwitcher()" class="action-btn" style="background:#8b5cf6; font-size:12px;">Przejdź na inne konto</button>
+        </div>
     </div>
 
-    <!-- PANEL BOCZNY (Aternos Style) -->
+    <!-- PANEL BOCZNY -->
     <div class="sidebar">
         <div class="sidebar-top">
             <div class="sidebar-logo-area">
@@ -452,15 +488,14 @@
                 <h1 class="logo-text">Inteligent</h1>
             </div>
             <button class="nav-item" onclick="showSection('maps-section')">🗺️ Inteligent Maps</button>
+            <button class="nav-item" onclick="showSection('maps-poland-section')">🇵🇱 Maps Poland</button>
             <button class="nav-item" onclick="showSection('intedisc-section')">💬 Intedisc (Discord)</button>
             <button class="nav-item" onclick="showSection('notes-section')">📝 Notatki (Kwadraty)</button>
             <button class="nav-item" onclick="showSection('store-section')">🛒 Inteligent Store</button>
             <button class="nav-item" onclick="showSection('info-section')">📢 Inteligent Informacje</button>
             <button class="nav-item" onclick="showSection('media-section')">🌐 Globalne Media</button>
-            <button class="nav-item" onclick="showSection('tiktok-feed-section')">📱 TikTok Feed</button>
         </div>
 
-        <!-- DOLNY ROG: TIKTOK, YOUTUBE, GOOGLE -->
         <div class="sidebar-bottom-icons">
             <button class="bottom-icon-btn" onclick="window.open('https://www.tiktok.com', '_blank')" title="TikTok">📱</button>
             <button class="bottom-icon-btn" onclick="window.open('https://www.youtube.com', '_blank')" title="YouTube">▶️</button>
@@ -471,31 +506,37 @@
     <!-- GŁÓWNA TREŚĆ -->
     <div class="main-content-area" id="main-area">
 
-        <!-- Domyślny ekran powitalny / Menu -->
         <div id="default-menu-view" style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; text-align:center;">
             <h2 style="font-size: 32px; margin-bottom: 10px;">Witaj w systemie Inteligent</h2>
-            <p style="opacity: 0.7; max-width: 500px;">Wybierz opcję z panelu po lewej stronie. Wpisuj wiadomości klawiszem <b>Enter</b>, a wracaj do menu klawiszem <b>ESC</b>.</p>
+            <p style="opacity: 0.7; max-width: 500px;">Wybierz opcję z panelu. Wpisuj wiadomości klawiszem <b>Enter</b>, wracaj do menu klawiszem <b>ESC</b>.</p>
         </div>
 
         <!-- 1. INTELIGENT MAPS -->
         <div id="maps-section" class="section-content">
-            <h3>Inteligent Maps (Wbudowana Mapa Świata)</h3>
-            <p>Wyszukaj miasto, kraj lub ulicę na interaktywnej mapie:</p>
+            <h3>Inteligent Maps</h3>
             <div style="display:flex; gap:10px; margin-bottom:15px;">
                 <input type="text" id="map-query" placeholder="Wpisz lokalizację..." style="flex-grow:1; padding:10px; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:6px;">
-                <button onclick="searchMap()" class="action-btn">Szukaj na mapie</button>
+                <button onclick="searchMap()" class="action-btn">Szukaj</button>
             </div>
-            <div id="map-container-frame" style="width:100%; height:450px; background:var(--btn-bg); border:1px solid var(--border-color); border-radius:8px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-                <p style="opacity:0.6;">Wpisz lokalizację i kliknij szukaj, aby załadować mapę.</p>
+            <div id="map-container-frame" style="width:100%; height:450px; background:var(--btn-bg); border:1px solid var(--border-color); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <p style="opacity:0.6;">Wpisz lokalizację i kliknij szukaj.</p>
             </div>
         </div>
 
-        <!-- 2. INTEDISC -->
+        <!-- 2. MAPS POLAND -->
+        <div id="maps-poland-section" class="section-content">
+            <h3>Maps Poland (Mapa Polski)</h3>
+            <div style="width:100%; height:480px; background:var(--btn-bg); border:1px solid var(--border-color); border-radius:8px; overflow:hidden;">
+                <iframe width="100%" height="100%" frameborder="0" src="https://maps.google.com/maps?q=Poland&output=embed"></iframe>
+            </div>
+        </div>
+
+        <!-- 3. INTEDISC -->
         <div id="intedisc-section" class="section-content">
-            <h3>Intedisc (Komunikator sieciowy)</h3>
+            <h3>Intedisc (Komunikator)</h3>
             <div class="discord-layout">
                 <div class="discord-sidebar">
-                    <h4 style="margin:0 0 10px 0;">Kanały / Grupy</h4>
+                    <h4 style="margin:0 0 10px 0;">Kanały</h4>
                     <button onclick="createNewChannel()" class="action-btn" style="font-size:12px; margin-bottom:10px;">+ Stwórz grupę</button>
                     <div id="channel-list" style="display:flex; flex-direction:column; gap:5px;">
                         <button class="nav-item" style="padding:8px;" onclick="switchChannel('#ogólny')"># ogólny</button>
@@ -503,87 +544,75 @@
                 </div>
                 <div class="discord-chat-main">
                     <div id="intedisc-chat-box" class="chat-box">
-                        <div class="chat-msg"><b>[System]:</b> Witaj w Intedisc. Wiadomości wysyłaj klawiszem Enter.</div>
+                        <div class="chat-msg"><b>[System]:</b> Witaj w Intedisc.</div>
                     </div>
-                    <input type="text" id="intedisc-msg-input" placeholder="Napisz wiadomość..." onkeydown="handleIntediscKey(event)" style="width:100%; padding:10px; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:6px; box-sizing:border-box;">
+                    <div class="typing-indicator" id="intedisc-typing"></div>
+                    <input type="text" id="intedisc-msg-input" placeholder="Napisz wiadomość..." oninput="triggerTyping('intedisc')" onkeydown="handleIntediscKey(event)" style="width:100%; padding:10px; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:6px; box-sizing:border-box;">
                 </div>
             </div>
         </div>
 
-        <!-- 3. NOTATKI W KWADRATACH -->
+        <!-- 4. NOTATKI -->
         <div id="notes-section" class="section-content">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <h3>Twoje Notatki</h3>
-                <button onclick="addNewNoteCard()" class="action-btn">+ Nowy Kwadrat Notatki</button>
+                <button onclick="addNewNoteCard()" class="action-btn">+ Nowy Kwadrat</button>
             </div>
             <div class="notes-grid" id="notes-grid-container"></div>
         </div>
 
-        <!-- 4. INTELIGENT STORE (Zastąpienie AI) -->
+        <!-- 5. INTELIGENT STORE (Z WYSZUKIWARKĄ I UPLOADEM PLIKÓW/ZDJĘĆ) -->
         <div id="store-section" class="section-content">
             <h3>🛒 Inteligent Store</h3>
-            <p>Tutaj znajdziesz autorskie gry, mody, programy i dodatki wrzucane do platformy:</p>
-            <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:15px; margin-top:20px;">
-                <div style="background:var(--container-bg); border:1px solid var(--border-color); border-radius:8px; padding:15px;">
-                    <h4 style="margin-top:0;">📦 Modpack v1</h4>
-                    <p style="font-size:13px; opacity:0.8;">Zestaw optymalizacyjny dla systemu.</p>
-                    <button class="action-btn" style="width:100%; font-size:12px;">Pobierz</button>
-                </div>
-                <div style="background:var(--container-bg); border:1px solid var(--border-color); border-radius:8px; padding:15px;">
-                    <h4 style="margin-top:0;">🎮 Minigra Pixel</h4>
-                    <p style="font-size:13px; opacity:0.8;">Zręcznościowa gra przeglądarkowa.</p>
-                    <button class="action-btn" style="width:100%; font-size:12px;">Uruchom</button>
-                </div>
+            <div style="display:flex; gap:10px; margin-bottom:20px;">
+                <input type="text" id="store-search" placeholder="Szukaj plików, gier, modów..." oninput="filterStore(this.value)" style="flex-grow:1; padding:10px; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:6px;">
+                <label class="action-btn" style="cursor:pointer; display:flex; align-items:center; gap:5px;">
+                    📤 Wrzuć plik/zdjęcie <input type="file" id="store-file-upload" onchange="uploadStoreFile(event)" style="display:none;">
+                </label>
             </div>
+            <div id="store-items-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:15px;"></div>
         </div>
 
-        <!-- 5. INTELIGENT INFORMACJE (Dziennik zmian) -->
+        <!-- 6. INTELIGENT INFORMACJE -->
         <div id="info-section" class="section-content">
-            <h3>📢 Inteligent Informacje (Co nowego w wersji v0.20)</h3>
+            <h3>📢 Inteligent Informacje (Dziennik zmian v0.21)</h3>
             <div style="background:var(--container-bg); border:1px solid var(--border-color); border-radius:10px; padding:20px; margin-top:15px; line-height:1.6;">
-                <h4 style="margin-top:0; color:var(--accent-color);">✨ Wersja v0.20 - Oficjalny Dziennik Zmian:</h4>
+                <h4 style="margin-top:0; color:var(--accent-color);">✨ Wersja v0.21 - Co nowego:</h4>
                 <ul style="padding-left:20px; font-size:14px;">
-                    <li><b>Inteligent Store:</b> Całkowicie zastąpiono dawne AI nowym sklepem z grami, modami i modpackami!</li>
-                    <li><b>Nowe Motywy:</b> Dodano pełną gamę motywów (Kolorowy femboy +, Minecraftowo w stylu Minecraft, Żółto-niebieski, Fioletowy, Pomarańczowy, Czerwony i wiele innych).</li>
-                    <li><b>Usprawniona animacja startowa:</b> Lupa kręci się wokół Google, YouTube i TikTok, po czym ikony odlatują w przestrzeń, a lupa trafia idealnie w logo!</li>
-                    <li><b>Klawiszologia:</b> Wpisywanie wiadomości za pomocą <b>Enter</b>, powrót do menu za pomocą klawisza <b>ESC</b>.</li>
+                    <li><b>Inteligent Store:</b> Wbudowana wyszukiwarka oraz możliwość przesyłania i pobierania własnych plików/zdjęć!</li>
+                    <li><b>Maps Poland:</b> Dodano mapę Polski.</li>
+                    <li><b>Wskaźnik pisania:</b> Dynamiczne kropki informujące, gdy ktoś pisze wiadomość.</li>
+                    <li><b>Wiele kont i Wylogowywanie:</b> Obsługa wielu kont w ustawieniach.</li>
+                    <li><b>Rozbudowany Pędzel i Dodatki:</b> 5 nowych układów interfejsu oraz szalony <b>Tryb Hard</b> z niedźwiedziem!</li>
+                    <li><b>Nowa animacja startowa:</b> Lupa niszczy napis Inteligent i efektownie odlatuje.</li>
                 </ul>
             </div>
         </div>
 
-        <!-- 6. GLOBALNE MEDIA -->
+        <!-- 7. GLOBALNE MEDIA -->
         <div id="media-section" class="section-content">
             <h3>Globalne Media Świata</h3>
             <div id="global-chat-box" class="chat-box" style="height:350px;"></div>
-            <input type="text" id="global-msg-input" placeholder="Napisz do świata..." onkeydown="handleGlobalKey(event)" style="width:100%; padding:10px; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:6px; box-sizing:border-box;">
-        </div>
-
-        <!-- 7. TIKTOK FEED -->
-        <div id="tiktok-feed-section" class="section-content">
-            <h3>TikTok Feed</h3>
-            <p>Przeglądaj najnowsze trendy społecznościowe:</p>
-            <div style="display:flex; gap:10px; margin-bottom:15px;">
-                <input type="text" id="tiktok-url" placeholder="Wklej link do wideo..." style="flex-grow:1; padding:10px; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:6px;">
-                <button onclick="addTikTok()" class="action-btn">Dodaj</button>
-            </div>
-            <div id="tiktok-feed-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+            <div class="typing-indicator" id="global-typing"></div>
+            <input type="text" id="global-msg-input" placeholder="Napisz do świata..." oninput="triggerTyping('global')" onkeydown="handleGlobalKey(event)" style="width:100%; padding:10px; background:var(--btn-bg); border:1px solid var(--border-color); color:var(--text-color); border-radius:6px; box-sizing:border-box;">
         </div>
 
     </div>
 
-    <div class="version-tag">v0.20🎉</div>
+    <div class="version-tag">v0.21🎉</div>
 
     <script>
         let currentUser = "";
+        let userAccounts = JSON.parse(localStorage.getItem('inteligent_accounts') || '{}');
 
         window.addEventListener('DOMContentLoaded', () => {
-            const savedUser = localStorage.getItem('inteligent_username');
+            const savedUser = localStorage.getItem('inteligent_active_user');
             if(savedUser) {
                 currentUser = savedUser;
                 document.getElementById('auth-modal').style.display = 'none';
             }
             loadNotesCards();
-            loadIntediscChannels();
+            loadStoreItems();
         });
 
         function registerUser() {
@@ -591,14 +620,137 @@
             const pass = document.getElementById('reg-password').value.trim();
             if(!user || !pass) { alert("Wpisz nick i hasło!"); return; }
             currentUser = user;
-            localStorage.setItem('inteligent_username', currentUser);
+            userAccounts[user] = pass;
+            localStorage.setItem('inteligent_accounts', JSON.stringify(userAccounts));
+            localStorage.setItem('inteligent_active_user', currentUser);
             document.getElementById('auth-modal').style.display = 'none';
         }
 
-        window.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape') {
-                showDefaultMenu();
+        function logoutUser() {
+            localStorage.removeItem('inteligent_active_user');
+            location.reload();
+        }
+
+        function createSecondAccount() {
+            document.getElementById('reg-username').value = "";
+            document.getElementById('reg-password').value = "";
+            document.getElementById('auth-modal').style.display = 'flex';
+        }
+
+        function showAccountSwitcher() {
+            let accounts = Object.keys(userAccounts);
+            if(accounts.length === 0) { alert("Brak zapisanych innych kont!"); return; }
+            let chosen = prompt("Wybierz konto spośród zapisanych:\n" + accounts.join(", "));
+            if(chosen && userAccounts[chosen]) {
+                currentUser = chosen;
+                localStorage.setItem('inteligent_active_user', currentUser);
+                document.getElementById('auth-modal').style.display = 'none';
+                alert("Przełączono na konto: " + currentUser);
             }
+        }
+
+        function togglePopup(id) {
+            const p = document.getElementById(id);
+            const other = id === 'brush-popup' ? 'settings-popup' : 'brush-popup';
+            document.getElementById(other).style.display = 'none';
+            p.style.display = p.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function switchBrushTab(tab) {
+            if(tab === 'motywy') {
+                document.getElementById('brush-tab-motywy').style.display = 'flex';
+                document.getElementById('brush-tab-dodatki').style.display = 'none';
+            } else {
+                document.getElementById('brush-tab-motywy').style.display = 'none';
+                document.getElementById('brush-tab-dodatki').style.display = 'flex';
+            }
+        }
+
+        function setTheme(theme) {
+            const root = document.documentElement;
+            if(theme === 'szary') {
+                root.style.setProperty('--bg-color', '#1f2937');
+                root.style.setProperty('--sidebar-bg', '#111827');
+                root.style.setProperty('--container-bg', '#374151');
+                root.style.setProperty('--text-color', '#f9fafb');
+                root.style.setProperty('--border-color', '#4b5563');
+                root.style.setProperty('--btn-bg', '#4b5563');
+                root.style.setProperty('--accent-color', '#6b7280');
+            } else if(theme === 'rozowy') {
+                root.style.setProperty('--bg-color', '#fdf2f8');
+                root.style.setProperty('--sidebar-bg', '#fce7f3');
+                root.style.setProperty('--container-bg', '#ffffff');
+                root.style.setProperty('--text-color', '#831843');
+                root.style.setProperty('--border-color', '#fbcfe8');
+                root.style.setProperty('--btn-bg', '#fce7f3');
+                root.style.setProperty('--accent-color', '#ec4899');
+            } else if(theme === 'ciemny') {
+                root.style.setProperty('--bg-color', '#09090b');
+                root.style.setProperty('--sidebar-bg', '#18181b');
+                root.style.setProperty('--container-bg', '#27272a');
+                root.style.setProperty('--text-color', '#f4f4f5');
+                root.style.setProperty('--border-color', '#3f3f46');
+                root.style.setProperty('--btn-bg', '#3f3f46');
+                root.style.setProperty('--accent-color', '#6366f1');
+            } else if(theme === 'czerwony') {
+                root.style.setProperty('--bg-color', '#450a0a');
+                root.style.setProperty('--sidebar-bg', '#7f1d1d');
+                root.style.setProperty('--container-bg', '#991b1b');
+                root.style.setProperty('--text-color', '#fee2e2');
+                root.style.setProperty('--border-color', '#f87171');
+                root.style.setProperty('--btn-bg', '#b91c1c');
+                root.style.setProperty('--accent-color', '#ef4444');
+            } else if(theme === 'bialy') {
+                root.style.setProperty('--bg-color', '#f4f4f9');
+                root.style.setProperty('--sidebar-bg', '#e2e8f0');
+                root.style.setProperty('--container-bg', '#ffffff');
+                root.style.setProperty('--text-color', '#121218');
+                root.style.setProperty('--border-color', '#cbd5e1');
+                root.style.setProperty('--btn-bg', '#f1f5f9');
+                root.style.setProperty('--accent-color', '#3b82f6');
+            } else if(theme === 'femboy') {
+                root.style.setProperty('--bg-color', '#ffe4e6');
+                root.style.setProperty('--sidebar-bg', '#fce7f3');
+                root.style.setProperty('--container-bg', '#ffffff');
+                root.style.setProperty('--text-color', '#9d174d');
+                root.style.setProperty('--border-color', '#f472b6');
+                root.style.setProperty('--btn-bg', '#fbcfe8');
+                root.style.setProperty('--accent-color', '#db2777');
+            } else if(theme === 'femboy-colorful') {
+                root.style.setProperty('--bg-color', '#3b0764');
+                root.style.setProperty('--sidebar-bg', '#4c1d95');
+                root.style.setProperty('--container-bg', '#581c87');
+                root.style.setProperty('--text-color', '#fce7f3');
+                root.style.setProperty('--border-color', '#ec4899');
+                root.style.setProperty('--btn-bg', '#7c3aed');
+                root.style.setProperty('--accent-color', '#ec4899');
+            }
+            document.getElementById('brush-popup').style.display = 'none';
+        }
+
+        function setLayout(layout) {
+            document.body.className = "";
+            if(layout !== 'default') document.body.classList.add('layout-' + layout);
+            document.getElementById('brush-popup').style.display = 'none';
+        }
+
+        function enableHardMode() {
+            document.getElementById('hard-mode-overlay').style.display = 'flex';
+            document.getElementById('brush-popup').style.display = 'none';
+        }
+
+        function disableHardMode() {
+            document.getElementById('hard-mode-overlay').style.display = 'none';
+        }
+
+        function changeBrightness(val) {
+            let num = parseFloat(val);
+            if(isNaN(num) || num < 50) num = 50;
+            document.documentElement.style.setProperty('--brightness-val', num / 100);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape') showDefaultMenu();
         });
 
         function showDefaultMenu() {
@@ -616,156 +768,10 @@
             document.getElementById('settings-popup').style.display = 'none';
         }
 
-        function togglePopup(id) {
-            const p = document.getElementById(id);
-            const other = id === 'brush-popup' ? 'settings-popup' : 'brush-popup';
-            document.getElementById(other).style.display = 'none';
-            p.style.display = p.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function setTheme(theme) {
-            const root = document.documentElement;
-            if(theme === 'dark') {
-                root.style.setProperty('--bg-color', '#0f141c');
-                root.style.setProperty('--sidebar-bg', '#161b22');
-                root.style.setProperty('--container-bg', '#1f242d');
-                root.style.setProperty('--text-color', '#f0f6fc');
-                root.style.setProperty('--border-color', '#30363d');
-                root.style.setProperty('--btn-bg', '#21262d');
-                root.style.setProperty('--btn-hover', '#30363d');
-                root.style.setProperty('--accent-color', '#238636');
-            } else if(theme === 'light') {
-                root.style.setProperty('--bg-color', '#f4f4f9');
-                root.style.setProperty('--sidebar-bg', '#e2e8f0');
-                root.style.setProperty('--container-bg', '#ffffff');
-                root.style.setProperty('--text-color', '#121218');
-                root.style.setProperty('--border-color', '#cbd5e1');
-                root.style.setProperty('--btn-bg', '#f1f5f9');
-                root.style.setProperty('--btn-hover', '#e2e8f0');
-                root.style.setProperty('--accent-color', '#3b82f6');
-            } else if(theme === 'femboy') {
-                root.style.setProperty('--bg-color', '#ffe4e6');
-                root.style.setProperty('--sidebar-bg', '#fce7f3');
-                root.style.setProperty('--container-bg', '#ffffff');
-                root.style.setProperty('--text-color', '#9d174d');
-                root.style.setProperty('--border-color', '#f472b6');
-                root.style.setProperty('--btn-bg', '#fbcfe8');
-                root.style.setProperty('--btn-hover', '#f472b6');
-                root.style.setProperty('--accent-color', '#db2777');
-            } else if(theme === 'femboy-colorful') {
-                root.style.setProperty('--bg-color', '#3b0764');
-                root.style.setProperty('--sidebar-bg', '#4c1d95');
-                root.style.setProperty('--container-bg', '#581c87');
-                root.style.setProperty('--text-color', '#fce7f3');
-                root.style.setProperty('--border-color', '#ec4899');
-                root.style.setProperty('--btn-bg', '#7c3aed');
-                root.style.setProperty('--btn-hover', '#8b5cf6');
-                root.style.setProperty('--accent-color', '#ec4899');
-            } else if(theme === 'blue-white') {
-                root.style.setProperty('--bg-color', '#1e3a8a');
-                root.style.setProperty('--sidebar-bg', '#1e40af');
-                root.style.setProperty('--container-bg', '#2563eb');
-                root.style.setProperty('--text-color', '#ffffff');
-                root.style.setProperty('--border-color', '#60a5fa');
-                root.style.setProperty('--btn-bg', '#1d4ed8');
-                root.style.setProperty('--btn-hover', '#3b82f6');
-                root.style.setProperty('--accent-color', '#93c5fd');
-            } else if(theme === 'yellow-blue') {
-                root.style.setProperty('--bg-color', '#1e3a8a');
-                root.style.setProperty('--sidebar-bg', '#172554');
-                root.style.setProperty('--container-bg', '#1e40af');
-                root.style.setProperty('--text-color', '#fef08a');
-                root.style.setProperty('--border-color', '#f59e0b');
-                root.style.setProperty('--btn-bg', '#2563eb');
-                root.style.setProperty('--btn-hover', '#3b82f6');
-                root.style.setProperty('--accent-color', '#f59e0b');
-            } else if(theme === 'yellow') {
-                root.style.setProperty('--bg-color', '#fef3c7');
-                root.style.setProperty('--sidebar-bg', '#fde68a');
-                root.style.setProperty('--container-bg', '#ffffff');
-                root.style.setProperty('--text-color', '#78350f');
-                root.style.setProperty('--border-color', '#f59e0b');
-                root.style.setProperty('--btn-bg', '#fef9c3');
-                root.style.setProperty('--btn-hover', '#fde047');
-                root.style.setProperty('--accent-color', '#d97706');
-            } else if(theme === 'blue') {
-                root.style.setProperty('--bg-color', '#0f172a');
-                root.style.setProperty('--sidebar-bg', '#1e293b');
-                root.style.setProperty('--container-bg', '#334155');
-                root.style.setProperty('--text-color', '#38bdf8');
-                root.style.setProperty('--border-color', '#0ea5e9');
-                root.style.setProperty('--btn-bg', '#1e293b');
-                root.style.setProperty('--btn-hover', '#475569');
-                root.style.setProperty('--accent-color', '#0284c7');
-            } else if(theme === 'red') {
-                root.style.setProperty('--bg-color', '#450a0a');
-                root.style.setProperty('--sidebar-bg', '#7f1d1d');
-                root.style.setProperty('--container-bg', '#991b1b');
-                root.style.setProperty('--text-color', '#fee2e2');
-                root.style.setProperty('--border-color', '#f87171');
-                root.style.setProperty('--btn-bg', '#b91c1c');
-                root.style.setProperty('--btn-hover', '#dc2626');
-                root.style.setProperty('--accent-color', '#ef4444');
-            } else if(theme === 'orange') {
-                root.style.setProperty('--bg-color', '#431407');
-                root.style.setProperty('--sidebar-bg', '#7c2d12');
-                root.style.setProperty('--container-bg', '#9a3412');
-                root.style.setProperty('--text-color', '#ffedd5');
-                root.style.setProperty('--border-color', '#fb923c');
-                root.style.setProperty('--btn-bg', '#c2410c');
-                root.style.setProperty('--btn-hover', '#ea580c');
-                root.style.setProperty('--accent-color', '#f97316');
-            } else if(theme === 'purple') {
-                root.style.setProperty('--bg-color', '#2e1065');
-                root.style.setProperty('--sidebar-bg', '#3b0764');
-                root.style.setProperty('--container-bg', '#4c1d95');
-                root.style.setProperty('--text-color', '#f3e8ff');
-                root.style.setProperty('--border-color', '#c084fc');
-                root.style.setProperty('--btn-bg', '#581c87');
-                root.style.setProperty('--btn-hover', '#6b21a8');
-                root.style.setProperty('--accent-color', '#a855f7');
-            } else if(theme === 'yellow-purple-black') {
-                root.style.setProperty('--bg-color', '#09090b');
-                root.style.setProperty('--sidebar-bg', '#18181b');
-                root.style.setProperty('--container-bg', '#27272a');
-                root.style.setProperty('--text-color', '#facc15');
-                root.style.setProperty('--border-color', '#8b5cf6');
-                root.style.setProperty('--btn-bg', '#3f3f46');
-                root.style.setProperty('--btn-hover', '#52525b');
-                root.style.setProperty('--accent-color', '#8b5cf6');
-            } else if(theme === 'yellow-purple') {
-                root.style.setProperty('--bg-color', '#fef9c3');
-                root.style.setProperty('--sidebar-bg', '#fde047');
-                root.style.setProperty('--container-bg', '#ffffff');
-                root.style.setProperty('--text-color', '#581c87');
-                root.style.setProperty('--border-color', '#a855f7');
-                root.style.setProperty('--btn-bg', '#fef08a');
-                root.style.setProperty('--btn-hover', '#fde047');
-                root.style.setProperty('--accent-color', '#7e22ce');
-            } else if(theme === 'minecraft') {
-                root.style.setProperty('--bg-color', '#283618');
-                root.style.setProperty('--sidebar-bg', '#386641');
-                root.style.setProperty('--container-bg', '#606c38');
-                root.style.setProperty('--text-color', '#f4f1de');
-                root.style.setProperty('--border-color', '#dda15e');
-                root.style.setProperty('--btn-bg', '#588157');
-                root.style.setProperty('--btn-hover', '#3a5a40');
-                root.style.setProperty('--accent-color', '#bc6c25');
-            }
-            document.getElementById('brush-popup').style.display = 'none';
-        }
-
-        function changeBrightness(val) {
-            let num = parseFloat(val);
-            if(isNaN(num) || num < 50) num = 50;
-            document.documentElement.style.setProperty('--brightness-val', num / 100);
-        }
-
         function searchMap() {
             const q = document.getElementById('map-query').value.trim();
             if(!q) return;
-            const container = document.getElementById('map-container-frame');
-            container.innerHTML = `<iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://maps.google.com/maps?q=${encodeURIComponent(q)}&output=embed"></iframe>`;
+            document.getElementById('map-container-frame').innerHTML = `<iframe width="100%" height="100%" frameborder="0" src="https://maps.google.com/maps?q=${encodeURIComponent(q)}&output=embed"></iframe>`;
         }
 
         let currentChannel = "#ogólny";
@@ -773,15 +779,21 @@
             let name = prompt("Nazwa nowej grupy:");
             if(name) {
                 if(!name.startsWith('#')) name = '#' + name;
-                const list = document.getElementById('channel-list');
-                list.innerHTML += `<button class="nav-item" style="padding:8px;" onclick="switchChannel('${name}')">${name}</button>`;
+                document.getElementById('channel-list').innerHTML += `<button class="nav-item" style="padding:8px;" onclick="switchChannel('${name}')">${name}</button>`;
             }
         }
         function switchChannel(ch) {
             currentChannel = ch;
-            const box = document.getElementById('intedisc-chat-box');
-            box.innerHTML += `<div class="chat-msg"><b>[System]:</b> Przełączono na ${currentChannel}</div>`;
+            document.getElementById('intedisc-chat-box').innerHTML += `<div class="chat-msg"><b>[System]:</b> Przełączono na ${currentChannel}</div>`;
         }
+
+        function triggerTyping(type) {
+            const ind = document.getElementById(type + '-typing');
+            ind.innerText = currentUser + " pisze wiadomość...";
+            clearTimeout(window.typingTimer);
+            window.typingTimer = setTimeout(() => { ind.innerText = ""; }, 1500);
+        }
+
         function handleIntediscKey(e) {
             if(e.key === 'Enter') {
                 const inp = document.getElementById('intedisc-msg-input');
@@ -794,7 +806,7 @@
             }
         }
 
-        let notesList = JSON.parse(localStorage.getItem('inteligent_notes_cards') || '["Notatka 1: Wpisz coś..."]');
+        let notesList = JSON.parse(localStorage.getItem('inteligent_notes_cards') || '["Notatka 1..."]');
         function loadNotesCards() {
             const container = document.getElementById('notes-grid-container');
             container.innerHTML = '';
@@ -802,22 +814,15 @@
                 container.innerHTML += `
                     <div class="note-card">
                         <span style="font-size:12px; font-weight:bold; opacity:0.7;">Kwadrat #${idx+1}</span>
-                        <textarea oninput="updateNoteCard(${idx}, this.value)">${text}</textarea>
+                        <textarea oninput="notesList[${idx}] = this.value; localStorage.setItem('inteligent_notes_cards', JSON.stringify(notesList));">${text}</textarea>
                     </div>
                 `;
             });
         }
         function addNewNoteCard() {
             notesList.push("Nowa notatka...");
-            saveNotesCards();
-            loadNotesCards();
-        }
-        function updateNoteCard(idx, val) {
-            notesList[idx] = val;
-            saveNotesCards();
-        }
-        function saveNotesCards() {
             localStorage.setItem('inteligent_notes_cards', JSON.stringify(notesList));
+            loadNotesCards();
         }
 
         function handleGlobalKey(e) {
@@ -832,13 +837,47 @@
             }
         }
 
-        function addTikTok() {
-            const inp = document.getElementById('tiktok-url');
-            const val = inp.value.trim();
-            if(!val) return;
-            const list = document.getElementById('tiktok-feed-list');
-            list.innerHTML += `<div style="background:var(--container-bg); padding:12px; border-radius:6px; border-left:3px solid #ec4899;"><a href="${val}" target="_blank" style="color:var(--text-color);">${val}</a></div>`;
-            inp.value = '';
+        /* INTELIGENT STORE Z WYSZUKIWARKĄ I UPLOADEM PLIKÓW */
+        let storeItems = JSON.parse(localStorage.getItem('inteligent_store_items') || '[{"name": "Modpack v1", "desc": "Zestaw optymalizacyjny.", "url": "#", "author": "System"}]');
+
+        function loadStoreItems(filter = "") {
+            const grid = document.getElementById('store-items-grid');
+            grid.innerHTML = "";
+            storeItems.forEach(item => {
+                if(filter && !item.name.toLowerCase().includes(filter.toLowerCase()) && !item.desc.toLowerCase().includes(filter.toLowerCase())) return;
+                grid.innerHTML += `
+                    <div style="background:var(--container-bg); border:1px solid var(--border-color); border-radius:8px; padding:15px; display:flex; flex-direction:column; justify-content:space-between;">
+                        <div>
+                            <h4 style="margin-top:0; color:var(--accent-color);">${item.name}</h4>
+                            <p style="font-size:13px; opacity:0.8;">${item.desc}</p>
+                            <span style="font-size:11px; opacity:0.6;">Autor: ${item.author}</span>
+                        </div>
+                        <a href="${item.url}" download="${item.name}" class="action-btn" style="text-align:center; margin-top:10px; text-decoration:none; font-size:12px;">Pobierz plik</a>
+                    </div>
+                `;
+            });
+        }
+
+        function filterStore(val) {
+            loadStoreItems(val);
+        }
+
+        function uploadStoreFile(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                storeItems.push({
+                    name: file.name,
+                    desc: "Udostępniony plik użytkownika.",
+                    url: event.target.result,
+                    author: currentUser || "Anonim"
+                });
+                localStorage.setItem('inteligent_store_items', JSON.stringify(storeItems));
+                loadStoreItems();
+                alert("Plik został pomyślnie wrzucony do Inteligent Store!");
+            };
+            reader.readAsDataURL(file);
         }
     </script>
 </body>
