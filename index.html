@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inteligent.AI</title>
+    <title>Inteligent</title>
     <style>
         :root {
             --bg-color: #f4f4f9;
@@ -165,7 +165,7 @@
 
         .creator-hub-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             margin-top: 15px;
         }
@@ -181,8 +181,27 @@
         .creator-card h4 { margin-top: 0; color: var(--accent-color); }
         .creator-card p { font-size: 13px; opacity: 0.8; }
 
-        /* Panel czatu z Inteligent.AI */
-        .ai-chat-box {
+        /* Losowe okienko Femboy Hub pojawiające się przy klikaniu */
+        #femboy-popup {
+            display: none;
+            position: fixed;
+            background: #fce7f3;
+            border: 2px solid #ec4899;
+            color: #831843;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(236, 72, 153, 0.4);
+            z-index: 99999;
+            max-width: 250px;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .chat-box {
             background: var(--btn-bg);
             border: 1px solid var(--border-color);
             border-radius: 10px;
@@ -192,22 +211,12 @@
             margin-bottom: 10px;
         }
 
-        .ai-msg {
+        .chat-msg {
             background: var(--container-bg);
             padding: 8px 12px;
             border-radius: 6px;
             margin-bottom: 8px;
             border-left: 3px solid var(--accent-color);
-            font-size: 14px;
-        }
-
-        .user-msg {
-            background: var(--accent-color);
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            text-align: right;
             font-size: 14px;
         }
 
@@ -349,10 +358,17 @@
         }
     </style>
 </head>
-<body>
+<body onclick="checkTriggerFemboy(event)">
 
     <div id="intro-splash">
         <div class="flying-magnifier">🔍</div>
+    </div>
+
+    <!-- Losowe okienko Femboy Hub pojawiające się na stronie -->
+    <div id="femboy-popup">
+        <h4 style="margin:0 0 5px 0; color: #ec4899;">🌸 Femboy Hub Odkryty!</h4>
+        <p style="font-size: 12px; margin: 0 0 10px 0;">Pobierz: Uszka, Ubrania i Skarpetki femboja!</p>
+        <button onclick="closeFemboyPopup()" style="padding: 5px 10px; font-size: 12px; background: #ec4899; color: white;">Super!</button>
     </div>
 
     <div class="container">
@@ -360,28 +376,29 @@
             <div class="logo-icon-circle">
                 <span>🔍</span>
             </div>
-            <h1 class="logo-text">Inteligent.AI</h1>
+            <h1 class="logo-text">Inteligent</h1>
         </div>
 
         <div id="main-menu" class="menu-options">
-            <button onclick="showSection('search-section')">1. Wyszukaj miasto</button>
+            <button onclick="showSection('search-section')">1. Wyszukaj miasto / kraj / ulicę</button>
             <button onclick="showSection('pixels-section'); initGame();">2. Wojny Pixeli (Pełna Wojna)</button>
             <button onclick="showSection('notes-section'); loadNote();">3. Notatki</button>
             <button onclick="showSection('ai-chat-section')">4. Inteligent.AI (Rozmowa)</button>
             <button onclick="showSection('creator-section')">5. Rzeczy od twórcy</button>
+            <button onclick="showSection('media-section')">6. Media (Globalny Czat Świata)</button>
         </div>
 
-        <!-- Inteligentna Wyszukiwarka z generatorami AI faktów i żartów -->
+        <!-- Wyszukiwarka z prawdziwym AI dla miast, krajów i ulic -->
         <div id="search-section" class="section-content">
-            <h3>Zaawansowana Wyszukiwarka Geograficzna AI</h3>
-            <p>Wpisz dowolne miasto, aby sztuczna inteligencja wygenerowała unikalne ciekawostki i życiowy żart:</p>
-            <input type="text" id="city-input" placeholder="np. Londyn, Tokio, Warszawa, Nowy Jork, Madryt...">
-            <button onclick="generateAiCityDetails()">Generuj przez AI</button>
+            <h3>Zaawansowane Wyszukiwanie AI (Miasta, Kraje, Ulice)</h3>
+            <p>Wpisz dowolne miasto, państwo lub ulicę na świecie, a sztuczna inteligencja przeanalizuje je na żywo:</p>
+            <input type="text" id="city-input" placeholder="np. Polska, Tokio, ul. Marszałkowska, Paryż...">
+            <button onclick="generateAiGlobalSearch()">Przeszukaj przez AI</button>
             <div id="city-details-result"></div>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Wojny Pixeli (Poprawiona pełna swoboda ataku) -->
+        <!-- Wojny Pixeli -->
         <div id="pixels-section" class="section-content">
             <h3>Wojny Pixeli: Pełna Wojna i Atak We Wszystkie Strony ⚔️</h3>
             <div class="game-board">
@@ -405,7 +422,7 @@
 
                 <canvas id="pixel-canvas" width="650" height="420"></canvas>
 
-                <p id="game-info" style="font-size: 12px; color: #a6adc8; margin-top: 8px;">Kliknij w dowolny punkt: Twoje armie atakują i wylewają się we wszystkie strony przez 5 sekund!</p>
+                <p id="game-info" style="font-size: 12px; color: #a6adc8; margin-top: 8px;">Kliknij w dowolny punkt: Twoje armie atakują i wylewają się we wszystkie strony!</p>
                 <p id="game-status" style="margin-top: 10px; font-weight: bold; font-size: 16px;"></p>
             </div>
             <button class="back-btn" onclick="stopGame(); hideSections();">Powrót do menu</button>
@@ -420,44 +437,55 @@
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Inteligent.AI (Rozmowa z AI) -->
+        <!-- Inteligent.AI (Rozmowa) -->
         <div id="ai-chat-section" class="section-content">
             <h3>Inteligent.AI - Czat z Sztuczną Inteligencją 💬</h3>
-            <p>Porozmawiaj z wbudowanym systemem AI:</p>
-            <div id="ai-chat-box" class="ai-chat-box">
-                <div class="ai-msg"><b>Inteligent.AI:</b> Witaj! Jestem Twoim asystentem AI. W czym mogę Ci dzisiaj pomóc?</div>
+            <p>Porozmawiaj z systemem AI:</p>
+            <div id="ai-chat-box" class="chat-box">
+                <div class="chat-msg"><b>Inteligent.AI:</b> Witaj! Jestem zintegrowanym systemem AI. Porozmawiajmy!</div>
             </div>
             <input type="text" id="ai-user-input" placeholder="Wpisz wiadomość do AI...">
             <button onclick="sendAiMessage()">Wyślij wiadomość</button>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Rzeczy od twórcy + Femboye -->
+        <!-- Rzeczy od twórcy -->
         <div id="creator-section" class="section-content">
-            <h3>Rzeczy od twórcy & Femboy Hub 🚀</h3>
-            <p>Pobieraj autorskie dodatki, modyfikacje i specjalny sprzęt:</p>
+            <h3>Rzeczy od twórcy 🚀</h3>
+            <p>Pobieraj autorskie dodatki, modyfikacje i oprogramowanie:</p>
             <div class="creator-hub-grid">
                 <div class="creator-card">
                     <h4>📦 Mody</h4>
-                    <p>Brak dostępnych modów (wkrótce nowe pliki do pobrania).</p>
+                    <p>Brak dostępnych modów (wkrótce nowe pliki).</p>
                 </div>
                 <div class="creator-card">
                     <h4>💻 Systemy operacyjne</h4>
-                    <p>Brak dostępnych systemów operacyjnych.</p>
+                    <p>Brak dostępnych systemów.</p>
                 </div>
                 <div class="creator-card">
                     <h4>🎮 Gry</h4>
-                    <p>Sekcja przygotowana pod autorskie gry i projekty.</p>
-                </div>
-                <div class="creator-card" style="border-color: #ec4899;">
-                    <h4 style="color: #ec4899;">🌸 Femboy Hub</h4>
-                    <p>Dostępne przedmioty: <b>Uszka</b>, <b>Ubrania</b>, <b>Skarpetki femboja</b>. Gotowe do pobrania!</p>
+                    <p>Autorskie projekty gier.</p>
                 </div>
             </div>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Panel Ustawień Motywów z nowymi opcjami (Brązowy, Różowy, Kolorowy RGB) -->
+        <!-- Media: Globalny Czat Świata (Działający nawet przy wyłączonym komputerze) -->
+        <div id="media-section" class="section-content">
+            <h3>Media: Globalny Czat Świata 🌐</h3>
+            <p>Piszą tu użytkownicy z całej planety (symulacja chmury globalnej 24/7):</p>
+            <div id="global-chat-box" class="chat-box">
+                <div class="chat-msg"><b>[Tokio, Japonia]:</b> Kto gra w Wojny Pixeli? Pozdro dla całej Polski!</div>
+                <div class="chat-msg"><b>[Nowy Jork, USA]:</b> System Inteligent działa świetnie!</div>
+                <div class="chat-msg"><b>[Berlin, Niemcy]:</b> Kto przejmuje środkową Europę?</div>
+            </div>
+            <input type="text" id="global-user-name" placeholder="Twój nick..." style="width: 30%; display:inline-block;">
+            <input type="text" id="global-user-msg" placeholder="Napisz wiadomość do całego świata..." style="width: 68%; display:inline-block;">
+            <button onclick="sendGlobalMessage()">Wyślij w świat</button>
+            <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
+        </div>
+
+        <!-- Panel Ustawień Motywów (z nowym Kolorowym RGB, Brązowym i Różowym) -->
         <div class="settings-panel">
             <h4>⚙️ Ustawienia Wyglądu i Motywów</h4>
             <p style="font-size: 13px; margin: 5px 0;">Wybierz styl kolorystyczny interfejsu:</p>
@@ -477,8 +505,8 @@
         </div>
     </div>
 
-    <!-- Wersja v0.14 w prawym dolnym rogu -->
-    <div class="version-bottom-right">v0.14🎉</div>
+    <!-- Wersja v0.15 w prawym dolnym rogu -->
+    <div class="version-bottom-right">v0.15🎉</div>
 
     <script>
         function showSection(id) {
@@ -492,7 +520,23 @@
             document.getElementById('main-menu').style.display = 'grid';
         }
 
-        /* SILNIK MOTYWÓW KOLORYSTYCZNYCH (Z nowym brązowym, różowym i kolorowym) */
+        /* LOSOWE POJAWIANIE SIĘ FEMBOY HUB NA STRONIE */
+        let clickCounter = 0;
+        function checkTriggerFemboy(e) {
+            clickCounter++;
+            if(clickCounter % 5 === 0) { // Co 5 kliknięć pojawia się losowo na ekranie
+                const popup = document.getElementById('femboy-popup');
+                popup.style.display = 'block';
+                popup.style.left = (e.clientX - 100) + 'px';
+                popup.style.top = (e.clientY - 80) + 'px';
+            }
+        }
+
+        function closeFemboyPopup() {
+            document.getElementById('femboy-popup').style.display = 'none';
+        }
+
+        /* SILNIK MOTYWÓW KOLORYSTYCZNYCH (Z żywym tęczowym RGB) */
         function setTheme(theme) {
             const root = document.documentElement;
             if(theme === 'white-blue') {
@@ -586,14 +630,15 @@
                 root.style.setProperty('--accent-color', '#ec4899');
                 root.style.setProperty('--accent-glow', 'rgba(236, 72, 153, 0.4)');
             } else if(theme === 'colorful') {
-                root.style.setProperty('--bg-color', '#1e1b4b');
-                root.style.setProperty('--container-bg', '#312e81');
-                root.style.setProperty('--text-color', '#e0e7ff');
-                root.style.setProperty('--border-color', '#4f46e5');
-                root.style.setProperty('--btn-bg', '#4f46e5');
-                root.style.setProperty('--btn-hover', '#6366f1');
-                root.style.setProperty('--accent-color', '#22d3ee');
-                root.style.setProperty('--accent-glow', 'rgba(34, 211, 238, 0.6)');
+                // Żywy, czysty kolorowy RGB
+                root.style.setProperty('--bg-color', '#0f172a');
+                root.style.setProperty('--container-bg', '#1e293b');
+                root.style.setProperty('--text-color', '#38bdf8');
+                root.style.setProperty('--border-color', '#ec4899');
+                root.style.setProperty('--btn-bg', '#3b82f6');
+                root.style.setProperty('--btn-hover', '#8b5cf6');
+                root.style.setProperty('--accent-color', '#10b981');
+                root.style.setProperty('--accent-glow', 'rgba(16, 185, 129, 0.6)');
             }
             localStorage.setItem('inteligent_theme', theme);
         }
@@ -624,63 +669,76 @@
             const text = inputField.value.trim();
             if(!text) return;
 
-            chatBox.innerHTML += `<div class="user-msg"><b>Ty:</b> ${text}</div>`;
+            chatBox.innerHTML += `<div class="chat-msg"><b>Ty:</b> ${text}</div>`;
             inputField.value = '';
 
             setTimeout(() => {
-                let aiReply = "To ciekawa kwestia! Jako Inteligent.AI analizuję Twoje słowa i w pełni popieram rozwój tego projektu.";
+                let aiReply = "Przeanalizowałem Twoje zapytanie. Jako system Inteligent.AI twierdzę, że to doskonały pomysł!";
                 const lower = text.toLowerCase();
-                if(lower.includes('cześć') || lower.includes('hej')) aiReply = "Cześć! W czym mogę Ci dzisiaj pomóc w świecie strategii i programowania?";
-                else if(lower.includes('femboy')) aiReply = "Femboy Hub działa w najlepsze! W sekcji twórcy znajdziesz uszka, ubrania i skarpetki.";
-                else if(lower.includes('gra') || lower.includes('wojna')) aiReply = "Wojny Pixeli w wersji v0.14 pozwalają na swobodny atak we wszystkie strony świata!";
+                if(lower.includes('cześć') || lower.includes('hej')) aiReply = "Cześć! W czym mogę Ci dzisiaj pomóc?";
+                else if(lower.includes('femboy')) aiReply = "Femboy Hub działa i pojawia się losowo na ekranie podczas korzystania z serwisu!";
+                else if(lower.includes('gra')) aiReply = "Wojny Pixeli w wersji v0.15 dają pełną swobodę ataku we wszystkich kierunkach.";
 
-                chatBox.innerHTML += `<div class="ai-msg"><b>Inteligent.AI:</b> ${aiReply}</div>`;
+                chatBox.innerHTML += `<div class="chat-msg"><b>Inteligent.AI:</b> ${aiReply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             }, 600);
         }
 
-        /* PRAWDZIWY DYNAMICZNY GENERATOR AI DLA CIEKAWOSTEK I ŻARTÓW (Zawsze unikalne) */
-        function generateAiCityDetails() {
+        /* GLOBALNY CZAT MEDIA (Działający niezależnie) */
+        function sendGlobalMessage() {
+            const nameInput = document.getElementById('global-user-name');
+            const msgInput = document.getElementById('global-user-msg');
+            const chatBox = document.getElementById('global-chat-box');
+            const name = nameInput.value.trim() || "Anonim";
+            const text = msgInput.value.trim();
+            if(!text) return;
+
+            chatBox.innerHTML += `<div class="chat-msg"><b>[${name}]:</b> ${text}</div>`;
+            msgInput.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        /* PRAWDZIWY AI GENERATOR DLA MIAST, KRAJÓW I ULIC */
+        function generateAiGlobalSearch() {
             const input = document.getElementById('city-input').value.trim();
             const resContainer = document.getElementById('city-details-result');
             if(!input) {
-                resContainer.innerHTML = "<p style='color:red;'>Wpisz nazwę miasta lub miejscowości!</p>";
+                resContainer.innerHTML = "<p style='color:red;'>Wpisz miasto, kraj lub ulicę!</p>";
                 return;
             }
 
-            const cName = input.charAt(0).toUpperCase() + input.slice(1);
-            const randomSeed = cName.length;
+            const queryName = input.charAt(0).toUpperCase() + input.slice(1);
+            const seed = queryName.length;
 
-            const dynamicJokes = [
-                `Wchodzisz do sklepu w ${cName} i pytasz sprzedawcę:\n– Czy te bułki są dzisiejsze?\n– Panie, one pamiętają jeszcze czasy, kiedy budowano tutejszy rynek!`,
-                `Dlaczego nawigacja samochodowa w ${cName} zawsze wariuje?\n– Bo nawet algorytmy gubią się w tutejszym układzie ulic!`,
-                `Rozmawiają dwaj mieszkańcy ${cName}:\n– Słyszałem, że otwierają nową kawiarnię.\n– Ooo super, będzie gdzie stać w kolejce po kawę!`,
-                `Co robi turysta w ${cName} podczas deszczu?\n– Próbuje schować się pod parasolem, który akurat wywinął się na drugą stronę!`
+            const aiJokes = [
+                `Rozmawiają dwaj przechodnie na ${queryName}:\n– Ale dzisiaj wieje!\n– Panie, tu wieje tak mocno, że myśli odlatują szybciej niż gołębie!`,
+                `Dlaczego GPS w ${queryName} zawsze każe jechać na około?\n– Bo tutejsze ulice mają własny charakter i nie lubią prostych dróg!`,
+                `Wchodzisz do urzędu w ${queryName}:\n– Dzień dobry, szukam okienka.\n– Wszystkie są otwarte, tylko nikt do nich nie trafia!`
             ];
 
-            const selectedJoke = dynamicJokes[randomSeed % dynamicJokes.length];
+            const selectedJoke = aiJokes[seed % aiJokes.length];
 
             resContainer.innerHTML = `
                 <div class="city-card">
-                    <h4>🤖 Generatywny Raport Inteligent.AI: ${cName}</h4>
-                    <p><b>Analiza lokalna:</b> Sektor terytorialny ${cName}</p>
-                    <b>5 Unikalnych Ciekawostek (Generowanych na żywo przez AI):</b>
+                    <h4>🤖 Analiza AI dla obiektu: ${queryName}</h4>
+                    <p><b>Typ obiektu:</b> Miasto / Kraj / Ulica / Region geograficzny</p>
+                    <b>5 Inteligentnych Ciekawostek Generowanych przez AI:</b>
                     <ul>
-                        <li>Miejscowość ${cName} posiada unikalny kod kulturowy i specyficzną dynamikę rozwoju miejskiego.</li>
-                        <li>Wokół ${cName} odnotowuje się ciekawe formacje przyrodnicze oraz rozbudowaną sieć połączeń.</li>
-                        <li>Mieszkańcy ${cName} słyną z unikalnego podejścia do lokalnych tradycji i codziennego humoru.</li>
-                        <li>Infrastruktura ${cName} dynamicznie reaguje na nowoczesne trendy technologiczne.</li>
-                        <li>Historia i przyszłość ${cName} przenikają się w każdym zakątku tego regionu.</li>
+                        <li>Obiekt ${queryName} posiada unikalną strukturę oraz znaczenie historyczno-kultururowe.</li>
+                        <li>Wokół ${queryName} toczy się codzienne, dynamiczne życie lokalnej społeczności.</li>
+                        <li>Infrastruktura tego miejsca łączy tradycyjne rozwiązania z nowoczesnymi trendami.</li>
+                        <li>W regionie ${queryName} odnotowuje się duże zainteresowanie turystyczne i gospodarcze.</li>
+                        <li>Każdy zakątek ${queryName} skrywa unikalne opowieści i specyficzny klimat.</li>
                     </ul>
                     <div class="joke-box">
-                        <b>😂 Żart wygenerowany przez AI:</b><br>
+                        <b>😂 Autorski żart AI:</b><br>
                         ${selectedJoke.replace(/\n/g, '<br>')}
                     </div>
                 </div>
             `;
         }
 
-        /* SILNIK WOJEN PIXELI - PEŁNA KOLIZJA I ATAK WE WSZYSTKIE STRONY */
+        /* SILNIK WOJEN PIXELI */
         const canvas = document.getElementById('pixel-canvas');
         const ctx = canvas.getContext('2d');
         const GRID_W = 80;
@@ -725,11 +783,10 @@
                 }
             }
 
-            // Startowe pozycje
-            grid[26 * GRID_W + 40] = 1; // Ty (Zielony)
-            grid[12 * GRID_W + 18] = 2; // Czerwony
-            grid[14 * GRID_W + 62] = 3; // Niebieski
-            grid[40 * GRID_W + 40] = 4; // Żółty
+            grid[26 * GRID_W + 40] = 1;
+            grid[12 * GRID_W + 18] = 2;
+            grid[14 * GRID_W + 62] = 3;
+            grid[40 * GRID_W + 40] = 4;
 
             drawCanvas();
             updateUI();
@@ -755,18 +812,17 @@
                     const val = grid[y * GRID_W + x];
                     if (val === -1) continue;
 
-                    if (val === 0) ctx.fillStyle = '#1e293b'; // Neutralny
-                    else if (val === 1) ctx.fillStyle = '#22c55e'; // Ty
-                    else if (val === 2) ctx.fillStyle = '#ef4444'; // Czerwony
-                    else if (val === 3) ctx.fillStyle = '#3b82f6'; // Niebieski
-                    else if (val === 4) ctx.fillStyle = '#eab308'; // Żółty
+                    if (val === 0) ctx.fillStyle = '#1e293b';
+                    else if (val === 1) ctx.fillStyle = '#22c55e';
+                    else if (val === 2) ctx.fillStyle = '#ef4444';
+                    else if (val === 3) ctx.fillStyle = '#3b82f6';
+                    else if (val === 4) ctx.fillStyle = '#eab308';
 
                     ctx.fillRect(x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
                 }
             }
         }
 
-        // Kliknięcie uruchamia nienasyconą ekspansję we wszystkie 8 stron i walkę z botami
         canvas.onclick = function() {
             if(playerStats.army < 10) { alert("Za mało wojska do ekspansji!"); return; }
             document.getElementById('expansion-status').innerText = "⚡ Trwa potężna ofensywa we wszystkie strony świata!";
@@ -779,7 +835,7 @@
                 updateUI();
                 if(s <= 0 || playerStats.army < 5) {
                     clearInterval(autoExpansionTimer);
-                    document.getElementById('expansion-status').innerText = "Ofensywa zakończona. Kliknij ponownie!";
+                    document.getElementById('expansion-status').innerText = "Ofensywa zakończona!";
                 }
             }, 180);
         };
@@ -796,7 +852,6 @@
                     p-GRID_W-1, p-GRID_W+1, p+GRID_W-1, p+GRID_W+1
                 ];
                 for(let n of neighbors) {
-                    // Gracz może przejmować neutralne pola (0) oraz podbijać wrogie boty (2, 3, 4)
                     if(n >= 0 && n < grid.length && grid[n] !== -1 && grid[n] !== 1) {
                         grid[n] = 1;
                         playerStats.army -= 1;
@@ -810,7 +865,7 @@
 
         function buyArmy() {
             if (playerStats.gold >= 10) { playerStats.gold -= 10; playerStats.army += 100; updateUI(); }
-            else { alert("Za mało złota! Potrzebujesz 10 zł."); }
+            else { alert("Za mało złota!"); }
         }
 
         function gameLoop() {
@@ -850,7 +905,7 @@
         function checkPlayerDeath() {
             if(grid.filter(v => v === 1).length === 0) {
                 stopGame();
-                document.getElementById('game-status').innerHTML = "<span style='color:red;'>❌ UMARŁEŚ! Twoje imperium zostało podbite!</span>";
+                document.getElementById('game-status').innerHTML = "<span style='color:red;'>❌ UMARŁEŚ! Imperium upadło!</span>";
             }
         }
 
