@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -22,16 +21,15 @@
         .container {
             text-align: center;
             background: white;
-            padding: 40px;
+            padding: 30px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 600px;
+            max-width: 650px;
             width: 90%;
         }
 
-        /* Styl logo z Twojego projektu */
         .logo-area {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         .logo-icon {
             font-size: 50px;
@@ -45,7 +43,6 @@
             margin: 0;
         }
 
-        /* Przyciski opcji */
         .menu-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -74,7 +71,6 @@
             transform: translateY(-2px);
         }
 
-        /* Sekcje treści */
         .section-content {
             display: none;
             margin-top: 20px;
@@ -92,7 +88,51 @@
             background-color: #c9302c;
         }
 
-        /* Styl dla opcji 4 (Wyskakujące :D) */
+        /* Sekcja Gry Wojny Pixeli */
+        .game-board {
+            background: #1e1e2e;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .regions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .region-btn {
+            background: #313244;
+            border: 2px solid #45475a;
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .region-btn.player {
+            background: #22c55e !important;
+            border-color: #16a34a !important;
+        }
+
+        .region-btn.bot {
+            background: #ef4444 !important;
+            border-color: #dc2626 !important;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
         #secret-popup {
             display: none;
             position: fixed;
@@ -106,7 +146,6 @@
             padding: 30px 60px;
             border-radius: 20px;
             z-index: 1000;
-            box-shadow: 0 0 30px rgba(255, 51, 102, 0.5);
         }
 
         input, textarea {
@@ -123,13 +162,11 @@
 <body>
 
     <div class="container">
-        <!-- Logo -->
         <div class="logo-area">
             <div class="logo-icon">🔍</div>
             <h1 class="logo-text">inteligent</h1>
         </div>
 
-        <!-- 4 Główne Opcje -->
         <div id="main-menu" class="menu-options">
             <button onclick="showSection('search-section')">1. Wyszukaj miasto</button>
             <button onclick="showSection('pixels-section')">2. Wojny Pixeli</button>
@@ -137,7 +174,7 @@
             <button onclick="triggerSecret()">4. ? :D</button>
         </div>
 
-        <!-- Opcja 1: Wyszukaj miasto -->
+        <!-- Opcja 1 -->
         <div id="search-section" class="section-content">
             <h3>Wyszukiwarka Miast</h3>
             <p>Wpisz miasto, które chcesz sprawdzić:</p>
@@ -147,17 +184,33 @@
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Opcja 2: Wojny pixeli -->
+        <!-- Opcja 2: WOJNY PIXELI (Gra) -->
         <div id="pixels-section" class="section-content">
-            <h3>Wojny Pixeli (Mapa Polski)</h3>
-            <p>Wybierz region/miasto na mapie Polski i rozpocznij walkę o terytorium z botami lub znajomymi!</p>
-            <div style="background: #e2e8f0; height: 150px; display: flex; align-items: center; justify-content: center; border-radius: 5px; color: #666; font-style: italic;">
-                [Tutaj w przyszłości pojawi się interaktywna mapa Polski]
+            <h3>Wojny Pixeli: Bitwa o Polskę ⚔️</h3>
+            <div class="game-board">
+                <div class="score-board">
+                    <span style="color: #4ade80;">Ty: <span id="player-score">0</span></span>
+                    <span style="color: #f87171;">Bot: <span id="bot-score">0</span></span>
+                </div>
+                <p style="font-size: 14px; color: #a6adc8;">Klikaj w regiony Polski, aby przejmować je przed botem!</p>
+                
+                <div class="regions-grid" id="map-grid">
+                    <button class="region-btn" onclick="claimRegion(this, 'Mazowieckie')">Mazowieckie</button>
+                    <button class="region-btn" onclick="claimRegion(this, 'Małopolskie')">Małopolskie</button>
+                    <button class="region-btn" onclick="claimRegion(this, 'Wielkopolskie')">Wielkopolskie</button>
+                    <button class="region-btn" onclick="claimRegion(this, 'Śląskie')">Śląskie</button>
+                    <button class="region-btn" onclick="claimRegion(this, 'Pomorskie')">Pomorskie</button>
+                    <button class="region-btn" onclick="claimRegion(this, 'Dolnośląskie')">Dolnośląskie</button>
+                    <button class="region-btn" onclick="claimRegion(this, 'Łódzkie')">Łódzkie</button>
+                    <button class="region-btn" onclick="claimRegion(this, 'Zachodniopomorskie')">Zachodniopomorskie</button>
+                    <button class="region-btn" onclick="claimRegion(this, 'Lubelskie')">Lubelskie</button>
+                </div>
+                <p id="game-status" style="margin-top: 15px; font-weight: bold;"></p>
             </div>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Opcja 3: Notatki -->
+        <!-- Opcja 3 -->
         <div id="notes-section" class="section-content">
             <h3>Twoje Notatki</h3>
             <textarea id="user-note" rows="4" placeholder="Wpisz swoją notatkę tutaj..."></textarea>
@@ -167,7 +220,6 @@
         </div>
     </div>
 
-    <!-- Ukryty element dla opcji 4 -->
     <div id="secret-popup">:D</div>
 
     <script>
@@ -182,7 +234,6 @@
             document.getElementById('main-menu').style.display = 'grid';
         }
 
-        // Logika dla opcji 1
         function searchCity() {
             const city = document.getElementById('city-input').value;
             const resultDiv = document.getElementById('city-result');
@@ -195,7 +246,6 @@
             }
         }
 
-        // Logika dla opcji 3
         function saveNote() {
             const noteText = document.getElementById('user-note').value;
             if(noteText.trim() !== "") {
@@ -207,13 +257,54 @@
             }
         }
 
-        // Logika dla opcji 4 (Pojawia się i znika po 2 sekundach)
         function triggerSecret() {
             const popup = document.getElementById('secret-popup');
             popup.style.display = 'block';
             setTimeout(() => {
                 popup.style.display = 'none';
-            }, 2000); // 2000 milisekund = 2 sekundy
+            }, 2000);
+        }
+
+        /* LOGIKA GRY WOJNY PIXELI */
+        let playerScore = 0;
+        let botScore = 0;
+
+        function claimRegion(btn, name) {
+            if (btn.classList.contains('player') || btn.classList.contains('bot')) return;
+
+            // Gracz przejmuje region
+            btn.classList.add('player');
+            playerScore++;
+            document.getElementById('player-score').innerText = playerScore;
+
+            // Ruch bota po 0.5 sekundy
+            setTimeout(botTurn, 500);
+        }
+
+        function botTurn() {
+            const available = Array.from(document.querySelectorAll('.region-btn')).filter(b => !b.classList.contains('player') && !b.classList.contains('bot'));
+            if (available.length > 0) {
+                const randomBtn = available[Math.floor(Math.random() * available.length)];
+                randomBtn.classList.add('bot');
+                botScore++;
+                document.getElementById('bot-score').innerText = botScore;
+            }
+
+            checkWinner();
+        }
+
+        function checkWinner() {
+            const total = document.querySelectorAll('.region-btn').length;
+            if (playerScore + botScore === total) {
+                const status = document.getElementById('game-status');
+                if (playerScore > botScore) {
+                    status.innerText = "🎉 ZWYCIĘSTWO! Przejąłeś Polskę!";
+                    status.style.color = "#4ade80";
+                } else {
+                    status.innerText = "❌ PRZEGRANA! Bot zajął więcej terytoriów!";
+                    status.style.color = "#f87171";
+                }
+            }
         }
     </script>
 </body>
