@@ -5,51 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inteligent</title>
     <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --container-bg: #ffffff;
+            --text-color: #121218;
+            --border-color: #d1d5db;
+            --btn-bg: #e5e7eb;
+            --btn-hover: #d1d5db;
+            --accent-color: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.4);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121218;
-            color: #f4f4f9;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
+            box-sizing: border-box;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* ANIMACJA POWITALNA Z LUPĄ */
+        #intro-splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--container-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            animation: hideSplash 0.8s ease 1.2s forwards;
+        }
+
+        .flying-magnifier {
+            font-size: 80px;
+            animation: flyAndZoom 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes flyAndZoom {
+            0% { transform: scale(0.5) translate(0, 0) rotate(0deg); opacity: 0; }
+            50% { transform: scale(1.5) translate(0, -20px) rotate(45deg); opacity: 1; }
+            100% { transform: scale(3) translate(200px, -300px) rotate(90deg); opacity: 0; }
+        }
+
+        @keyframes hideSplash {
+            to { visibility: hidden; opacity: 0; pointer-events: none; }
         }
 
         .container {
-            text-align: center;
-            background: #1e1e2e;
+            background: var(--container-bg);
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             max-width: 1100px;
-            width: 98%;
+            width: 100%;
             position: relative;
+            border: 1px solid var(--border-color);
+            animation: expandContainer 0.5s ease-out;
         }
 
-        .version-tag {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 16px;
-            color: #facc15;
-            font-weight: bold;
+        @keyframes expandContainer {
+            from { transform: scale(0.92); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .logo-area {
-            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
         }
-        .logo-icon {
-            font-size: 40px;
+
+        .logo-icon-circle {
+            width: 65px;
+            height: 65px;
+            background: var(--btn-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
+
+        .logo-icon-circle span {
+            font-size: 34px;
+            display: inline-block;
+            animation: spinMagnifier 6s linear infinite;
+        }
+
+        @keyframes spinMagnifier {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .logo-text {
-            font-size: 38px;
+            font-size: 42px;
             font-weight: 900;
             font-style: italic;
             letter-spacing: -1px;
-            color: #fff;
             margin: 0;
         }
 
@@ -66,14 +130,15 @@
             font-weight: bold;
             border: none;
             border-radius: 8px;
-            background-color: #313244;
-            color: white;
+            background-color: var(--btn-bg);
+            color: var(--text-color);
             cursor: pointer;
             transition: 0.2s;
+            border: 1px solid var(--border-color);
         }
 
         button:hover {
-            background-color: #45475a;
+            background-color: var(--btn-hover);
             transform: translateY(-2px);
         }
 
@@ -81,214 +146,294 @@
             display: none;
             margin-top: 20px;
             text-align: left;
-            border-top: 2px solid #45475a;
+            border-top: 2px solid var(--border-color);
             padding-top: 20px;
+            animation: expandSection 0.35s ease-out;
+        }
+
+        @keyframes expandSection {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .back-btn {
-            background-color: #d9534f;
+            background-color: #ef4444;
+            color: #fff;
             margin-top: 15px;
             width: 100%;
         }
-        .back-btn:hover {
-            background-color: #c9302c;
+        .back-btn:hover { background-color: #dc2626; }
+
+        /* Rzeczy od twórcy - Nowa zakładka */
+        .creator-hub-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
         }
 
-        /* Sekcja Gra Wojny Pixeli */
+        .creator-card {
+            background: var(--btn-bg);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .creator-card h4 { margin-top: 0; color: var(--accent-color); }
+        .creator-card p { font-size: 13px; opacity: 0.8; }
+
+        /* Panel Ustawień Motywów */
+        .settings-panel {
+            background: var(--btn-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .theme-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .theme-buttons button {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+
         .game-board {
-            background: #11111b;
+            background: #09090d;
             color: white;
             padding: 15px;
             border-radius: 10px;
             text-align: center;
         }
 
+        .map-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .map-selector button {
+            padding: 8px 15px;
+            font-size: 13px;
+            background: #313244;
+            color: white;
+        }
+
+        .map-selector button.active {
+            background: #22c55e;
+            color: #000;
+        }
+
         .stats-panel {
             display: flex;
             justify-content: space-around;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             background: #181825;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
-            margin-bottom: 12px;
-            font-size: 14px;
+            margin-bottom: 10px;
+            font-size: 13px;
             font-weight: bold;
+            color: white;
         }
 
-        .progress-bar-container {
-            width: 100%;
-            height: 12px;
-            background-color: #313244;
-            border-radius: 6px;
-            overflow: hidden;
-            display: flex;
-            margin-bottom: 15px;
-        }
-
-        .progress-segment {
-            height: 100%;
-            transition: width 0.3s;
+        #pixel-canvas {
+            background: #000;
+            border: 2px solid #45475a;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
         }
 
         .control-panel {
-            margin-bottom: 15px;
+            margin-top: 12px;
             display: flex;
             gap: 15px;
             justify-content: center;
             align-items: center;
-            flex-wrap: wrap;
         }
 
         .action-btn {
             background-color: #22c55e;
             color: black;
             padding: 10px 20px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
             border-radius: 6px;
-            cursor: pointer;
             border: none;
-        }
-        .action-btn:hover {
-            background-color: #16a34a;
-            color: white;
-        }
-
-        /* Prawdziwa Mapa Polski z Terytoriami (SVG) */
-        #poland-map-container {
-            width: 100%;
-            max-width: 900px;
-            height: auto;
-            margin: 0 auto;
-            display: block;
-            background: #09090d;
-            border-radius: 10px;
-            padding: 10px;
-            border: 1px solid #45475a;
-        }
-
-        .territory {
-            stroke: #11111b;
-            stroke-width: 1.5;
             cursor: pointer;
-            transition: fill 0.2s, stroke 0.2s;
         }
 
-        .territory:hover {
-            stroke: #ffffff;
-            stroke-width: 2.5;
-            filter: brightness(1.2);
+        .city-card {
+            background: var(--btn-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid var(--accent-color);
         }
 
-        .territory-label {
-            fill: #ffffff;
-            font-size: 8px;
+        .city-card h4 { margin-top: 0; color: var(--accent-color); }
+        .city-card ul { padding-left: 20px; font-size: 14px; }
+        .city-card .joke-box {
+            background: var(--container-bg);
+            padding: 10px;
+            border-radius: 6px;
+            font-style: italic;
+            margin-top: 10px;
+            color: #d97706;
+            border: 1px solid var(--border-color);
+        }
+
+        .version-bottom-right {
+            position: fixed;
+            bottom: 15px;
+            right: 20px;
+            font-size: 14px;
+            color: #f59e0b;
             font-weight: bold;
-            pointer-events: none;
-            text-anchor: middle;
-            text-shadow: 1px 1px 2px #000;
+            background: var(--container-bg);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            z-index: 9999;
         }
-
-        /* Kolory Frakcji */
-        .color-neutral { fill: #313244 !important; }
-        .color-green { fill: #22c55e !important; }
-        .color-red { fill: #ef4444 !important; }
-        .color-blue { fill: #3b82f6 !important; }
-        .color-yellow { fill: #eab308 !important; }
-        .color-purple { fill: #a855f7 !important; }
-        .color-orange { fill: #f97316 !important; }
 
         input, textarea {
             width: 100%;
             padding: 10px;
             margin-top: 10px;
             margin-bottom: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid var(--border-color);
             border-radius: 5px;
             box-sizing: border-box;
-            background: #222;
-            color: #fff;
+            background: var(--container-bg);
+            color: var(--text-color);
         }
     </style>
 </head>
 <body>
 
+    <!-- Animacja powitalna z lupą -->
+    <div id="intro-splash">
+        <div class="flying-magnifier">🔍</div>
+    </div>
+
     <div class="container">
-        <div class="version-tag">v0.10🎉</div>
+        <!-- Logo z kręcącą się lupą w kółku -->
         <div class="logo-area">
-            <div class="logo-icon">🔍</div>
+            <div class="logo-icon-circle">
+                <span>🔍</span>
+            </div>
             <h1 class="logo-text">inteligent</h1>
         </div>
 
         <div id="main-menu" class="menu-options">
             <button onclick="showSection('search-section')">1. Wyszukaj miasto</button>
-            <button onclick="showSection('pixels-section'); initGame();">2. Wojny Pixeli (Mapa Polski)</button>
-            <button onclick="showSection('notes-section')">3. Notatki</button>
-            <button onclick="triggerSecret()">4. ? :D</button>
+            <button onclick="showSection('pixels-section'); initGame();">2. Wojny Pixeli (3897 Pikseli)</button>
+            <button onclick="showSection('notes-section'); loadNote();">3. Notatki</button>
+            <button onclick="showSection('creator-section')">4. Rzeczy od twórcy</button>
         </div>
 
-        <!-- Opcja 1 -->
+        <!-- Wyszukiwarka miast -->
         <div id="search-section" class="section-content">
             <h3>Wyszukiwarka Miast Polski</h3>
-            <p>Sprawdź miasto w bazie terytoriów Polski:</p>
-            <input type="text" id="city-input" placeholder="np. Radomsko, Łódź, Warszawa, Piotrków Tryb....">
-            <button onclick="searchCity()">Szukaj</button>
-            <div id="city-result" style="margin-top: 10px; font-weight: bold;"></div>
+            <p>Wpisz miasto, aby poznać jego terytorium, 5 ciekawostek oraz żart:</p>
+            <input type="text" id="city-input" placeholder="np. Warszawa, Łódź, Radomsko, Kraków, Lwów...">
+            <button onclick="searchCityDetails()">Szukaj w bazie</button>
+            <div id="city-details-result"></div>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Opcja 2: WOJNY PIXELI NA MAPIE POLSKI -->
+        <!-- Wojny Pixeli -->
         <div id="pixels-section" class="section-content">
-            <h3>Wojny Pixeli: Bitwa o Terytoria Polski ⚔️</h3>
+            <h3>Wojny Pixeli: Bitwa na 3897 Pikseli ⚔️</h3>
             <div class="game-board">
-                <!-- Pasek postępu -->
-                <div class="progress-bar-container">
-                    <div id="prog-green" class="progress-segment" style="background:#22c55e; width: 0%;"></div>
-                    <div id="prog-red" class="progress-segment" style="background:#ef4444; width: 0%;"></div>
-                    <div id="prog-blue" class="progress-segment" style="background:#3b82f6; width: 0%;"></div>
-                    <div id="prog-yellow" class="progress-segment" style="background:#eab308; width: 0%;"></div>
-                    <div id="prog-purple" class="progress-segment" style="background:#a855f7; width: 0%;"></div>
-                    <div id="prog-orange" class="progress-segment" style="background:#f97316; width: 0%;"></div>
+                <div class="map-selector">
+                    <button id="btn-map-poland" class="active" onclick="switchMap('poland')">Mapa: Polska</button>
+                    <button id="btn-map-lwow" onclick="switchMap('lwow')">Mapa: Polska + Lwów</button>
+                    <button id="btn-map-europe" onclick="switchMap('europe')">Mapa: Europa</button>
                 </div>
 
-                <!-- Panel Statystyk i Licznika Wojska -->
                 <div class="stats-panel">
-                    <span style="color: #4ade80;">🟢 Ty | Wojsko: <span id="s-green-a">500</span> | Złoto: <span id="s-gold">100</span> zł | Podbite: <span id="s-green-pct">0%</span> (<span id="s-green-t">0</span>)</span>
-                    <span style="color: #f87171;">🔴 Czerwony: <span id="s-red-t">0</span></span>
-                    <span style="color: #60a5fa;">🔵 Niebieski: <span id="s-blue-t">0</span></span>
-                    <span style="color: #facc15;">🟡 Żółty: <span id="s-yellow-t">0</span></span>
-                    <span style="color: #c084fc;">🟣 Fioletowy: <span id="s-purple-t">0</span></span>
-                    <span style="color: #fb923c;">🟠 Pomarańczowy: <span id="s-orange-t">0</span></span>
+                    <span style="color: #4ade80;">🟢 Ty | Piksele: <span id="px-green">0</span> | Wojsko: <span id="army-green">500</span> | Złoto: <span id="gold-val">100</span> zł</span>
+                    <span style="color: #f87171;">🔴 Czerwony: <span id="px-red">0</span></span>
+                    <span style="color: #60a5fa;">🔵 Niebieski: <span id="px-blue">0</span></span>
+                    <span style="color: #facc15;">🟡 Żółty: <span id="px-yellow">0</span></span>
                 </div>
 
                 <div class="control-panel">
-                    <button class="action-btn" onclick="buyArmy()">Kup Wojsko (+100 żołnierzy za 10 zł)</button>
-                    <span id="game-alert" style="font-weight: bold; color: #facc15;"></span>
+                    <button class="action-btn" onclick="buyArmy()">Kup Wojsko (+100 za 10 zł)</button>
+                    <span id="expansion-status" style="font-size: 13px; color: #4ade80; font-weight: bold;"></span>
                 </div>
 
-                <!-- Interaktywna Mapa Polski z Podziałem na Terytoria -->
-                <svg id="poland-map-container" viewBox="0 0 650 550">
-                    <g id="territories-group"></g>
-                </svg>
+                <canvas id="pixel-canvas" width="600" height="400"></canvas>
 
-                <p id="city-hover-info" style="font-size: 13px; color: #a6adc8; margin-top: 8px;">Kliknij w ziemię/miasto na mapie, aby je zaatakować!</p>
+                <p id="game-info" style="font-size: 12px; color: #a6adc8; margin-top: 8px;">Kliknij w piksel: automatyczny atak terytorialny trwa przez 5 sekund!</p>
                 <p id="game-status" style="margin-top: 10px; font-weight: bold; font-size: 16px;"></p>
             </div>
             <button class="back-btn" onclick="stopGame(); hideSections();">Powrót do menu</button>
         </div>
 
-        <!-- Opcja 3 -->
+        <!-- Notatki trwale zapisywane -->
         <div id="notes-section" class="section-content">
-            <h3>Twoje Notatki</h3>
-            <textarea id="user-note" rows="4" placeholder="Wpisz notatkę..."></textarea>
-            <button onclick="saveNote()">Zapisz</button>
-            <p id="note-status" style="color: green; font-size: 14px;"></p>
+            <h3>Twoje Notatki (Zapisywane trwale w przeglądarce)</h3>
+            <textarea id="user-note" rows="6" placeholder="Wpisz swoje ważne notatki tutaj..."></textarea>
+            <button onclick="saveNote()">Zapisz Notatkę</button>
+            <p id="note-status" style="color: var(--accent-color); font-size: 14px; margin-top: 5px;"></p>
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
+        </div>
+
+        <!-- Rzeczy od twórcy -->
+        <div id="creator-section" class="section-content">
+            <h3>Rzeczy od twórcy 🚀</h3>
+            <p>Pobieraj autorskie dodatki, modyfikacje i oprogramowanie:</p>
+            <div class="creator-hub-grid">
+                <div class="creator-card">
+                    <h4>📦 Mody</h4>
+                    <p>Brak dostępnych modów (wkrótce nowe pliki do pobrania).</p>
+                </div>
+                <div class="creator-card">
+                    <h4>💻 Systemy operacyjne</h4>
+                    <p>Brak dostępnych systemów operacyjnych.</p>
+                </div>
+                <div class="creator-card">
+                    <h4>🎮 Gry</h4>
+                    <p>Sekcja przygotowana pod autorskie gry i projekty.</p>
+                </div>
+            </div>
+            <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
+        </div>
+
+        <!-- Panel Ustawień Motywów Kolorystycznych na dole -->
+        <div class="settings-panel">
+            <h4>⚙️ Ustawienia Wyglądu i Motywów</h4>
+            <p style="font-size: 13px; margin: 5px 0;">Wybierz styl kolorystyczny interfejsu:</p>
+            <div class="theme-buttons">
+                <button onclick="setTheme('white-blue')">Biało-Niebieski</button>
+                <button onclick="setTheme('black')">Czarny</button>
+                <button onclick="setTheme('blue-white')">Niebiesko-Biały</button>
+                <button onclick="setTheme('black-pure')">Czarny Klasyczny</button>
+                <button onclick="setTheme('black-white')">Czarno-Biały</button>
+                <button onclick="setTheme('blue')">Niebieski</button>
+                <button onclick="setTheme('yellow')">Żółty</button>
+                <button onclick="setTheme('yellow-white')">Żółto-Biały</button>
+            </div>
         </div>
     </div>
 
-    <div id="secret-popup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); font-size:80px; color:#ff3366; background:rgba(0,0,0,0.9); padding:30px; border-radius:20px; z-index:1000;">:D</div>
+    <!-- Wersja v0.11 w prawym dolnym rogu -->
+    <div class="version-bottom-right">v0.11🎉</div>
 
     <script>
         function showSection(id) {
@@ -296,588 +441,305 @@
             document.querySelectorAll('.section-content').forEach(el => el.style.display = 'none');
             document.getElementById(id).style.display = 'block';
         }
+
         function hideSections() {
             document.querySelectorAll('.section-content').forEach(el => el.style.display = 'none');
             document.getElementById('main-menu').style.display = 'grid';
         }
 
-        /* BAZA MIAST POLSKI LINIA PO LINII */
-        const realPolishCitiesBase = [
-            "Warszawa",
-            "Łódź",
-            "Radomsko",
-            "Piotrków Trybunalski",
-            "Płock",
-            "Kraków",
-            "Wrocław",
-            "Poznań",
-            "Gdańsk",
-            "Szczecin",
-            "Bydgoszcz",
-            "Lublin",
-            "Katowice",
-            "Białystok",
-            "Gdynia",
-            "Częstochowa",
-            "Radom",
-            "Sosnowiec",
-            "Toruń",
-            "Kielce",
-            "Gliwice",
-            "Zabrze",
-            "Olsztyn",
-            "Bielsko-Biała",
-            "Bytom",
-            "Zielona Góra",
-            "Rybnik",
-            "Ruda Śląska",
-            "Tychy",
-            "Opole",
-            "Gorzów Wielkopolski",
-            "Elbląg",
-            "Tarnów",
-            "Chorzów",
-            "Kalisz",
-            "Koszalin",
-            "Legnica",
-            "Grudziądz",
-            "Słupsk",
-            "Jaworzno",
-            "Jastrzębie-Zdrój",
-            "Nowy Sącz",
-            "Jelenia Góra",
-            "Siedlce",
-            "Mysłowice",
-            "Konin",
-            "Piła",
-            "Inowrocław",
-            "Lubin",
-            "Ostrów Wielkopolski",
-            "Suwałki",
-            "Stargard",
-            "Gniezno",
-            "Ostrołęka",
-            "Siemianowice Śląskie",
-            "Pabianice",
-            "Tomaszów Mazowiecki",
-            "Stalowa Wola",
-            "Bełchatów",
-            "Biała Podlaska",
-            "Będzin",
-            "Żory",
-            "Tczew",
-            "Ełk",
-            "Pruszków",
-            "Chełm",
-            "Przemyśl",
-            "Kędzierzyn-Koźle",
-            "Łomża",
-            "Mielec",
-            "Zamość",
-            "Leszno",
-            "Żyrardów",
-            "Świdnica",
-            "Zgierz",
-            "Turek",
-            "Wągrowiec",
-            "Wieluń",
-            "Wyszków",
-            "Zawiercie",
-            "Zduńska Wola",
-            "Żary",
-            "Świętochłowice",
-            "Wejherowo",
-            "Włocławek",
-            "Wodzisław Śląski",
-            "Wołomin",
-            "Września",
-            "Ząbki",
-            "Zgorzelec",
-            "Bochnia",
-            "Brodnica",
-            "Brzeg",
-            "Busko-Zdrój",
-            "Chojnice",
-            "Cieszyn",
-            "Czeladź",
-            "Dębica",
-            "Dzierżoniów",
-            "Giżycko",
-            "Głogów",
-            "Goleniów",
-            "Zakopane",
-            "Sanok",
-            "Augustów",
-            "Andrychów",
-            "Bartoszyce",
-            "Biłgoraj",
-            "Bolesławiec",
-            "Braniewo",
-            "Brzeg Dolny",
-            "Brzesko",
-            "Brzeziny",
-            "Bytów",
-            "Chełmża",
-            "Chojnów",
-            "Choszczno",
-            "Dąbrowa Górnicza",
-            "Działdowo",
-            "Garwolin",
-            "Gostyń",
-            "Grajewo",
-            "Grodzisk Mazowiecki",
-            "Grodzisk Wielkopolski",
-            "Gryfice",
-            "Gryfino",
-            "Hajnówka",
-            "Hrubieszów",
-            "Iława",
-            "Jarocin",
-            "Jarosław",
-            "Jasło",
-            "Jędrzejów",
-            "Karpacz",
-            "Kartuzy",
-            "Kęty",
-            "Kętrzyn",
-            "Kluczbork",
-            "Kłodzko",
-            "Kobyłka",
-            "Kolbuszowa",
-            "Koło",
-            "Kołobrzeg",
-            "Końskie",
-            "Kostrzyn nad Odrą",
-            "Kościan",
-            "Kościerzyna",
-            "Kozienice",
-            "Krasnystaw",
-            "Kraśnik",
-            "Krosno",
-            "Krotoszyn",
-            "Kutno",
-            "Kwidzyn",
-            "Lębork",
-            "Lidzbark Warmiński",
-            "Limanowa",
-            "Lipno",
-            "Lubaczów",
-            "Lubań",
-            "Lubartów",
-            "Lubliniec",
-            "Łańcut",
-            "Łask",
-            "Łęczna",
-            "Łęczyca",
-            "Łomianki",
-            "Łuków",
-            "Malbork",
-            "Marki",
-            "Międzyrzec Podlaski",
-            "Międzyrzecz",
-            "Mikołów",
-            "Milicz",
-            "Mińsk Mazowiecki",
-            "Mława",
-            "Mogilno",
-            "Mońki",
-            "Mrągowo",
-            "Myślenice",
-            "Myślibórz",
-            "Nakło nad Notecią",
-            "Namysłów",
-            "Nisko",
-            "Nowa Dęba",
-            "Nowa Sól",
-            "Nowy Dwór Mazowiecki",
-            "Nowy Targ",
-            "Nysa",
-            "Oborniki",
-            "Olecko",
-            "Oleśnica",
-            "Olkusz",
-            "Oława",
-            "Opoczno",
-            "Ostróda",
-            "Ostrów Mazowiecka",
-            "Ostrzeszów",
-            "Oświęcim",
-            "Otwock",
-            "Ozorków",
-            "Pajęczno",
-            "Piaseczno",
-            "Piastów",
-            "Piekary Śląskie",
-            "Pionki",
-            "Pisz",
-            "Pleszew",
-            "Płońsk",
-            "Polkowice",
-            "Police",
-            "Przasnysz",
-            "Prudnik",
-            "Przysucha",
-            "Pszczyna",
-            "Puck",
-            "Puławy",
-            "Pułtusk",
-            "Pyrzyce",
-            "Racibórz",
-            "Radlin",
-            "Radziejów",
-            "Rawa Mazowiecka",
-            "Rawicz",
-            "Reda",
-            "Ropczyce",
-            "Rumia",
-            "Rypin",
-            "Sandomierz",
-            "Sejny",
-            "Sieradz",
-            "Sierpc",
-            "Skarżysko-Kamienna",
-            "Skawina",
-            "Skierniewice",
-            "Słubice",
-            "Słupca",
-            "Sochaczew",
-            "Sokołów Podlaski",
-            "Sokółka",
-            "Solec Kujawski",
-            "Sopot",
-            "Starachowice",
-            "Starogard Gdański",
-            "Staszów",
-            "Strzelce Opolskie",
-            "Strzelin",
-            "Strzyżów",
-            "Sucha Beskidzka",
-            "Sulechów",
-            "Sulejówek",
-            "Sulęcin",
-            "Szamotuły",
-            "Szczecinek",
-            "Szczytno",
-            "Szprotawa",
-            "Śrem",
-            "Środa Wielkopolska",
-            "Świdnik",
-            "Świebodzice",
-            "Świebodzin",
-            "Świecie",
-            "Świnoujście",
-            "Tarnobrzeg",
-            "Tarnowskie Góry",
-            "Trzebinia",
-            "Trzebnica",
-            "Tuchola",
-            "Ustroń",
-            "Wadowice",
-            "Wałbrzych",
-            "Wałcz",
-            "Wąbrzeźno",
-            "Węgorzewo",
-            "Węgrów",
-            "Wieliczka",
-            "Wieruszów",
-            "Władysławowo",
-            "Włoszczowa",
-            "Wolsztyn",
-            "Wołów",
-            "Wschowa",
-            "Wysokie Mazowieckie",
-            "Ząbkowice Śląskie",
-            "Zambrów",
-            "Zator",
-            "Zdzieszowice",
-            "Złotoryja",
-            "Złotów",
-            "Zwoleń",
-            "Żagań",
-            "Żnin",
-            "Aleksandrów Kujawski",
-            "Barlinek",
-            "Białogard",
-            "Bielawa",
-            "Bieruń",
-            "Bogatynia",
-            "Boguszów-Gorce",
-            "Bolesławiec",
-            "Brzeg",
-            "Bychawa",
-            "Bytów",
-            "Chełmża",
-            "Chocianów",
-            "Czarna Woda",
-            "Czarny Dunajec",
-            "Czchów",
-            "Człuchów",
-            "Ćmielów",
-            "Dąbrowa Białostocka",
-            "Dąbrowa Tarnowska",
-            "Dębno",
-            "Dobczyce",
-            "Dobre Miasto",
-            "Drawno",
-            "Drezdenko",
-            "Dynów",
-            "Głuchołazy",
-            "Głuszyca",
-            "Gliwice Górne",
-            "Gniew",
-            "Głowno",
-            "Goniądz",
-            "Gozdnica",
-            "Góra",
-            "Góra Kalwaria",
-            "Górno",
-            "Gryfów Śląski",
-            "Gubin", "Iłża", "Imielin", "Inowłódz", "Ińsko", "Janikowo", "Janowiec Wielkopolski", "Janów Lubelski", "Jedlina-Zdrój", "Jedwabne", "Jelcz", "Jeziorany", "Jędrzejów", "Jutrosin", "Kalwaria Zebrzydowska", "Kałuszyn", "Kamienna Góra", "Kamień Pomorski", "Kańczuga", "Karczew", "Kargowa", "Karlino", "Kazimierza Wielka", "Kąty Wrocławskie", "Kcynia", "Kietrz", "Kłecko", "Kłobuck", "Knyszyn", "Kobylin", "Kobyłka", "Kolbuszowa", "Kolno", "Kolonowskie", "Kołaczyce", "Koło", "Koniecpol", "Konstancin-Jeziorna", "Koprzywnica", "Korfantów", "Koronowo", "Korsze", "Kosów Lacki", "Kostrzyn", "Kowary", "Kowal", "Kowalewo Pomorskie", "Koziegłowy", "Kozienice", "Koźmin Wielkopolski", "Kożuchów", "Krapkowice", "Krasnobród", "Krasnystaw", "Kraśnik", "Krobia", "Krosno Odrzańskie", "Krośniewice", "Krynica-Zdrój", "Krynica Morska", "Krzepice", "Krzeszowice", "Książ Wielkopolski", "Kudowa-Zdrój", "Kunów", "Kutno", "Kuźnia Raciborska", "Lądek-Zdrój", "Leginy", "Legionowo", "Lesko", "Leśna", "Leśnica", "Lewin Brzeski", "Leżajsk", "Lębork", "Lędzińskie Górki", "Libiąż", "Lidzbark", "Lipdeń", "Lipno", "Lipsk", "Lipsko", "Lubawka", "Lubień Kujawski", "Lubin Śląski", "Lubliniec", "Lubniewice", "Lubomierz", "Luboń", "Lubycza Królewska", "Lwówek", "Łabiszyn", "Łagów", "Łazy", "Łeba", "Łobez", "Łochów", "Łomianki dolne", "Łosice", "Łowicz", "Łodzia", "Łuków Podlaski", "Maków Podhalański", "Margonin", "Marki Górne", "Miasteczko Śląskie", "Miastko", "Michałowo", "Miechów", "Miejska Górka", "Mielno", "Mieroszów", "Międzylesie", "Międzyrzecz", "Międzyzdroje", "Mikołajki", "Mikołów", "Mikstat", "Milanówek", "Milicz", "Miłakowo", "Miłomłyn", "Miłosław", "Mińsk Mazowiecki", "Mirosławiec", "Mirsk", "Mława Górna", "Młynary", "Modliborzyce", "Mogielnica", "Mogilno", "Mońki", "Morawica", "Morąg", "Mrocza", "Mrozy", "Murowana Goślina", "Muszyna", "Mysłowice Górne", "Myszków", "Myszyniec", "Nałęczów", "Narol", "Nasielsk", "Nekla", "Nidzica", "Niemodlin", "Niepołomice", "Niewodnica", "Nysa Górna", "Oborniki Śląskie", "Olsztynek", "Olszyna", "Olsztyn pod Częstochową", "Opalenica", "Opatów", "Opoczno Górne", "Opole Lubelskie", "Orneta", "Orzesze", "Orzysz", "Osieczna", "Osięciny", "Ośno Lubuskie", "Otmuchów", "Otwock pod Warszawą", "Ożarów", "Ożarów Mazowiecki", "Pabianice Zachód", "Paczków", "Pałecznica", "Pajęczno", "Pakość", "Parczew", "Pasłęk", "Pasym", "Pecna", "Pelplin", "Pełczyce", "Piaseczno Południe", "Piaski", "Piastów Południe", "Piechowice", "Piekary", "Pieniężno", "Pieńsk", "Pieszyce", "Pilawa", "Pilica", "Pilzno", "Pińczów", "Piotrków Kujawski", "Pisz", "Piwniczna-Zdrój", "Pleszew", "Płock Północ", "Płońsk", "Płoty", "Pniewy", "Pobiedziska", "Poddębice", "Podkowa Leśna", "Pogorzela", "Polanica-Zdrój", "Polanów", "Police Górne", "Połczyn-Zdrój", "Połaniec", "Poniatowa", "Poniec", "Poręba", "Prabuty", "Praszka", "Prochowice", "Proszowice", "Pruszków Północ", "Pruszcz", "Prusice", "Przecław", "Przedbórz", "Przedecz", "Przemków", "Przelewice", "Przeszłość", "Przeworsk", "Przysucha", "Pszczyna Górna", "Pszów", "Puck", "Puszczykowo", "Pyrzyce", "Pyskowice", "Pyzdry", "Rabka-Zdrój", "Raciąż", "Racibórz Górny", "Radków", "Radłówek", "Radymno", "Radziejów", "Radzionków", "Radzymin", "Radzyń Chełmiński", "Radzyń Podlaski", "Rajgród", "Rakoniewice", "Raszków", "Rawa Mazowiecka Północ", "Rawicz", "Recz", "Reda Górna", "Rejowiec", "Rejowiec Fabryczny", "Resko", "Reszel", "Rogoźno", "Ropczyce", "Różan", "Ruciane-Nida", "Ruda", "Rudnik nad Sanem", "Rumia Górna", "Rybnik Południe", "Rychwał", "Rydułtowy", "Rydzyna", "Ryglice", "Rymanów", "Ryn", "Rypin Północ", "Rzepin", "Rzgów", "Sandomierz Górny", "Sanniki", "Sańki", "Sejny", "Serock", "Sędziszów", "Sędziszów Małopolski", "Sępopol", "Sępólno", "Sianów", "Siechnice", "Siedliszcze", "Siemianowice", "Siemiatycze", "Sieniawa", "Sieradz Północ", "Sieraków", "Sierpc", "Siewierz", "Skalbmierz", "Skała", "Skarszewy", "Skaryszew", "Skarżysko", "Skawina Górna", "Skępe", "Skwierzyna", "Sława", "Sławków", "Sławno", "Słomniki", "Słubice", "Słupca", "Słupsk Górny", "Sobótka", "Sochaczew Północ", "Sokołów", "Sokółka", "Solec", "Sompolno", "Sopot", "Sosnowiec Północ", "Sośnicowice", "Stalowa Wola Górna", "Starachowice", "Stargard Górny", "Starogard", "Stary Sącz", "Staszów", "Stawiski", "Stawiszyn", "Stąporków", "Stepnica", "Stęszew", "Stoczek Łukowski", "Stopnica", "Stronie Śląskie", "Strumień", "Stryków", "Strzegom", "Strzelce Krajeńskie", "Strzelce", "Strzelin", "Strzelno", "Strzyżów", "Sucha", "Suchań", "Suchedniów", "Suchowola", "Sulechów", "Sulejów", "Sulejówek", "Sulęcin", "Sulmierzyce", "Sułkowice", "Supraśl", "Suraż", "Susz", "Suchedniów", "Swarzędz", "Syców", "Szadek", "Szamocin", "Szamotuły", "Szczawnica", "Szczawno-Zdrój", "Szczebrzeszyn", "Szczecinek", "Szczekociny", "Szczucin", "Szczyniec", "Szczytna", "Szczytno", "Szepietowo", "Szklarska Poręba", "Szlichtyngowa", "Szprotawa", "Sztum", "Szubin", "Szydłowiec", "Ścinawa", "Ślesin", "Śmigiel", "Świdnica Górna", "Świdwin", "Świebodzice", "Świebodzin", "Świecie", "Świeradów-Zdrój", "Świerzawa", "Świętochłowice", "Świnoujście Górne", "Tarczyn", "Tarnogród", "Tarnowskie Góry", "Tchórzew", "Terespol", "Tłuszcz", "Tolkmicko", "Tomaszów", "Toruń Południe", "Torzym", "Toszek", "Trzcianka", "Trzciel", "Trzcińsko-Zdrój", "Trzebiatów", "Trzebinia", "Trzebnica", "Trzemeszno", "Tuchola", "Tuchów", "Tuczno", "Tuliszków", "Tuchów", "Tusczyn", "Twardogóra", "Tuchola", "Tychowo", "Tyczyn", "Tykocin", "Tyszowce", "Ujazd", "Ujście", "Ulanów", "Uniejów", "Ustka", "Ustroń", "Ustrzyki Dolne", "Wadowice Górne", "Wałbrzych Północ", "Wałcz", "Wąbrzeźno", "Wąchock", "Wągrowiec", "Wąsosz", "Wejherowo Górne", "Węgliniec", "Węgorzewo", "Węgrów", "Wiązów", "Wieleń", "Wielichowo", "Wieliczka", "Wieluń Północ", "Wieruszów", "Więcbork", "Wilamowice", "Wisła", "Wiślica", "Witkowo", "Witnica", "Wleń", "Władysławowo", "Włocławek Północ", "Włodawa", "Włoszczowa", "Wodzisław", "Wojcieszów", "Wojkowice", "Wojnicz", "Wolbrom", "Wolin", "Wolsztyn", "Wołczyn", "Wołomin Górny", "Wołów", "Woźniki", "Wrocław Zachód", "Wronki", "Września", "Wschowa", "Wyrzysk", "Wysoka", "Wysokie Mazowieckie", "Wyszków Górny", "Wyszogród", "Wyśmierzyce", "Zabłudów", "Zabrze Południe", "Zagórów", "Zagórz", "Zakliczyn", "Zakroczym", "Zalewo", "Zambrów", "Ząbki", "Ząbkowice", "Zbąszynek", "Zbąszyń", "Zduny", "Zdzieszowice", "Zelów", "Zgierz Północ", "Zgorzelec", "Zielona Góra Południe", "Zielonka", "Ziębice", "Złocieniec", "Złoczew", "Złotoryja", "Złotów", "Złoty Stok", "Zwierzyniec", "Zwoleń", "Żabno", "Żagań", "Żarki", "Żarnów", "Żarów", "Żary", "Żelechów", "Żerków", "Żmigród", "Żnin", "Żory", "Żukowo", "Żuromin", "Żychlin", "Żyrardów", "Żywiec"
-        ];
-
-        function searchCity() {
-            const input = document.getElementById('city-input').value.trim().toLowerCase();
-            const res = document.getElementById('city-result');
-            if(!input) {
-                res.innerText = "Wpisz nazwę miasta!";
-                res.style.color = "red";
-                return;
+        /* SILNIK MOTYWÓW KOLORYSTYCZNYCH */
+        function setTheme(theme) {
+            const root = document.documentElement;
+            if(theme === 'white-blue') {
+                root.style.setProperty('--bg-color', '#f4f4f9');
+                root.style.setProperty('--container-bg', '#ffffff');
+                root.style.setProperty('--text-color', '#121218');
+                root.style.setProperty('--border-color', '#cbd5e1');
+                root.style.setProperty('--btn-bg', '#e2e8f0');
+                root.style.setProperty('--btn-hover', '#cbd5e1');
+                root.style.setProperty('--accent-color', '#3b82f6');
+                root.style.setProperty('--accent-glow', 'rgba(59, 130, 246, 0.4)');
+            } else if(theme === 'black') {
+                root.style.setProperty('--bg-color', '#09090b');
+                root.style.setProperty('--container-bg', '#18181b');
+                root.style.setProperty('--text-color', '#f4f4f5');
+                root.style.setProperty('--border-color', '#27272a');
+                root.style.setProperty('--btn-bg', '#27272a');
+                root.style.setProperty('--btn-hover', '#3f3f46');
+                root.style.setProperty('--accent-color', '#6366f1');
+                root.style.setProperty('--accent-glow', 'rgba(99, 102, 241, 0.4)');
+            } else if(theme === 'blue-white') {
+                root.style.setProperty('--bg-color', '#1e3a8a');
+                root.style.setProperty('--container-bg', '#3b82f6');
+                root.style.setProperty('--text-color', '#ffffff');
+                root.style.setProperty('--border-color', '#60a5fa');
+                root.style.setProperty('--btn-bg', '#2563eb');
+                root.style.setProperty('--btn-hover', '#1d4ed8');
+                root.style.setProperty('--accent-color', '#93c5fd');
+                root.style.setProperty('--accent-glow', 'rgba(255, 255, 255, 0.5)');
+            } else if(theme === 'black-pure') {
+                root.style.setProperty('--bg-color', '#000000');
+                root.style.setProperty('--container-bg', '#0f172a');
+                root.style.setProperty('--text-color', '#38bdf8');
+                root.style.setProperty('--border-color', '#1e293b');
+                root.style.setProperty('--btn-bg', '#1e293b');
+                root.style.setProperty('--btn-hover', '#334155');
+                root.style.setProperty('--accent-color', '#0ea5e9');
+                root.style.setProperty('--accent-glow', 'rgba(14, 165, 233, 0.5)');
+            } else if(theme === 'black-white') {
+                root.style.setProperty('--bg-color', '#121212');
+                root.style.setProperty('--container-bg', '#ffffff');
+                root.style.setProperty('--text-color', '#000000');
+                root.style.setProperty('--border-color', '#cccccc');
+                root.style.setProperty('--btn-bg', '#e0e0e0');
+                root.style.setProperty('--btn-hover', '#cccccc');
+                root.style.setProperty('--accent-color', '#000000');
+                root.style.setProperty('--accent-glow', 'rgba(0, 0, 0, 0.3)');
+            } else if(theme === 'blue') {
+                root.style.setProperty('--bg-color', '#0284c7');
+                root.style.setProperty('--container-bg', '#0ea5e9');
+                root.style.setProperty('--text-color', '#f8fafc');
+                root.style.setProperty('--border-color', '#38bdf8');
+                root.style.setProperty('--btn-bg', '#0284c7');
+                root.style.setProperty('--btn-hover', '#0369a1');
+                root.style.setProperty('--accent-color', '#fef08a');
+                root.style.setProperty('--accent-glow', 'rgba(254, 240, 138, 0.5)');
+            } else if(theme === 'yellow') {
+                root.style.setProperty('--bg-color', '#f59e0b');
+                root.style.setProperty('--container-bg', '#fbbf24');
+                root.style.setProperty('--text-color', '#78350f');
+                root.style.setProperty('--border-color', '#d97706');
+                root.style.setProperty('--btn-bg', '#f6ad55');
+                root.style.setProperty('--btn-hover', '#ed8936');
+                root.style.setProperty('--accent-color', '#1e3a8a');
+                root.style.setProperty('--accent-glow', 'rgba(30, 58, 138, 0.4)');
+            } else if(theme === 'yellow-white') {
+                root.style.setProperty('--bg-color', '#fef3c7');
+                root.style.setProperty('--container-bg', '#ffffff');
+                root.style.setProperty('--text-color', '#78350f');
+                root.style.setProperty('--border-color', '#fde68a');
+                root.style.setProperty('--btn-bg', '#fef9c3');
+                root.style.setProperty('--btn-hover', '#fef08a');
+                root.style.setProperty('--accent-color', '#d97706');
+                root.style.setProperty('--accent-glow', 'rgba(217, 119, 6, 0.4)');
             }
-
-            const found = realPolishCitiesBase.some(c => c.toLowerCase().includes(input));
-            if(found) {
-                res.innerText = `Miasto "${input}" znajduje się w bazie terytoriów Polski! Status: Bezpieczny obszar.`;
-                res.style.color = "#4ade80";
-            } else {
-                res.innerText = `Miasto "${input}" znajduje się w rejestrze gmin i miast Polski! Status: Aktywne w Wojnach Pixeli.`;
-                res.style.color = "#60a5fa";
-            }
+            localStorage.setItem('inteligent_theme', theme);
         }
+
+        // Wczytaj zapisany motyw
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('inteligent_theme');
+            if(savedTheme) setTheme(savedTheme);
+        });
 
         function saveNote() {
-            localStorage.setItem('note', document.getElementById('user-note').value);
-            document.getElementById('note-status').innerText = "Zapisano pomyślnie!";
+            const noteText = document.getElementById('user-note').value;
+            localStorage.setItem('inteligent_permanent_note', noteText);
+            document.getElementById('note-status').innerText = "Notatka została pomyślnie zapisana!";
+            setTimeout(() => document.getElementById('note-status').innerText = "", 3000);
         }
 
-        function triggerSecret() {
-            const p = document.getElementById('secret-popup');
-            p.style.display = 'block';
-            setTimeout(() => p.style.display = 'none', 2000);
+        function loadNote() {
+            const saved = localStorage.getItem('inteligent_permanent_note');
+            if (saved !== null) {
+                document.getElementById('user-note').value = saved;
+            }
         }
 
-        /* LOGIKA WOJEN PIXELI Z DEDYKOWANYMI TERYTORIAMI (POLYGONAMI) */
-        let cities = [];
-        let player = { gold: 100, army: 500 };
-        let bots = {
-            red: { army: 400 }, blue: { army: 400 }, yellow: { army: 400 }, purple: { army: 400 }, orange: { army: 400 }
+        /* BAZA DANYCH MIAST */
+        const explicitCitiesList = {
+            "warszawa": { name: "Warszawa", area: "517.2 km²", facts: ["PKiN to najwyższy budynek.", "Jedyna sieć metra w PL.", "25% terenów zielonych.", "Symbol Syrenki.", "Odbudowane Stare Miasto."], joke: "Czemu w Warszawie kranówka ma historię? Bo płynie z całej Polski!" },
+            "łódź": { name: "Łódź", area: "293.2 km²", facts: ["Piotrkowska to najdłuższy deptak.", "Potęga filmowa.", "Manufaktura.", "Przemysł włókienniczy.", "Las Łagiewnicki."], joke: "Jak się nazywa nagroda filmowa? Łódka!" },
+            "radomsko": { name: "Radomsko", area: "51.4 km²", facts: ["Stolica meblarstwa.", "Tadeusz Różewicz.", "Rzeka Radomka.", "Średniowieczna historia.", "Muzeum Żydowskie."], joke: "Meble z Radomska składają się same do sukcesu!" },
+            "kraków": { name: "Kraków", area: "327 km²", facts: ["Dawna stolica.", "Największy rynek.", "Smok Wawelski.", "Uniwersytet Jagielloński.", "Hejnał Mariacki."], joke: "Ilu krakowian zmienia żarówkę? Żadnego, wolą świece!" },
+            "lwów": { name: "Lwów", area: "182 km²", facts: ["Historyczne miasto kresowe.", "Orlęta Lwowskie.", "Architektura UNESCO.", "Kawiarenki i teatra.", "Wysoki Zamek."], joke: "We Lwowie nawet tramwaj mówi do ciebie z uśmiechem!" },
+            "wrocław": { name: "Wrocław", area: "293 km²", facts: ["Miasto stu mostów.", "Krasnale wrocławskie.", "Ostrów Tumski.", "Panorama Racławicka.", "Rynek z gnomami."], joke: "Gdzie krasnale piją kawę? We Wrocławiu na Rynku!" }
         };
-        let gameInterval = null;
+
+        function searchCityDetails() {
+            const query = document.getElementById('city-input').value.trim().toLowerCase();
+            const resContainer = document.getElementById('city-details-result');
+            if(!query) { resContainer.innerHTML = "<p style='color:red;'>Wpisz miasto!</p>"; return; }
+
+            let data = explicitCitiesList[query] || {
+                name: query.charAt(0).toUpperCase() + query.slice(1),
+                area: "Terytorium RP / Sektor regionalny",
+                facts: [
+                    `Miejscowość ${query} posiada unikalne znaczenie strategiczne.`,
+                    "Lokalna społeczność aktywnie dba o rozwój kulturowy.",
+                    "Infrastruktura regionu stale ewoluuje.",
+                    "Obszar bogaty w zasoby naturalne i historyczne.",
+                    "Kluczowy punkt na mapie operacyjnej Wojen Pixeli."
+                ],
+                joke: `Dlaczego ${query} to potężny punkt na mapie? Bo każdy piksel ma tu swoje znaczenie!`
+            };
+
+            resContainer.innerHTML = `
+                <div class="city-card">
+                    <h4>📍 ${data.name}</h4>
+                    <p><b>Obszar:</b> ${data.area}</p>
+                    <b>5 Ciekawostek:</b>
+                    <ul>${data.facts.map(f => `<li>${f}</li>`).join('')}</ul>
+                    <div class="joke-box"><b>😂 Żart:</b><br>${data.joke}</div>
+                </div>
+            `;
+        }
+
+        /* 3897 PIKSELI - SILNIK GRY */
+        const canvas = document.getElementById('pixel-canvas');
+        const ctx = canvas.getContext('2d');
+        const GRID_W = 75;
+        const GRID_H = 52;
+        const PIXEL_SIZE = 8;
+        let grid = [];
+        let playerStats = { gold: 100, army: 500 };
+        let botsAlive = { red: true, blue: true, yellow: true };
+        let activeMap = 'poland';
+        let autoExpansionTimer = null;
+        let mainInterval = null;
         let ecoInterval = null;
 
+        function switchMap(mapType) {
+            activeMap = mapType;
+            document.querySelectorAll('.map-selector button').forEach(b => b.classList.remove('active'));
+            if(mapType === 'poland') document.getElementById('btn-map-poland').classList.add('active');
+            if(mapType === 'lwow') document.getElementById('btn-map-lwow').classList.add('active');
+            if(mapType === 'europe') document.getElementById('btn-map-europe').classList.add('active');
+            initGame();
+        }
+
         function initGame() {
-            cities = [];
-            player = { gold: 100, army: 500 };
-            bots = {
-                red: { army: 400 }, blue: { army: 400 }, yellow: { army: 400 }, purple: { army: 400 }, orange: { army: 400 }
-            };
+            grid = new Array(GRID_W * GRID_H).fill(0);
+            playerStats = { gold: 100, army: 500 };
+            botsAlive = { red: true, blue: true, yellow: true };
             document.getElementById('game-status').innerText = "";
+            document.getElementById('expansion-status').innerText = "";
 
-            const group = document.getElementById('territories-group');
-            group.innerHTML = '';
-
-            // Generowanie Siatki Terytoriów (Kształtów Ziemi z Półwyspem Helskim na Północy)
-            const cols = 12;
-            const rows = 10;
-            const cellW = 45;
-            const cellH = 45;
-            const startX = 50;
-            const startY = 40;
-
-            let count = 0;
-            for(let r = 0; r < rows; r++) {
-                for(let c = 0; c < cols; c++) {
-                    let idx = count;
-                    let cityName = realPolishCitiesBase[idx % realPolishCitiesBase.length];
-                    if(idx >= realPolishCitiesBase.length) {
-                        cityName += ` ${Math.floor(idx / realPolishCitiesBase.length) + 1}`;
-                    }
-
-                    // Tworzenie unikalnych punktów wielokąta dla każdego terytorium
-                    let x = startX + c * cellW;
-                    let y = startY + r * cellH;
-
-                    // Specjalne terytorium: Półwysep Helski na północy
-                    if(r === 0 && c === 4) {
-                        cityName = "Hel / Półwysep Helski";
-                    }
-
-                    let points = `${x},${y} ${x+cellW-2},${y} ${x+cellW-2},${y+cellH-2} ${x},${y+cellH-2}`;
-
-                    cities.push({
-                        id: idx,
-                        name: cityName,
-                        owner: 'neutral',
-                        garrison: Math.floor(Math.random() * 40) + 10,
-                        x: x + cellW/2,
-                        y: y + cellH/2
-                    });
-
-                    // Wielokąt terytorium (Polygon)
-                    const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-                    poly.setAttribute("points", points);
-                    poly.setAttribute("id", `terr-${idx}`);
-                    poly.setAttribute("class", "territory color-neutral");
-
-                    poly.onmouseover = () => {
-                        document.getElementById('city-hover-info').innerText = `Terytorium: ${cities[idx].name} | Właściciel: ${getOwnerName(cities[idx].owner)} | Garnizon: ⚔️${cities[idx].garrison}`;
-                    };
-
-                    poly.onclick = () => playerAttackCity(idx);
-                    group.appendChild(poly);
-
-                    // Etykieta z nazwą miasta na środku terytorium
-                    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                    label.setAttribute("x", x + cellW/2);
-                    label.setAttribute("y", y + cellH/2 + 3);
-                    label.setAttribute("class", "territory-label");
-                    label.textContent = cityName.length > 10 ? cityName.substring(0, 9) + ".." : cityName;
-                    group.appendChild(label);
-
-                    count++;
+            for (let y = 0; y < GRID_H; y++) {
+                for (let x = 0; x < GRID_W; x++) {
+                    const idx = y * GRID_W + x;
+                    let isLand = activeMap === 'poland' ? (x > 10 && x < 65 && y > 8 && y < 45) :
+                                 activeMap === 'lwow' ? (x > 8 && x < 70 && y > 8 && y < 48) :
+                                 (x > 5 && x < 72 && y > 5 && y < 48);
+                    grid[idx] = isLand ? 0 : -1;
                 }
             }
 
+            grid[25 * GRID_W + 35] = 1;
+            grid[10 * GRID_W + 15] = 2;
+            grid[12 * GRID_W + 55] = 3;
+            grid[38 * GRID_W + 45] = 4;
+
+            drawCanvas();
             updateUI();
 
-            clearInterval(gameInterval);
+            clearInterval(mainInterval);
             clearInterval(ecoInterval);
+            clearInterval(autoExpansionTimer);
 
-            // Ekonomia: +1 zł co 0.5s
-            ecoInterval = setInterval(() => {
-                player.gold += 1;
-                updateUI();
-            }, 500);
-
-            // Ruchy botów co 1s
-            gameInterval = setInterval(gameLoop, 1000);
+            ecoInterval = setInterval(() => { playerStats.gold += 1; updateUI(); }, 500);
+            mainInterval = setInterval(gameLoop, 1000);
         }
 
         function stopGame() {
-            clearInterval(gameInterval);
+            clearInterval(mainInterval);
             clearInterval(ecoInterval);
+            clearInterval(autoExpansionTimer);
+        }
+
+        function drawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let y = 0; y < GRID_H; y++) {
+                for (let x = 0; x < GRID_W; x++) {
+                    const val = grid[y * GRID_W + x];
+                    if (val === -1) continue;
+                    ctx.fillStyle = val === 0 ? '#313244' : val === 1 ? '#22c55e' : val === 2 ? '#ef4444' : val === 3 ? '#3b82f6' : '#eab308';
+                    ctx.fillRect(x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE - 1, PIXEL_SIZE - 1);
+                }
+            }
+        }
+
+        canvas.onclick = function() {
+            if(playerStats.army < 10) { alert("Za mało wojska!"); return; }
+            document.getElementById('expansion-status').innerText = "⚡ Trwa 5-sekundowy automatyczny atak pikseli!";
+            let s = 5;
+            clearInterval(autoExpansionTimer);
+            autoExpansionTimer = setInterval(() => {
+                s--;
+                expandPlayerPixels();
+                drawCanvas();
+                updateUI();
+                if(s <= 0 || playerStats.army < 5) {
+                    clearInterval(autoExpansionTimer);
+                    document.getElementById('expansion-status').innerText = "Atak zakończony!";
+                }
+            }, 300);
+        };
+
+        function expandPlayerPixels() {
+            let my = [];
+            for(let i=0; i<grid.length; i++) if(grid[i] === 1) my.push(i);
+            if(my.length === 0 || playerStats.army < 5) return;
+            for(let p of my) {
+                let nList = [p-1, p+1, p-GRID_W, p+GRID_W];
+                for(let n of nList) {
+                    if(n >= 0 && n < grid.length && grid[n] !== -1 && grid[n] !== 1) {
+                        grid[n] = 1; playerStats.army -= 2; return;
+                    }
+                }
+            }
         }
 
         function buyArmy() {
-            if (player.gold >= 10) {
-                player.gold -= 10;
-                player.army += 100;
-                updateUI();
-            } else {
-                showGameAlert("Za mało złota! Potrzebujesz 10 zł.");
-            }
-        }
-
-        function showGameAlert(msg) {
-            const alertElem = document.getElementById('game-alert');
-            alertElem.innerText = msg;
-            setTimeout(() => alertElem.innerText = "", 2000);
-        }
-
-        function getOwnerName(owner) {
-            if(owner === 'green') return "Ty (Zielony)";
-            if(owner === 'red') return "Bot Czerwony";
-            if(owner === 'blue') return "Bot Niebieski";
-            if(owner === 'yellow') return "Bot Żółty";
-            if(owner === 'purple') return "Bot Fioletowy";
-            if(owner === 'orange') return "Bot Pomarańczowy";
-            return "Neutralne";
-        }
-
-        function playerAttackCity(idx) {
-            const target = cities[idx];
-            if (target.owner === 'green') {
-                showGameAlert("To już jest Twoje terytorium!");
-                return;
-            }
-
-            if (player.army >= target.garrison) {
-                player.army -= target.garrison;
-                target.owner = 'green';
-                target.garrison = Math.floor(player.army * 0.08) + 15;
-
-                const poly = document.getElementById(`terr-${idx}`);
-                if(poly) poly.setAttribute("class", "territory color-green");
-
-                updateUI();
-                checkWinCondition();
-            } else {
-                showGameAlert(`Za mało wojska! Garnizon ziemi: ${target.garrison}, Twoja armia: ${player.army}.`);
-            }
+            if (playerStats.gold >= 10) { playerStats.gold -= 10; playerStats.army += 100; updateUI(); }
+            else { alert("Za mało złota!"); }
         }
 
         function gameLoop() {
-            const botKeys = Object.keys(bots);
-            botKeys.forEach(bKey => {
-                const targetIdx = Math.floor(Math.random() * cities.length);
-                const target = cities[targetIdx];
-
-                if (target.owner !== bKey && bots[bKey].army >= target.garrison) {
-                    bots[bKey].army -= target.garrison;
-                    target.owner = bKey;
-                    target.garrison = Math.floor(bots[bKey].army * 0.05) + 10;
-
-                    const poly = document.getElementById(`terr-${targetIdx}`);
-                    if(poly) poly.setAttribute("class", `territory color-${bKey}`);
-                }
-
-                bots[bKey].army += 12;
-            });
-
+            if(botsAlive.red) botExpand(2);
+            if(botsAlive.blue) botExpand(3);
+            if(botsAlive.yellow) botExpand(4);
+            checkBotDeaths();
             checkPlayerDeath();
+            drawCanvas();
             updateUI();
         }
 
-        function checkPlayerDeath() {
-            const playerTerritories = cities.filter(c => c.owner === 'green').length;
-            if (playerTerritories === 0 && player.army < 10) {
-                stopGame();
-                document.getElementById('game-status').innerHTML = "❌ <span style='color:red;'>UMARŁEŚ! Straciłeś całą mapę i wojsko! Zresetuj rundę!</span>";
+        function botExpand(id) {
+            let bPix = [];
+            for(let i=0; i<grid.label; i++) if(grid[i] === id) bPix.push(i);
+            if(bPix.length === 0) return;
+            let p = bPix[Math.floor(Math.random() * bPix.length)];
+            let nList = [p-1, p+1, p-GRID_W, p+GRID_W];
+            for(let n of nList) {
+                if(n >= 0 && n < grid.length && grid[n] !== -1 && grid[n] !== id) { grid[n] = id; break; }
             }
         }
 
-        function checkWinCondition() {
-            const total = cities.length;
-            const playerTerritories = cities.filter(c => c.owner === 'green').length;
-            if (playerTerritories === total) {
+        function checkBotDeaths() {
+            let counts = { 1:0, 2:0, 3:0, 4:0 };
+            for(let v of grid) if(counts[v] !== undefined) counts[v]++;
+            if(counts[2] === 0) botsAlive.red = false;
+            if(counts[3] === 0) botsAlive.blue = false;
+            if(counts[4] === 0) botsAlive.yellow = false;
+        }
+
+        function checkPlayerDeath() {
+            if(grid.filter(v => v === 1).length === 0) {
                 stopGame();
-                document.getElementById('game-status').innerHTML = "🎉 <span style='color:#22c55e;'>ZWYCIĘSTWO! Podbiłeś całą Polskę!</span>";
+                document.getElementById('game-status').innerHTML = "<span style='color:red;'>❌ UMARŁEŚ! Straciłeś piksele!</span>";
             }
         }
 
         function updateUI() {
-            let counts = { green: 0, red: 0, blue: 0, yellow: 0, purple: 0, orange: 0, neutral: 0 };
-            cities.forEach(c => counts[c.owner]++);
-
-            const total = cities.length || 1;
-            const greenPct = ((counts.green / total) * 100).toFixed(1);
-
-            document.getElementById('s-green-t').innerText = counts.green;
-            document.getElementById('s-green-pct').innerText = `${greenPct}%`;
-            document.getElementById('s-green-a').innerText = player.army;
-            document.getElementById('s-gold').innerText = player.gold;
-
-            document.getElementById('s-red-t').innerText = counts.red;
-            document.getElementById('s-blue-t').innerText = counts.blue;
-            document.getElementById('s-yellow-t').innerText = counts.yellow;
-            document.getElementById('s-purple-t').innerText = counts.purple;
-            document.getElementById('s-orange-t').innerText = counts.orange;
-
-            document.getElementById('prog-green').style.width = `${(counts.green/total)*100}%`;
-            document.getElementById('prog-red').style.width = `${(counts.red/total)*100}%`;
-            document.getElementById('prog-blue').style.width = `${(counts.blue/total)*100}%`;
-            document.getElementById('prog-yellow').style.width = `${(counts.yellow/total)*100}%`;
-            document.getElementById('prog-purple').style.width = `${(counts.purple/total)*100}%`;
-            document.getElementById('prog-orange').style.width = `${(counts.orange/total)*100}%`;
+            let counts = { 1:0, 2:0, 3:0, 4:0 };
+            for(let v of grid) if(counts[v] !== undefined) counts[v]++;
+            document.getElementById('px-green').innerText = counts[1];
+            document.getElementById('px-red').innerText = counts[2] + (botsAlive.red ? "" : " (MARTWY)");
+            document.getElementById('px-blue').innerText = counts[3] + (botsAlive.blue ? "" : " (MARTWY)");
+            document.getElementById('px-yellow').innerText = counts[4] + (botsAlive.yellow ? "" : " (MARTWY)");
+            document.getElementById('army-green').innerText = playerStats.army;
+            document.getElementById('gold-val').innerText = playerStats.gold;
         }
     </script>
 </body>
