@@ -24,7 +24,7 @@
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 700px;
+            max-width: 750px;
             width: 90%;
         }
 
@@ -88,7 +88,7 @@
             background-color: #c9302c;
         }
 
-        /* Sekcja Gry Wojny Pixeli */
+        /* Sekcja Gry Wojny Pixeli - 4 Frakcje */
         .game-board {
             background: #1e1e2e;
             color: white;
@@ -100,14 +100,16 @@
         .score-board {
             display: flex;
             justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 15px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
         }
 
         #poland-map {
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
             height: auto;
             margin: 0 auto;
             display: block;
@@ -118,21 +120,32 @@
             stroke: #45475a;
             stroke-width: 2;
             cursor: pointer;
-            transition: fill 0.3s, transform 0.2s;
+            transition: fill 0.3s;
         }
 
         .voivodeship:hover {
             fill: #585b70;
         }
 
+        /* Kolory 4 Frakcji */
         .voivodeship.player {
-            fill: #22c55e !important;
+            fill: #22c55e !important; /* Zielony */
             stroke: #16a34a !important;
         }
 
-        .voivodeship.bot {
-            fill: #ef4444 !important;
+        .voivodeship.bot-red {
+            fill: #ef4444 !important; /* Czerwony */
             stroke: #dc2626 !important;
+        }
+
+        .voivodeship.bot-blue {
+            fill: #3b82f6 !important; /* Niebieski */
+            stroke: #2563eb !important;
+        }
+
+        .voivodeship.bot-yellow {
+            fill: #eab308 !important; /* Żółty */
+            stroke: #ca8a04 !important;
         }
 
         #secret-popup {
@@ -186,15 +199,17 @@
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Opcja 2: WOJNY PIXELI -->
+        <!-- Opcja 2: WOJNY PIXELI (4 KOLORY / 3 BOTY) -->
         <div id="pixels-section" class="section-content">
-            <h3>Wojny Pixeli: Bitwa o Polskę ⚔️</h3>
+            <h3>Wojny Pixeli: Bitwa 4 Frakcji ⚔️</h3>
             <div class="game-board">
                 <div class="score-board">
-                    <span style="color: #4ade80;">Ty: <span id="player-score">0</span></span>
-                    <span style="color: #f87171;">Bot (atakuje automatycznie!): <span id="bot-score">0</span></span>
+                    <span style="color: #4ade80;">🟢 Ty: <span id="score-green">0</span></span>
+                    <span style="color: #f87171;">🔴 Czerwony: <span id="score-red">0</span></span>
+                    <span style="color: #60a5fa;">🔵 Niebieski: <span id="score-blue">0</span></span>
+                    <span style="color: #facc15;">🟡 Żółty: <span id="score-yellow">0</span></span>
                 </div>
-                <p style="font-size: 14px; color: #a6adc8;">Szybko przejmuj województwa! Bot atakuje sam bez zatrzymania!</p>
+                <p style="font-size: 14px; color: #a6adc8;">Przejmuj tereny Polski! Trzy boty walczą jednocześnie!</p>
                 
                 <!-- Interaktywna Mapa Polski -->
                 <svg id="poland-map" viewBox="0 0 600 550">
@@ -307,26 +322,21 @@
             }, 2000);
         }
 
-        /* LOGIKA MAPY I AUTOMATYCZNEGO BOTA */
-        let playerScore = 0;
-        let botScore = 0;
+        /* LOGIKA BITWY 4 FRAKCJI */
+        let scores = { green: 0, red: 0, blue: 0, yellow: 0 };
         let botInterval = null;
 
         function startGame() {
-            // Resetowanie stanu gry
-            playerScore = 0;
-            botScore = 0;
-            document.getElementById('player-score').innerText = 0;
-            document.getElementById('bot-score').innerText = 0;
+            scores = { green: 0, red: 0, blue: 0, yellow: 0 };
+            updateScores();
             document.getElementById('game-status').innerText = "";
 
             document.querySelectorAll('.voivodeship').forEach(el => {
-                el.classList.remove('player', 'bot');
+                el.className.baseVal = "voivodeship";
             });
 
-            // Uruchomienie automatycznych ataków bota co 1.5 sekundy (1500 ms)
             clearInterval(botInterval);
-            botInterval = setInterval(botAttack, 1500);
+            botInterval = setInterval(botsAttack, 1200); // Boty atakują co 1.2s
         }
 
         function stopGame() {
@@ -334,41 +344,71 @@
         }
 
         function claimVoivodeship(element) {
-            if (element.classList.contains('player') || element.classList.contains('bot')) return;
+            if (isClaimed(element)) return;
 
             element.classList.add('player');
-            playerScore++;
-            document.getElementById('player-score').innerText = playerScore;
-
+            scores.green++;
+            updateScores();
             checkWinner();
         }
 
-        function botAttack() {
-            const available = Array.from(document.querySelectorAll('.voivodeship')).filter(e => !e.classList.contains('player') && !e.classList.contains('bot'));
-            if (available.length > 0) {
-                const randomElem = available[Math.floor(Math.random() * available.length)];
-                randomElem.classList.add('bot');
-                botScore++;
-                document.getElementById('bot-score').innerText = botScore;
+        function botsAttack() {
+            const available = Array.from(document.querySelectorAll('.voivodeship')).filter(e => !isClaimed(e));
+            if (available.length === 0) {
+                checkWinner();
+                return;
             }
 
+            const botTypes = ['bot-red', 'bot-blue', 'bot-yellow'];
+            // Losowy bot przeprowadza atak
+            const randomBot = botTypes[Math.floor(Math.random() * botTypes.length)];
+            const randomTarget = available[Math.floor(Math.random() * available.length)];
+
+            randomTarget.classList.add(randomBot);
+
+            if (randomBot === 'bot-red') scores.red++;
+            if (randomBot === 'bot-blue') scores.blue++;
+            if (randomBot === 'bot-yellow') scores.yellow++;
+
+            updateScores();
             checkWinner();
+        }
+
+        function isClaimed(element) {
+            return element.classList.contains('player') || 
+                   element.classList.contains('bot-red') || 
+                   element.classList.contains('bot-blue') || 
+                   element.classList.contains('bot-yellow');
+        }
+
+        function updateScores() {
+            document.getElementById('score-green').innerText = scores.green;
+            document.getElementById('score-red').innerText = scores.red;
+            document.getElementById('score-blue').innerText = scores.blue;
+            document.getElementById('score-yellow').innerText = scores.yellow;
         }
 
         function checkWinner() {
             const total = document.querySelectorAll('.voivodeship').length;
-            if (playerScore + botScore >= total) {
+            const totalClaimed = scores.green + scores.red + scores.blue + scores.yellow;
+
+            if (totalClaimed >= total) {
                 stopGame();
                 const status = document.getElementById('game-status');
-                if (playerScore > botScore) {
-                    status.innerText = "🎉 ZWYCIĘSTWO! Opanowałeś całą Polskę!";
+                const maxScore = Math.max(scores.green, scores.red, scores.blue, scores.yellow);
+
+                if (scores.green === maxScore) {
+                    status.innerText = "🎉 ZWYCIĘSTWO! Zdominowałeś całą Polskę!";
                     status.style.color = "#4ade80";
-                } else if (botScore > playerScore) {
-                    status.innerText = "❌ PRZEGRANA! Bot przejął większość Polski!";
-                    status.style.color = "#f87171";
+                } else if (scores.red === maxScore) {
+                    status.innerText = "❌ Wygrał Czerwony Bot!";
+                    status.style.color = "#ef4444";
+                } else if (scores.blue === maxScore) {
+                    status.innerText = "❌ Wygrał Niebieski Bot!";
+                    status.style.color = "#3b82f6";
                 } else {
-                    status.innerText = "🤝 REMIS! Podzieliliście Polskę po połowie!";
-                    status.style.color = "#facc15";
+                    status.innerText = "❌ Wygrał Żółty Bot!";
+                    status.style.color = "#eab308";
                 }
             }
         }
