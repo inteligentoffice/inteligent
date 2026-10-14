@@ -24,7 +24,7 @@
             padding: 25px;
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            max-width: 1050px;
+            max-width: 1100px;
             width: 98%;
             position: relative;
         }
@@ -33,7 +33,7 @@
             position: absolute;
             top: 15px;
             right: 20px;
-            font-size: 15px;
+            font-size: 16px;
             color: #facc15;
             font-weight: bold;
         }
@@ -155,10 +155,10 @@
             color: white;
         }
 
-        /* Prawdziwa Mapa Polski SVG */
+        /* Prawdziwa Mapa Polski z Terytoriami (SVG) */
         #poland-map-container {
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
             height: auto;
             margin: 0 auto;
             display: block;
@@ -168,27 +168,30 @@
             border: 1px solid #45475a;
         }
 
-        .map-base-outline {
-            fill: #1e1e2e;
-            stroke: #45475a;
-            stroke-width: 2;
-        }
-
-        .city-dot {
-            cursor: pointer;
-            transition: r 0.15s, fill 0.2s;
+        .territory {
             stroke: #11111b;
-            stroke-width: 0.5;
-        }
-
-        .city-dot:hover {
-            r: 7;
-            stroke: #ffffff;
             stroke-width: 1.5;
+            cursor: pointer;
+            transition: fill 0.2s, stroke 0.2s;
         }
 
-        /* Frakcje / Kolory */
-        .color-neutral { fill: #45475a !important; }
+        .territory:hover {
+            stroke: #ffffff;
+            stroke-width: 2.5;
+            filter: brightness(1.2);
+        }
+
+        .territory-label {
+            fill: #ffffff;
+            font-size: 8px;
+            font-weight: bold;
+            pointer-events: none;
+            text-anchor: middle;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        /* Kolory Frakcji */
+        .color-neutral { fill: #313244 !important; }
         .color-green { fill: #22c55e !important; }
         .color-red { fill: #ef4444 !important; }
         .color-blue { fill: #3b82f6 !important; }
@@ -237,9 +240,9 @@
 
         <!-- Opcja 2: WOJNY PIXELI NA MAPIE POLSKI -->
         <div id="pixels-section" class="section-content">
-            <h3>Wojny Pixeli: Bitwa o Miasta Polski ⚔️</h3>
+            <h3>Wojny Pixeli: Bitwa o Terytoria Polski ⚔️</h3>
             <div class="game-board">
-                <!-- Pasek postępu opanowania Polski -->
+                <!-- Pasek postępu -->
                 <div class="progress-bar-container">
                     <div id="prog-green" class="progress-segment" style="background:#22c55e; width: 0%;"></div>
                     <div id="prog-red" class="progress-segment" style="background:#ef4444; width: 0%;"></div>
@@ -251,7 +254,7 @@
 
                 <!-- Panel Statystyk i Licznika Wojska -->
                 <div class="stats-panel">
-                    <span style="color: #4ade80;">🟢 Ty | Wojsko: <span id="s-green-a">500</span> | Złoto: <span id="s-gold">100</span> zł | Zajęte: <span id="s-green-pct">0%</span> (<span id="s-green-t">0</span>)</span>
+                    <span style="color: #4ade80;">🟢 Ty | Wojsko: <span id="s-green-a">500</span> | Złoto: <span id="s-gold">100</span> zł | Podbite: <span id="s-green-pct">0%</span> (<span id="s-green-t">0</span>)</span>
                     <span style="color: #f87171;">🔴 Czerwony: <span id="s-red-t">0</span></span>
                     <span style="color: #60a5fa;">🔵 Niebieski: <span id="s-blue-t">0</span></span>
                     <span style="color: #facc15;">🟡 Żółty: <span id="s-yellow-t">0</span></span>
@@ -264,13 +267,12 @@
                     <span id="game-alert" style="font-weight: bold; color: #facc15;"></span>
                 </div>
 
-                <!-- Interaktywna Mapa Polski -->
-                <svg id="poland-map-container" viewBox="0 0 600 550">
-                    <path class="map-base-outline" d="M 120,60 Q 250,30 380,50 Q 520,70 550,180 Q 570,300 500,420 Q 380,520 280,500 Q 180,480 80,390 Q 30,280 40,180 Z"></path>
-                    <g id="cities-dots-group"></g>
+                <!-- Interaktywna Mapa Polski z Podziałem na Terytoria -->
+                <svg id="poland-map-container" viewBox="0 0 650 550">
+                    <g id="territories-group"></g>
                 </svg>
 
-                <p id="city-hover-info" style="font-size: 13px; color: #a6adc8; margin-top: 8px;">Najedź lub kliknij w punkt na mapie, aby podjąć walkę o miasto!</p>
+                <p id="city-hover-info" style="font-size: 13px; color: #a6adc8; margin-top: 8px;">Kliknij w ziemię/miasto na mapie, aby je zaatakować!</p>
                 <p id="game-status" style="margin-top: 10px; font-weight: bold; font-size: 16px;"></p>
             </div>
             <button class="back-btn" onclick="stopGame(); hideSections();">Powrót do menu</button>
@@ -299,7 +301,7 @@
             document.getElementById('main-menu').style.display = 'grid';
         }
 
-        /* BAZA POLSKICH MIAST LINIA PO LINII */
+        /* BAZA MIAST POLSKI LINIA PO LINII */
         const realPolishCitiesBase = [
             "Warszawa",
             "Łódź",
@@ -663,7 +665,7 @@
             setTimeout(() => p.style.display = 'none', 2000);
         }
 
-        /* LOGIKA WOJEN PIXELI */
+        /* LOGIKA WOJEN PIXELI Z DEDYKOWANYMI TERYTORIAMI (POLYGONAMI) */
         let cities = [];
         let player = { gold: 100, army: 500 };
         let bots = {
@@ -671,21 +673,6 @@
         };
         let gameInterval = null;
         let ecoInterval = null;
-
-        function generate1026Cities() {
-            let list = [...realPolishCitiesBase];
-            let idx = 0;
-
-            while(list.length < 1026) {
-                let nameCandidate = `${realPolishCitiesBase[idx % realPolishCitiesBase.length]} Sektor ${Math.floor(list.length / realPolishCitiesBase.length) + 1}`;
-                if(!list.includes(nameCandidate)) {
-                    list.push(nameCandidate);
-                }
-                idx++;
-            }
-
-            return list.slice(0, 1026);
-        }
 
         function initGame() {
             cities = [];
@@ -695,38 +682,69 @@
             };
             document.getElementById('game-status').innerText = "";
 
-            const cityNames = generate1026Cities();
-            const group = document.getElementById('cities-dots-group');
+            const group = document.getElementById('territories-group');
             group.innerHTML = '';
 
-            for (let i = 0; i < 1026; i++) {
-                let rx = Math.random();
-                let ry = Math.random();
-                let cx = 80 + rx * 440;
-                let cy = 70 + ry * 420;
+            // Generowanie Siatki Terytoriów (Kształtów Ziemi z Półwyspem Helskim na Północy)
+            const cols = 12;
+            const rows = 10;
+            const cellW = 45;
+            const cellH = 45;
+            const startX = 50;
+            const startY = 40;
 
-                cities.push({
-                    id: i,
-                    name: cityNames[i],
-                    owner: 'neutral',
-                    x: cx,
-                    y: cy,
-                    garrison: Math.floor(Math.random() * 40) + 10
-                });
+            let count = 0;
+            for(let r = 0; r < rows; r++) {
+                for(let c = 0; c < cols; c++) {
+                    let idx = count;
+                    let cityName = realPolishCitiesBase[idx % realPolishCitiesBase.length];
+                    if(idx >= realPolishCitiesBase.length) {
+                        cityName += ` ${Math.floor(idx / realPolishCitiesBase.length) + 1}`;
+                    }
 
-                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                circle.setAttribute("cx", cx);
-                circle.setAttribute("cy", cy);
-                circle.setAttribute("r", "3.5");
-                circle.setAttribute("id", `dot-${i}`);
-                circle.setAttribute("class", "city-dot color-neutral");
-                
-                circle.onmouseover = () => {
-                    document.getElementById('city-hover-info').innerText = `Miasto: ${cities[i].name} | Właściciel: ${getOwnerName(cities[i].owner)} | Garnizon: ⚔️${cities[i].garrison}`;
-                };
+                    // Tworzenie unikalnych punktów wielokąta dla każdego terytorium
+                    let x = startX + c * cellW;
+                    let y = startY + r * cellH;
 
-                circle.onclick = () => playerAttackCity(i);
-                group.appendChild(circle);
+                    // Specjalne terytorium: Półwysep Helski na północy
+                    if(r === 0 && c === 4) {
+                        cityName = "Hel / Półwysep Helski";
+                    }
+
+                    let points = `${x},${y} ${x+cellW-2},${y} ${x+cellW-2},${y+cellH-2} ${x},${y+cellH-2}`;
+
+                    cities.push({
+                        id: idx,
+                        name: cityName,
+                        owner: 'neutral',
+                        garrison: Math.floor(Math.random() * 40) + 10,
+                        x: x + cellW/2,
+                        y: y + cellH/2
+                    });
+
+                    // Wielokąt terytorium (Polygon)
+                    const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+                    poly.setAttribute("points", points);
+                    poly.setAttribute("id", `terr-${idx}`);
+                    poly.setAttribute("class", "territory color-neutral");
+
+                    poly.onmouseover = () => {
+                        document.getElementById('city-hover-info').innerText = `Terytorium: ${cities[idx].name} | Właściciel: ${getOwnerName(cities[idx].owner)} | Garnizon: ⚔️${cities[idx].garrison}`;
+                    };
+
+                    poly.onclick = () => playerAttackCity(idx);
+                    group.appendChild(poly);
+
+                    // Etykieta z nazwą miasta na środku terytorium
+                    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    label.setAttribute("x", x + cellW/2);
+                    label.setAttribute("y", y + cellH/2 + 3);
+                    label.setAttribute("class", "territory-label");
+                    label.textContent = cityName.length > 10 ? cityName.substring(0, 9) + ".." : cityName;
+                    group.appendChild(label);
+
+                    count++;
+                }
             }
 
             updateUI();
@@ -734,11 +752,13 @@
             clearInterval(gameInterval);
             clearInterval(ecoInterval);
 
+            // Ekonomia: +1 zł co 0.5s
             ecoInterval = setInterval(() => {
                 player.gold += 1;
                 updateUI();
             }, 500);
 
+            // Ruchy botów co 1s
             gameInterval = setInterval(gameLoop, 1000);
         }
 
@@ -776,7 +796,7 @@
         function playerAttackCity(idx) {
             const target = cities[idx];
             if (target.owner === 'green') {
-                showGameAlert("To już jest Twoje miasto!");
+                showGameAlert("To już jest Twoje terytorium!");
                 return;
             }
 
@@ -785,13 +805,13 @@
                 target.owner = 'green';
                 target.garrison = Math.floor(player.army * 0.08) + 15;
 
-                const dot = document.getElementById(`dot-${idx}`);
-                if(dot) dot.setAttribute("class", "city-dot color-green");
+                const poly = document.getElementById(`terr-${idx}`);
+                if(poly) poly.setAttribute("class", "territory color-green");
 
                 updateUI();
                 checkWinCondition();
             } else {
-                showGameAlert(`Za mało wojska! Garnizon miasta: ${target.garrison}, Twoja armia: ${player.army}.`);
+                showGameAlert(`Za mało wojska! Garnizon ziemi: ${target.garrison}, Twoja armia: ${player.army}.`);
             }
         }
 
@@ -806,8 +826,8 @@
                     target.owner = bKey;
                     target.garrison = Math.floor(bots[bKey].army * 0.05) + 10;
 
-                    const dot = document.getElementById(`dot-${targetIdx}`);
-                    if(dot) dot.setAttribute("class", `city-dot color-${bKey}`);
+                    const poly = document.getElementById(`terr-${targetIdx}`);
+                    if(poly) poly.setAttribute("class", `territory color-${bKey}`);
                 }
 
                 bots[bKey].army += 12;
@@ -826,10 +846,11 @@
         }
 
         function checkWinCondition() {
+            const total = cities.length;
             const playerTerritories = cities.filter(c => c.owner === 'green').length;
-            if (playerTerritories === 1026) {
+            if (playerTerritories === total) {
                 stopGame();
-                document.getElementById('game-status').innerHTML = "🎉 <span style='color:#22c55e;'>ZWYCIĘSTWO! Podbiłeś wszystkie 1026 miast Polski!</span>";
+                document.getElementById('game-status').innerHTML = "🎉 <span style='color:#22c55e;'>ZWYCIĘSTWO! Podbiłeś całą Polskę!</span>";
             }
         }
 
@@ -837,7 +858,7 @@
             let counts = { green: 0, red: 0, blue: 0, yellow: 0, purple: 0, orange: 0, neutral: 0 };
             cities.forEach(c => counts[c.owner]++);
 
-            const total = 1026;
+            const total = cities.length || 1;
             const greenPct = ((counts.green / total) * 100).toFixed(1);
 
             document.getElementById('s-green-t').innerText = counts.green;
