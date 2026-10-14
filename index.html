@@ -117,7 +117,7 @@
 
         .voivodeship {
             fill: #313244;
-            stroke: #1e1e2e;
+            stroke: #11111b;
             stroke-width: 1.5;
             cursor: pointer;
             transition: fill 0.3s;
@@ -142,6 +142,14 @@
 
         .voivodeship.bot-yellow {
             fill: #eab308 !important; /* Żółty - Bot */
+        }
+
+        .map-text {
+            fill: #ffffff;
+            font-size: 9px;
+            font-weight: bold;
+            pointer-events: none;
+            text-anchor: middle;
         }
 
         #secret-popup {
@@ -195,7 +203,7 @@
             <button class="back-btn" onclick="hideSections()">Powrót do menu</button>
         </div>
 
-        <!-- Opcja 2: WOJNY PIXELI (Prawdziwy kształt Polski) -->
+        <!-- Opcja 2: WOJNY PIXELI (Prawdziwa Mapa Polski z granicami) -->
         <div id="pixels-section" class="section-content">
             <h3>Wojny Pixeli: Bitwa 4 Frakcji ⚔️</h3>
             <div class="game-board">
@@ -205,42 +213,59 @@
                     <span style="color: #60a5fa;">🔵 Niebieski: <span id="score-blue">0</span></span>
                     <span style="color: #facc15;">🟡 Żółty: <span id="score-yellow">0</span></span>
                 </div>
-                <p style="font-size: 14px; color: #a6adc8;">Wybieraj województwa na dokładnej mapie Polski!</p>
+                <p style="font-size: 14px; color: #a6adc8;">Prawdziwa mapa Polski – walcz o terytoria!</p>
                 
-                <!-- Dokładna mapa Polski wpasowana w idealny obrys -->
-                <svg id="poland-map" viewBox="0 0 550 520">
-                    <!-- Zachodniopomorskie -->
-                    <path class="voivodeship" id="zachodniopomorskie" d="M 30,110 Q 70,80 120,75 L 145,150 L 90,175 L 30,150 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Pomorskie -->
-                    <path class="voivodeship" id="pomorskie" d="M 120,75 Q 190,65 240,85 L 235,160 L 145,150 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Warmińsko-Mazurskie -->
-                    <path class="voivodeship" id="warminsko-mazurskie" d="M 240,85 Q 310,75 370,100 L 360,185 L 235,160 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Podlaskie -->
-                    <path class="voivodeship" id="podlaskie" d="M 370,100 Q 430,110 455,160 L 440,250 L 360,185 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Lubuskie -->
-                    <path class="voivodeship" id="lubuskie" d="M 30,150 L 90,175 L 95,270 L 40,250 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Wielkopolskie -->
-                    <path class="voivodeship" id="wielkopolskie" d="M 90,175 L 145,150 L 235,160 L 250,285 L 95,270 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Kujawsko-Pomorskie -->
-                    <path class="voivodeship" id="kujawsko-pomorskie" d="M 235,160 L 360,185 L 310,255 L 250,285 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Mazowieckie -->
-                    <path class="voivodeship" id="mazowieckie" d="M 360,185 L 440,250 L 420,330 L 310,310 L 310,255 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Dolnośląskie -->
-                    <path class="voivodeship" id="dolnoslaskie" d="M 40,250 L 95,270 L 150,320 L 100,395 L 45,340 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Łódzkie -->
-                    <path class="voivodeship" id="lodzkie" d="M 250,285 L 310,255 L 310,310 L 270,375 L 160,335 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Lubelskie -->
-                    <path class="voivodeship" id="lubelskie" d="M 420,330 L 440,250 L 470,350 L 380,410 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Opolskie -->
-                    <path class="voivodeship" id="opolskie" d="M 150,320 L 160,335 L 205,395 L 130,400 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Śląskie -->
-                    <path class="voivodeship" id="slaskie" d="M 160,335 L 270,375 L 265,445 L 205,395 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Świętokrzyskie -->
-                    <path class="voivodeship" id="swietokrzyskie" d="M 310,310 L 380,410 L 290,445 L 270,375 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Małopolskie -->
-                    <path class="voivodeship" id="malopolskie" d="M 270,375 L 290,445 L 360,485 L 250,490 Z" onclick="claimVoivodeship(this)"></path>
-                    <!-- Podkarpackie -->
-                    <path class="voivodeship" id="podkarpackie" d="M 380,410 L 470,350 L 440,500 L 360,485 Z" onclick="claimVoivodeship(this)"></path>
+                <!-- Idealny zarys i granice Polski -->
+                <svg id="poland-map" viewBox="0 0 500 480">
+                    <g onclick="claimVoivodeship(event)">
+                        <path class="voivodeship" id="zachodniopomorskie" data-name="Zachodniopomorskie" d="M 60,80 L 110,70 L 135,130 L 90,150 L 50,130 Z"></path>
+                        <text class="map-text" x="85" y="110">Zach-pom</text>
+
+                        <path class="voivodeship" id="pomorskie" data-name="Pomorskie" d="M 110,70 L 180,60 L 210,120 L 135,130 Z"></path>
+                        <text class="map-text" x="160" y="95">Pomorskie</text>
+
+                        <path class="voivodeship" id="warminsko-mazurskie" data-name="Warmińsko-Mazurskie" d="M 180,60 L 270,70 L 260,140 L 210,120 Z"></path>
+                        <text class="map-text" x="235" y="100">War-Maz</text>
+
+                        <path class="voivodeship" id="podlaskie" data-name="Podlaskie" d="M 270,70 L 330,90 L 320,170 L 260,140 Z"></path>
+                        <text class="map-text" x="295" y="125">Podlaskie</text>
+
+                        <path class="voivodeship" id="lubuskie" data-name="Lubuskie" d="M 50,130 L 90,150 L 95,220 L 40,200 Z"></path>
+                        <text class="map-text" x="65" y="175">Lubuskie</text>
+
+                        <path class="voivodeship" id="wielkopolskie" data-name="Wielkopolskie" d="M 90,150 L 135,130 L 210,120 L 225,220 L 95,220 Z"></path>
+                        <text class="map-text" x="155" y="180">Wielkopolska</text>
+
+                        <path class="voivodeship" id="kujawsko-pomorskie" data-name="Kujawsko-Pomorskie" d="M 210,120 L 260,140 L 245,200 L 225,220 Z"></path>
+                        <text class="map-text" x="235" y="170">Kuj-Pom</text>
+
+                        <path class="voivodeship" id="mazowieckie" data-name="Mazowieckie" d="M 260,140 L 320,170 L 310,250 L 245,200 Z"></path>
+                        <text class="map-text" x="285" y="200">Mazowieckie</text>
+
+                        <path class="voivodeship" id="lubelskie" data-name="Lubelskie" d="M 320,170 L 360,190 L 345,290 L 310,250 Z"></path>
+                        <text class="map-text" x="335" y="235">Lubelskie</text>
+
+                        <path class="voivodeship" id="dolnoslaskie" data-name="Dolnośląskie" d="M 40,200 L 95,220 L 130,280 L 80,310 L 45,270 Z"></path>
+                        <text class="map-text" x="80" y="255">Dolnośląskie</text>
+
+                        <path class="voivodeship" id="lodzkie" data-name="Łódzkie" d="M 225,220 L 245,200 L 310,250 L 295,310 L 210,290 Z"></path>
+                        <text class="map-text" x="255" y="260">Łódzkie</text>
+
+                        <path class="voivodeship" id="opolskie" data-name="Opolskie" d="M 130,280 L 160,275 L 175,335 L 125,330 Z"></path>
+                        <text class="map-text" x="150" y="305">Opolskie</text>
+
+                        <path class="voivodeship" id="slaskie" data-name="Śląskie" d="M 160,275 L 210,290 L 205,355 L 175,335 Z"></path>
+                        <text class="map-text" x="187" y="315">Śląskie</text>
+
+                        <path class="voivodeship" id="swietokrzyskie" data-name="Świętokrzyskie" d="M 295,310 L 310,250 L 345,290 L 325,355 L 280,350 Z"></path>
+                        <text class="map-text" x="310" y="315">Świętokrzysz.</text>
+
+                        <path class="voivodeship" id="malopolskie" data-name="Małopolskie" d="M 210,290 L 280,350 L 275,410 L 200,395 Z"></path>
+                        <text class="map-text" x="240" y="360">Małopolskie</text>
+
+                        <path class="voivodeship" id="podkarpackie" data-name="Podkarpackie" d="M 325,355 L 345,290 L 380,320 L 365,415 L 275,410 Z"></path>
+                        <text class="map-text" x="330" y="370">Podkarpackie</text>
+                    </g>
                 </svg>
 
                 <p id="game-status" style="margin-top: 15px; font-weight: bold; font-size: 18px;"></p>
@@ -324,8 +349,9 @@
             clearInterval(botInterval);
         }
 
-        function claimVoivodeship(element) {
-            if (isClaimed(element)) return;
+        function claimVoivodeship(event) {
+            const element = event.target.closest('.voivodeship');
+            if (!element || isClaimed(element)) return;
 
             element.classList.add('player');
             scores.green++;
@@ -375,20 +401,14 @@
             if (totalClaimed >= total) {
                 stopGame();
                 const status = document.getElementById('game-status');
-                const maxScore = Math.max(scores.green, scores.red, scores.blue, scores.yellow);
+                const maxScore = Math.Math.max ? Math.max(scores.green, scores.red, scores.blue, scores.yellow) : 0;
 
-                if (scores.green === maxScore) {
+                if (scores.green >= scores.red && scores.green >= scores.blue && scores.green >= scores.yellow) {
                     status.innerText = "🎉 ZWYCIĘSTWO! Zdominowałeś całą Polskę!";
                     status.style.color = "#4ade80";
-                } else if (scores.red === maxScore) {
-                    status.innerText = "❌ Wygrał Czerwony Bot!";
-                    status.style.color = "#ef4444";
-                } else if (scores.blue === maxScore) {
-                    status.innerText = "❌ Wygrał Niebieski Bot!";
-                    status.style.color = "#3b82f6";
                 } else {
-                    status.innerText = "❌ Wygrał Żółty Bot!";
-                    status.style.color = "#eab308";
+                    status.innerText = "❌ KONIEC GRY! Boty przejęły większość terenów!";
+                    status.style.color = "#f87171";
                 }
             }
         }
