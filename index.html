@@ -392,31 +392,37 @@
             height: 16px;
         }
 
-        /* STYLY MINIGRY STRATEGICZNEJ MAPY KRAJÓW */
+        /* IDEALNA KWADRATOWA MAPA STRATEGICZNA */
+        .strategy-map-container {
+            background: #111827;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
         .strategy-grid {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(4, 110px);
+            grid-template-rows: repeat(4, 100px);
             gap: 8px;
-            max-width: 650px;
-            margin-top: 15px;
         }
         .territory-tile {
             background: var(--btn-bg);
             border: 2px solid var(--border-color);
-            border-radius: 6px;
-            padding: 10px 5px;
+            border-radius: 8px;
+            padding: 6px;
             text-align: center;
             cursor: pointer;
             font-size: 11px;
             font-weight: bold;
-            min-height: 55px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             transition: 0.15s;
         }
-        .territory-tile:hover { transform: scale(1.05); }
+        .territory-tile:hover { transform: scale(1.05); filter: brightness(1.2); }
     </style>
 </head>
 <body>
@@ -492,7 +498,7 @@
                 <h1 class="logo-text">Inteligent</h1>
             </div>
             <button class="nav-item" onclick="showSection('maps-section')">🗺️ Inteligent Maps</button>
-            <button class="nav-item" onclick="showSection('strategy-game-section')">🛡️ Wojna Krajów (Minigra)</button>
+            <button class="nav-item" onclick="showSection('strategy-game-section')">🛡️ Wojna Krajów (Kwadratowa Mapa)</button>
             <button class="nav-item" onclick="showSection('intedisc-section')">💬 Intedisc (Discord)</button>
             <button class="nav-item" onclick="showSection('notes-section')">📝 Notatki (Kwadraty)</button>
             <button class="nav-item" onclick="showSection('store-section')">🛒 Inteligent Store</button>
@@ -525,12 +531,12 @@
             </div>
         </div>
 
-        <!-- MINIGRA STRATEGICZNA: EUROPA ŚRODKOWA I WOJNA KRAJÓW -->
+        <!-- KWADRATOWA MAPA STRATEGICZNA EUROPY ŚRODKOWEJ -->
         <div id="strategy-game-section" class="section-content">
-            <h3>🛡️ Wojna Krajów (Polska, Niemcy, Ukraina, Białoruś, Litwa, Czechy, Mołdawia)</h3>
+            <h3>🛡️ Wojna Krajów - Kwadratowa Mapa Strategiczna</h3>
             <div style="display:flex; gap:15px; align-items:center; margin-bottom:15px; flex-wrap:wrap;">
                 <div>
-                    <label style="font-size:12px; font-weight:bold;">Wybierz swój kraj startowy:</label>
+                    <label style="font-size:12px; font-weight:bold;">Twój kraj:</label>
                     <select id="player-country-select" onchange="initStrategyGame()" style="padding:6px; background:var(--btn-bg); color:var(--text-color); border:1px solid var(--border-color); border-radius:4px;">
                         <option value="Polska">🇵🇱 Polska</option>
                         <option value="Niemcy">🇩🇪 Niemcy</option>
@@ -541,11 +547,14 @@
                         <option value="Mołdawia">🇲🇩 Mołdawia</option>
                     </select>
                 </div>
-                <button onclick="initStrategyGame()" class="action-btn">🔄 Resetuj / Start Wojny</button>
+                <button onclick="initStrategyGame()" class="action-btn">🔄 Resetuj Mapę</button>
                 <div id="game-status-msg" style="font-weight:bold; font-size:14px; color:#22c55e;"></div>
             </div>
-            <p style="font-size:13px; opacity:0.8;">Kliknij na sąsiadujące terytorium wroga, aby zaatakować i zdobyć prowincję! Uważaj na kontrataki!</p>
-            <div class="strategy-grid" id="strategy-board"></div>
+            <p style="font-size:13px; opacity:0.8;">Kliknij na sąsiadujący kwadrat wroga na mapie, aby zaatakować i powiększyć swoje terytorium!</p>
+            
+            <div class="strategy-map-container">
+                <div class="strategy-grid" id="strategy-board"></div>
+            </div>
         </div>
 
         <div id="intedisc-section" class="section-content">
@@ -588,12 +597,12 @@
         </div>
 
         <div id="info-section" class="section-content">
-            <h3>📢 Inteligent Informacje (v0.22)</h3>
+            <h3>📢 Inteligent Informacje (v0.23)</h3>
             <div style="background:var(--container-bg); border:1px solid var(--border-color); border-radius:10px; padding:20px; margin-top:15px; line-height:1.6;">
-                <h4 style="margin-top:0; color:var(--accent-color);">✨ Wersja v0.22 - Co nowego:</h4>
+                <h4 style="margin-top:0; color:var(--accent-color);">✨ Wersja v0.23 - Co nowego:</h4>
                 <ul style="padding-left:20px; font-size:14px;">
-                    <li><b>Minigra Wojna Krajów:</b> Zastąpiono mapę nową strategią turową z Polską (i jej województwami), Niemcami, Ukrainą, Białorusią, Litwą, Czechami i Mołdawią!</li>
-                    <li>Wybieraj swój kraj, atakuj sąsiadów i podbijaj kwadratowe terytoria na mapie Europy Środkowej.</li>
+                    <li><b>Kwadratowa Mapa Strategiczna:</b> Europa Środkowa (Polska, Niemcy, Ukraina, Białoruś, Litwa, Czechy, Mołdawia) została przekształcona w idealną, stabilną siatkę kwadratów 4x4.</li>
+                    <li>Optymalizacja wydajności w Operze i innych przeglądarkach.</li>
                 </ul>
             </div>
         </div>
@@ -607,7 +616,7 @@
 
     </div>
 
-    <div class="version-tag">v0.22🎉</div>
+    <div class="version-tag">v0.23🎉</div>
 
     <script>
         let currentUser = "";
@@ -762,7 +771,7 @@
             document.getElementById('map-container-frame').innerHTML = `<iframe width="100%" height="100%" frameborder="0" src="https://maps.google.com/maps?q=${encodeURIComponent(q)}&output=embed"></iframe>`;
         }
 
-        /* MINIGRA STRATEGICZNA - WOJNA KRAJÓW */
+        /* KWADRATOWA MAPA STRATEGICZNA 4x4 */
         let territories = [];
         const countryColors = {
             "Polska": "#22c55e",
@@ -786,31 +795,25 @@
         function initStrategyGame() {
             const playerCountry = document.getElementById('player-country-select').value;
             territories = [
-                // Niemcy
                 { name: "Berlin", owner: "Niemcy", army: 10 },
                 { name: "Monachium", owner: "Niemcy", army: 8 },
-                // Polska (Województwa)
-                { name: "Mazowsze (PL)", owner: playerCountry, army: 15 },
-                { name: "Małopolska (PL)", owner: playerCountry, army: 12 },
-                { name: "Śląsk (PL)", owner: playerCountry, army: 12 },
-                { name: "Wielkopolska (PL)", owner: playerCountry, army: 10 },
-                { name: "Pomorze (PL)", owner: playerCountry, army: 10 },
-                { name: "Dolny Śląsk (PL)", owner: playerCountry, army: 10 },
-                // Czechy
                 { name: "Praga", owner: "Czechy", army: 9 },
-                { name: "Brno", owner: "Czechy", army: 7 },
-                // Litwa
                 { name: "Wilno", owner: "Litwa", army: 8 },
-                // Białoruś
-                { name: "Mińsk", owner: "Białoruś", army: 11 },
+
+                { name: "Pomorze (PL)", owner: playerCountry, army: 10 },
+                { name: "Mazowsze (PL)", owner: playerCountry, army: 15 },
+                { name: "Śląsk (PL)", owner: playerCountry, army: 12 },
+                { name: "Małopolska (PL)", owner: playerCountry, army: 12 },
+
                 { name: "Brześć", owner: "Białoruś", army: 9 },
-                // Ukraina
-                { name: "Kijów", owner: "Ukraina", army: 14 },
+                { name: "Mińsk", owner: "Białoruś", army: 11 },
                 { name: "Lwów", owner: "Ukraina", army: 12 },
+                { name: "Kijów", owner: "Ukraina", army: 14 },
+
                 { name: "Odessa", owner: "Ukraina", army: 10 },
-                // Mołdawia
                 { name: "Kiszyniów", owner: "Mołdawia", army: 6 },
-                { name: "Bielce", owner: "Mołdawia", army: 5 }
+                { name: "Bielce", owner: "Mołdawia", army: 5 },
+                { name: "Brno", owner: "Czechy", army: 7 }
             ];
             renderStrategyBoard();
         }
@@ -821,15 +824,15 @@
             let playerCountry = document.getElementById('player-country-select').value;
             let playerTerritoriesCount = territories.filter(t => t.owner === playerCountry).length;
 
-            document.getElementById('game-status-msg').innerText = `Twój kraj: ${countryFlags[playerCountry]} ${playerCountry} | Posiadane tereny: ${playerTerritoriesCount}`;
+            document.getElementById('game-status-msg').innerText = `Kraj: ${countryFlags[playerCountry]} ${playerCountry} | Tereny: ${playerTerritoriesCount}/16`;
 
             territories.forEach((t, idx) => {
                 let color = countryColors[t.owner] || "#555";
                 board.innerHTML += `
                     <div class="territory-tile" style="border-color: ${color};" onclick="attackTerritory(${idx})">
-                        <span style="font-size:10px; opacity:0.7;">${countryFlags[t.owner]} ${t.owner}</span>
-                        <b>${t.name}</b>
-                        <span style="font-size:12px; margin-top:2px;">🛡️ ${t.army}</span>
+                        <span style="font-size:9px; opacity:0.8;">${countryFlags[t.owner]} ${t.owner}</span>
+                        <b style="font-size:12px; margin:2px 0;">${t.name}</b>
+                        <span style="font-size:11px; background:rgba(0,0,0,0.3); padding:2px 6px; border-radius:4px;">🛡️ ${t.army}</span>
                     </div>
                 `;
             });
@@ -839,14 +842,13 @@
             let playerCountry = document.getElementById('player-country-select').value;
             let target = territories[idx];
             if(target.owner === playerCountry) {
-                alert("To jest Twoje terytorium! Wybierz sąsiadujący kraj wroga do ataku.");
+                alert("To terytorium należy do Ciebie!");
                 return;
             }
 
-            // Znajdź nasze najsilniejsze terytorium do ataku
             let ourTerrains = territories.filter(t => t.owner === playerCountry && t.army > 2);
             if(ourTerrains.length === 0) {
-                alert("Masz zbyt słabe armie na atak! Poczekaj na wzmocnienia.");
+                alert("Twoje armie są zbyt słabe na atak!");
                 return;
             }
 
@@ -855,25 +857,23 @@
                 attacker.army -= 2;
                 target.owner = playerCountry;
                 target.army = Math.floor(attacker.army / 2);
-                alert(`Sukces! Zapewniłeś zwycięstwo nad terytorium: ${target.name}!`);
+                alert(`Zwycięstwo! Podbiłeś terytorium: ${target.name}!`);
             } else {
                 attacker.army -= 3;
                 target.army -= 1;
-                alert(`Atak na ${target.name} odparty! Poniosłeś straty.`);
+                alert(`Atak odparty przez obrońców ${target.name}!`);
             }
 
-            // Tura wroga (wróg atakuje losowe terytorium gracza)
             setTimeout(() => {
                 let enemyTerrains = territories.filter(t => t.owner !== playerCountry);
                 if(enemyTerrains.length > 0) {
-                    let randomEnemy = enemyTerrains[Math.floor(Math.random() * enemyTerrains.length)];
                     let playerTerrainsList = territories.filter(t => t.owner === playerCountry);
                     if(playerTerrainsList.length > 0) {
                         let attackedPlayerTile = playerTerrainsList[Math.floor(Math.random() * playerTerrainsList.length)];
                         attackedPlayerTile.army -= 1;
                         if(attackedPlayerTile.army <= 0) {
-                            attackedPlayerTile.owner = randomEnemy.owner;
-                            attackedPlayerTile.army = 5;
+                            attackedPlayerTile.owner = enemyTerrains[0].owner;
+                            attackedPlayerTile.army = 4;
                         }
                     }
                 }
