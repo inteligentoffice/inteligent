@@ -33,15 +33,36 @@
             transition: filter 0.3s, background 0.3s, color 0.3s;
         }
 
-        /* ANIMACJA STARTOWA v0.3 */
+        /* ANIMACJA STARTOWA Z KRĘCĄCĄ SIĘ LUPĄ */
         #intro-splash {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #0f141c; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999999;
             animation: hideSplash 0.8s ease 3s forwards;
         }
-        .splash-logo-icon { font-size: 64px; margin-bottom: 10px; }
-        .splash-title-v1 { font-size: 48px; font-weight: 900; font-style: italic; color: #f0f6fc; margin-bottom: 20px; animation: textSmashSequence 3s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-        .splash-lupa { font-size: 70px; animation: lupaAction 3s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        .splash-logo-icon { 
+            font-size: 64px; 
+            margin-bottom: 10px; 
+            display: inline-block;
+            animation: spinMagnifier 2s linear infinite; 
+        }
+        .splash-title-v1 { 
+            font-size: 48px; 
+            font-weight: 900; 
+            font-style: italic; 
+            color: #f0f6fc; 
+            margin-bottom: 20px; 
+            animation: textSmashSequence 3s cubic-bezier(0.25, 1, 0.5, 1) forwards; 
+        }
+        .splash-lupa { 
+            font-size: 70px; 
+            display: inline-block;
+            animation: lupaAction 3s cubic-bezier(0.25, 1, 0.5, 1) forwards; 
+        }
+
+        @keyframes spinMagnifier {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
         @keyframes textSmashSequence {
             0% { transform: scale(0.3); opacity: 0; }
@@ -51,8 +72,8 @@
         }
         @keyframes lupaAction {
             0% { transform: scale(0.2) rotate(0deg); opacity: 0; }
-            30% { transform: scale(1.3) rotate(180deg); opacity: 1; }
-            100% { transform: scale(0.5) translate(400px, -300px) rotate(720deg); opacity: 0; }
+            30% { transform: scale(1.3) rotate(360deg); opacity: 1; }
+            100% { transform: scale(0.5) translate(400px, -300px) rotate(1440deg); opacity: 0; }
         }
         @keyframes hideSplash { to { visibility: hidden; opacity: 0; pointer-events: none; } }
 
@@ -66,6 +87,7 @@
         .sidebar-top { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; max-height: calc(100vh - 80px); }
         .sidebar-logo-area { display: flex; align-items: center; gap: 12px; padding: 10px; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); }
         .logo-icon-circle { width: 42px; height: 42px; background: var(--btn-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent-color); }
+        .logo-icon-circle span { display: inline-block; animation: spinMagnifier 4s linear infinite; }
         .logo-text { font-size: 22px; font-weight: 900; font-style: italic; margin: 0; color: var(--text-color); }
 
         .nav-item { padding: 10px 14px; font-size: 13px; font-weight: bold; border: none; border-radius: 6px; background-color: transparent; color: var(--text-color); cursor: pointer; transition: 0.2s; text-align: left; display: flex; align-items: center; gap: 10px; }
@@ -107,7 +129,6 @@
             z-index: 9999;
         }
 
-        /* ANIMACJA ZMIENIAJĄCYCH SIĘ KOLORÓW */
         body.theme-rainbow-anim {
             animation: rainbowBG 10s infinite linear;
         }
@@ -135,6 +156,16 @@
 
         .version-tag { position: fixed; bottom: 10px; right: 15px; font-size: 12px; color: #8b949e; background: var(--container-bg); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-color); }
         .typing-indicator { font-style: italic; opacity: 0.7; font-size: 12px; margin-top: 5px; height: 16px; }
+
+        .update-history-card {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .update-history-card h5 { margin: 0 0 8px 0; font-size: 16px; color: var(--accent-color); }
+        .update-history-card ul { margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -184,7 +215,6 @@
 
     <div class="main-content-area" id="main-area">
 
-        <!-- MINECRAFT BANNER -->
         <div id="creeper-head-banner">
             <span style="font-size:28px;">🟩</span>
             <span style="font-weight:bold; font-size:18px; color:#fff;">Minecraft Dirt & Creeper Edition</span>
@@ -309,11 +339,38 @@
             <div id="store-items-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:15px;"></div>
         </div>
 
+        <!-- REJESTR ZMIAN W INTELIGENT INFORMACJE -->
         <div id="info-section" class="section-content">
-            <h3 data-i18n="nav_info">📢 Inteligent Informacje</h3>
-            <div style="background:var(--container-bg); border:1px solid var(--border-color); border-radius:10px; padding:20px; margin-top:15px; line-height:1.6;">
-                <h4 data-i18n="info_title" style="margin-top:0; color:var(--accent-color);">✨ Wersja v0.3:</h4>
-                <p data-i18n="info_desc">Dodano motyw tęczowy (paski), zmieniający kolory (RGB), zielono-biały, polski oraz pozdrowienie femboyowe w rogu!</p>
+            <h3 data-i18n="nav_info">📢 Inteligent Informacje i Rejestr Zmian</h3>
+            <div style="margin-top:15px;">
+                
+                <div class="update-history-card">
+                    <h5>✨ Wersja v0.3 (Najnowsza):</h5>
+                    <ul>
+                        <li><b>Naprawiono kręcącą się lupę:</b> Ikona lupy na ekranie startowym znowu płynnie obraca się wokół własnej osi!</li>
+                        <li><b>Napis Femboy:</b> W rogu ekranu pojawia się powitanie: <i>"Lubisz femboye? Ja też! Pozdrawiam!"</i> na motywach femboyowych.</li>
+                        <li><b>Nowe motywy:</b> Motyw tęczowy (w paski), Zmieniający Kolory RGB, Zielono-Biały, Polski oraz Linux Terminal.</li>
+                        <li><b>Rejestr zmian:</b> Dodano pełną historię dawnych aktualizacji.</li>
+                    </ul>
+                </div>
+
+                <div class="update-history-card">
+                    <h5>🛠️ Wersja v0.2:</h5>
+                    <ul>
+                        <li><b>Usunięcie pop-upów:</b> Wyeliminowano wyskakiwanie denerwujących okienek powiadomień ze strony przy zmianie motywu.</li>
+                        <li><b>Dodano motyw Minecraft Dirt:</b> Ziemia ze stylizowanym banerem Creepera na górze.</li>
+                        <li><b>Optymalizacja języków:</b> Ograniczono listę do 8 najpopularniejszych języków.</li>
+                    </ul>
+                </div>
+
+                <div class="update-history-card">
+                    <h5>📜 Wersja v0.1 oraz starsze:</h5>
+                    <ul>
+                        <li><b>Stworzenie uniwersalnej bazy:</b> Przeprojektowanie systemu, wprowadzenie dynamicznych motywów i komunikatora Intedisc.</li>
+                        <li><b>Usunięto:</b> Starą minigrę "Wojna Krajów" na rzecz czystszego kodu, lepszej wydajności i mniejszego rozmiaru pliku.</li>
+                    </ul>
+                </div>
+
             </div>
         </div>
 
@@ -333,14 +390,14 @@
         let currentLang = localStorage.getItem('inteligent_lang') || 'pl';
 
         const i18n = {
-            pl: { auth_title: "🔒 Logowanie / Konto", auth_desc: "Wpisz swój nick i hasło:", nick: "Nick:", pass: "Hasło:", enter: "Wejdź do systemu", nav_maps: "Inteligent Maps", nav_settings: "Ustawienia i Motywy", nav_projects: "Przyszłe Projekty", nav_chat: "Intedisc (Discord)", nav_notes: "Notatki (Kwadraty)", nav_store: "Inteligent Store", nav_info: "Inteligent Informacje", nav_media: "Globalne Media", welcome_title: "Witaj w systemie Inteligent v0.3", welcome_desc: "Wybierz opcję z panelu bocznego.", map_placeholder: "Wpisz lokalizację...", btn_search: "Szukaj", map_hint: "Wpisz lokalizację i kliknij szukaj.", theme_title: "🎨 Wybór Motywu", lang_title: "🌍 Wybór Języka", account_title: "👤 Zarządzanie Kontem", account_current: "Aktualny użytkownik:", btn_logout: "Wyloguj się", btn_switch: "Stwórz / Przełącz konto", proj_browser_title: "🌐 1. Przeglądarka Inteligent", proj_browser_desc: "Dedykowana, szybka przeglądarka internetowa.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Autorska dystrybucja systemu Linux.", chat_channels: "Kanały", btn_new_group: "+ Stwórz grupę", chat_placeholder: "Napisz wiadomość...", nav_notes: "Twoje Notatki", btn_new_note: "+ Nowy Kwadrat", store_placeholder: "Szukaj plików...", lbl_upload: "📤 Wrzuć plik", info_title: "✨ Wersja v0.3:", info_desc: "Brak komunikatów, nowe genialne motywy i pozdrowienie femboyowe!" },
-            usa: { auth_title: "🔒 Login / Account", auth_desc: "Enter nickname and password:", nick: "Nickname:", pass: "Password:", enter: "Enter System", nav_maps: "Inteligent Maps", nav_settings: "Settings & Themes", nav_projects: "Future Projects", nav_chat: "Intedisc (Discord)", nav_notes: "Notes", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Global Media", welcome_title: "Welcome to Inteligent v0.3", welcome_desc: "Select an option from sidebar.", map_placeholder: "Enter location...", btn_search: "Search", map_hint: "Enter location and search.", theme_title: "🎨 Select Theme", lang_title: "🌍 Select Language", account_title: "👤 Account", account_current: "Current user:", btn_logout: "Log out", btn_switch: "Switch account", proj_browser_title: "🌐 1. Inteligent Browser", proj_browser_desc: "Dedicated fast web browser.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Custom Linux distribution.", chat_channels: "Channels", btn_new_group: "+ Create group", chat_placeholder: "Type message...", nav_notes: "Notes", btn_new_note: "+ New Square", store_placeholder: "Search files...", lbl_upload: "📤 Upload file", info_title: "✨ Version v0.3:", info_desc: "New themes, animated RGB, and femboy greeting!" },
-            lt: { auth_title: "🔒 Prisijungimas", auth_desc: "Įveskite duomenis:", nick: "Slapyvardis:", pass: "Slaptažodis:", enter: "Įeiti", nav_maps: "Inteligent Maps", nav_settings: "Nustatymai", nav_projects: "Projektai", nav_chat: "Intedisc", nav_notes: "Užrašai", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Media", welcome_title: "Sveiki atvykę į Inteligent v0.3", welcome_desc: "Pasirinkite parinktį.", map_placeholder: "Vieta...", btn_search: "Ieškoti", map_hint: "Įveskite vietą.", theme_title: "🎨 Tema", lang_title: "🌍 Kalba", account_title: "👤 Paskyra", account_current: "Vartotojas:", btn_logout: "Atsijungti", btn_switch: "Keisti", proj_browser_title: "🌐 1. Naršyklė Inteligent", proj_browser_desc: "Greita naršyklė.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Linux sistema.", chat_channels: "Kanalai", btn_new_group: "+ Sukurti", chat_placeholder: "Žinutė...", nav_notes: "Užrašai", btn_new_note: "+ Naujas", store_placeholder: "Ieškoti...", lbl_upload: "📤 Įkelti", info_title: "✨ v0.3:", info_desc: "Naujos temos ir funkcionalumas!" },
-            fr: { auth_title: "🔒 Connexion", auth_desc: "Identifiants :", nick: "Pseudo :", pass: "Mot de passe :", enter: "Entrer", nav_maps: "Inteligent Maps", nav_settings: "Paramètres", nav_projects: "Projets", nav_chat: "Intedisc", nav_notes: "Notes", nav_store: "Inteligent Store", nav_info: "Infos", nav_media: "Médias", welcome_title: "Bienvenue sur Inteligent v0.3", welcome_desc: "Choisissez une option.", map_placeholder: "Lieu...", btn_search: "Rechercher", map_hint: "Entrez un lieu.", theme_title: "🎨 Thème", lang_title: "🌍 Langue", account_title: "👤 Compte", account_current: "Utilisateur :", btn_logout: "Déconnexion", btn_switch: "Changer", proj_browser_title: "🌐 1. Navigateur Inteligent", proj_browser_desc: "Navigateur web.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Distribution Linux.", chat_channels: "Canaux", btn_new_group: "+ Créer", chat_placeholder: "Message...", nav_notes: "Notes", btn_new_note: "+ Nouveau", store_placeholder: "Rechercher...", lbl_upload: "📤 Envoyer", info_title: "✨ v0.3:", info_desc: "Nouveaux thèmes et options !" },
-            ru: { auth_title: "🔒 Вход / Аккаунт", auth_desc: "Введите ник и пароль:", nick: "Ник:", pass: "Пароль:", enter: "Войти в систему", nav_maps: "Inteligent Maps", nav_settings: "Настройки и Темы", nav_projects: "Будущие Проекты", nav_chat: "Intedisc (Discord)", nav_notes: "Заметки", nav_store: "Inteligent Store", nav_info: "Информация", nav_media: "Глобальные Медиа", welcome_title: "Добро пожаловать в Inteligent v0.3", welcome_desc: "Выберите опцию в меню.", map_placeholder: "Введите локацию...", btn_search: "Поиск", map_hint: "Введите местоположение.", theme_title: "🎨 Выбор Темы", lang_title: "🌍 Выбор Языка", account_title: "👤 Управление аккаунтом", account_current: "Текущий пользователь:", btn_logout: "Выйти", btn_switch: "Сменить аккаунт", proj_browser_title: "🌐 1. Браузер Inteligent", proj_browser_desc: "Быстрый веб-браузер.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Собственный Linux.", chat_channels: "Каналы", btn_new_group: "+ Создать группу", chat_placeholder: "Напишите сообщение...", nav_notes: "Заметки", btn_new_note: "+ Новый квадрат", store_placeholder: "Поиск файлов...", lbl_upload: "📤 Загрузить файл", info_title: "✨ Версия v0.3:", info_desc: "Новые темы и плавающий текст!" },
-            it: { auth_title: "🔒 Accedi", auth_desc: "Inserisci credenziali:", nick: "Nickname:", pass: "Password:", enter: "Entra", nav_maps: "Inteligent Maps", nav_settings: "Impostazioni", nav_projects: "Progetti", nav_chat: "Intedisc", nav_notes: "Note", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Media", welcome_title: "Benvenuto su Inteligent v0.3", welcome_desc: "Seleziona un'opzione.", map_placeholder: "Luogo...", btn_search: "Cerca", map_hint: "Inserisci luogo.", theme_title: "🎨 Tema", lang_title: "🌍 Lingua", account_title: "👤 Account", account_current: "Utente:", btn_logout: "Esci", btn_switch: "Cambia", proj_browser_title: "🌐 1. Browser Inteligent", proj_browser_desc: "Browser veloce.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Sistema Linux.", chat_channels: "Canali", btn_new_group: "+ Crea", chat_placeholder: "Messaggio...", nav_notes: "Note", btn_new_note: "+ Nuovo", store_placeholder: "Cerca...", lbl_upload: "📤 Carica", info_title: "✨ v0.3:", info_desc: "Nuovi temi e funzionalità!" },
-            es: { auth_title: "🔒 Iniciar sesión", auth_desc: "Ingrese datos:", nick: "Usuario:", pass: "Contraseña:", enter: "Entrar", nav_maps: "Inteligent Maps", nav_settings: "Ajustes", nav_projects: "Proyectos", nav_chat: "Intedisc", nav_notes: "Notas", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Medios", welcome_title: "Bienvenido a Inteligent v0.3", welcome_desc: "Seleccione una opción.", map_placeholder: "Ubicación...", btn_search: "Buscar", map_hint: "Ingrese ubicación.", theme_title: "🎨 Tema", lang_title: "🌍 Idioma", account_title: "👤 Cuenta", account_current: "Usuario:", btn_logout: "Salir", btn_switch: "Cambiar", proj_browser_title: "🌐 1. Navegador Inteligent", proj_browser_desc: "Navegador web.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Sistema Linux.", chat_channels: "Canales", btn_new_group: "+ Crear", chat_placeholder: "Mensaje...", nav_notes: "Notas", btn_new_note: "+ Nuevo", store_placeholder: "Buscar...", lbl_upload: "📤 Subir", info_title: "✨ v0.3:", info_desc: "¡Nuevos temas y opciones!" },
-            jp: { auth_title: "🔒 ログイン", auth_desc: "情報を入力:", nick: "ニックネーム:", pass: "パスワード:", enter: "ログイン", nav_maps: "Inteligent マップ", nav_settings: "設定", nav_projects: "プロジェクト", nav_chat: "Intedisc", nav_notes: "メモ", nav_store: "Inteligent ストア", nav_info: "情報", nav_media: "メディア", welcome_title: "Inteligent v0.3へようこそ", welcome_desc: "オプションを選択してください。", map_placeholder: "場所...", btn_search: "検索", map_hint: "場所を入力。", theme_title: "🎨 テーマ", lang_title: "🌍 言語", account_title: "👤 アカウント", account_current: "ユーザー:", btn_logout: "ログアウト", btn_switch: "切替", proj_browser_title: "🌐 1. Inteligent ブラウザ", proj_browser_desc: "高速ブラウザ。", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Linux OS。", chat_channels: "チャンネル", btn_new_group: "+ 作成", chat_placeholder: "メッセージ...", nav_notes: "メモ", btn_new_note: "+ 新規", store_placeholder: "検索...", lbl_upload: "📤 アップロード", info_title: "✨ v0.3:", info_desc: "新しいテーマと機能を追加！" }
+            pl: { auth_title: "🔒 Logowanie / Konto", auth_desc: "Wpisz swój nick i hasło:", nick: "Nick:", pass: "Hasło:", enter: "Wejdź do systemu", nav_maps: "Inteligent Maps", nav_settings: "Ustawienia i Motywy", nav_projects: "Przyszłe Projekty", nav_chat: "Intedisc (Discord)", nav_notes: "Notatki (Kwadraty)", nav_store: "Inteligent Store", nav_info: "Inteligent Informacje", nav_media: "Globalne Media", welcome_title: "Witaj w systemie Inteligent v0.3", welcome_desc: "Wybierz opcję z panelu bocznego.", map_placeholder: "Wpisz lokalizację...", btn_search: "Szukaj", map_hint: "Wpisz lokalizację i kliknij szukaj.", theme_title: "🎨 Wybór Motywu", lang_title: "🌍 Wybór Języka", account_title: "👤 Zarządzanie Kontem", account_current: "Aktualny użytkownik:", btn_logout: "Wyloguj się", btn_switch: "Stwórz / Przełącz konto", proj_browser_title: "🌐 1. Przeglądarka Inteligent", proj_browser_desc: "Dedykowana, szybka przeglądarka internetowa.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Autorska dystrybucja systemu Linux.", chat_channels: "Kanały", btn_new_group: "+ Stwórz grupę", chat_placeholder: "Napisz wiadomość...", nav_notes: "Twoje Notatki", btn_new_note: "+ Nowy Kwadrat", store_placeholder: "Szukaj plików...", lbl_upload: "📤 Wrzuć plik", info_title: "✨ Rejestr Aktualizacji:", info_desc: "Historia zmian systemu Inteligent." },
+            usa: { auth_title: "🔒 Login / Account", auth_desc: "Enter nickname and password:", nick: "Nickname:", pass: "Password:", enter: "Enter System", nav_maps: "Inteligent Maps", nav_settings: "Settings & Themes", nav_projects: "Future Projects", nav_chat: "Intedisc (Discord)", nav_notes: "Notes", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Global Media", welcome_title: "Welcome to Inteligent v0.3", welcome_desc: "Select an option from sidebar.", map_placeholder: "Enter location...", btn_search: "Search", map_hint: "Enter location and search.", theme_title: "🎨 Select Theme", lang_title: "🌍 Select Language", account_title: "👤 Account", account_current: "Current user:", btn_logout: "Log out", btn_switch: "Switch account", proj_browser_title: "🌐 1. Inteligent Browser", proj_browser_desc: "Dedicated fast web browser.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Custom Linux distribution.", chat_channels: "Channels", btn_new_group: "+ Create group", chat_placeholder: "Type message...", nav_notes: "Notes", btn_new_note: "+ New Square", store_placeholder: "Search files...", lbl_upload: "📤 Upload file", info_title: "✨ Changelog:", info_desc: "System update history." },
+            lt: { auth_title: "🔒 Prisijungimas", auth_desc: "Įveskite duomenis:", nick: "Slapyvardis:", pass: "Slaptažodis:", enter: "Įeiti", nav_maps: "Inteligent Maps", nav_settings: "Nustatymai", nav_projects: "Projektai", nav_chat: "Intedisc", nav_notes: "Užrašai", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Media", welcome_title: "Sveiki atvykę į Inteligent v0.3", welcome_desc: "Pasirinkite parinktį.", map_placeholder: "Vieta...", btn_search: "Ieškoti", map_hint: "Įveskite vietą.", theme_title: "🎨 Tema", lang_title: "🌍 Kalba", account_title: "👤 Paskyra", account_current: "Vartotojas:", btn_logout: "Atsijungti", btn_switch: "Keisti", proj_browser_title: "🌐 1. Naršyklė Inteligent", proj_browser_desc: "Greita naršyklė.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Linux sistema.", chat_channels: "Kanalai", btn_new_group: "+ Sukurti", chat_placeholder: "Žinutė...", nav_notes: "Užrašai", btn_new_note: "+ Naujas", store_placeholder: "Ieškoti...", lbl_upload: "📤 Įkelti", info_title: "✨ Atnaujinimai:", info_desc: "Sistemos istorija." },
+            fr: { auth_title: "🔒 Connexion", auth_desc: "Identifiants :", nick: "Pseudo :", pass: "Mot de passe :", enter: "Entrer", nav_maps: "Inteligent Maps", nav_settings: "Paramètres", nav_projects: "Projets", nav_chat: "Intedisc", nav_notes: "Notes", nav_store: "Inteligent Store", nav_info: "Infos", nav_media: "Médias", welcome_title: "Bienvenue sur Inteligent v0.3", welcome_desc: "Choisissez une option.", map_placeholder: "Lieu...", btn_search: "Rechercher", map_hint: "Entrez un lieu.", theme_title: "🎨 Thème", lang_title: "🌍 Langue", account_title: "👤 Compte", account_current: "Utilisateur :", btn_logout: "Déconnexion", btn_switch: "Changer", proj_browser_title: "🌐 1. Navigateur Inteligent", proj_browser_desc: "Navigateur web.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Distribution Linux.", chat_channels: "Canaux", btn_new_group: "+ Créer", chat_placeholder: "Message...", nav_notes: "Notes", btn_new_note: "+ Nouveau", store_placeholder: "Rechercher...", lbl_upload: "📤 Envoyer", info_title: "✨ Historique :", info_desc: "Historique des mises à jour." },
+            ru: { auth_title: "🔒 Вход / Аккаунт", auth_desc: "Введите ник и пароль:", nick: "Ник:", pass: "Пароль:", enter: "Войти в систему", nav_maps: "Inteligent Maps", nav_settings: "Настройки и Темы", nav_projects: "Будущие Проекты", nav_chat: "Intedisc (Discord)", nav_notes: "Заметки", nav_store: "Inteligent Store", nav_info: "Информация", nav_media: "Глобальные Медиа", welcome_title: "Добро пожаловать в Inteligent v0.3", welcome_desc: "Выберите опцию в меню.", map_placeholder: "Введите локацию...", btn_search: "Поиск", map_hint: "Введите местоположение.", theme_title: "🎨 Выбор Темы", lang_title: "🌍 Выбор Языка", account_title: "👤 Управление аккаунтом", account_current: "Текущий пользователь:", btn_logout: "Выйти", btn_switch: "Сменить аккаунт", proj_browser_title: "🌐 1. Браузер Inteligent", proj_browser_desc: "Быстрый веб-браузер.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Собственный Linux.", chat_channels: "Каналы", btn_new_group: "+ Создать группу", chat_placeholder: "Напишите сообщение...", nav_notes: "Заметки", btn_new_note: "+ Новый квадрат", store_placeholder: "Поиск файлов...", lbl_upload: "📤 Загрузить файл", info_title: "✨ История обновлений:", info_desc: "История изменений системы." },
+            it: { auth_title: "🔒 Accedi", auth_desc: "Inserisci credenziali:", nick: "Nickname:", pass: "Password:", enter: "Entra", nav_maps: "Inteligent Maps", nav_settings: "Impostazioni", nav_projects: "Progetti", nav_chat: "Intedisc", nav_notes: "Note", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Media", welcome_title: "Benvenuto su Inteligent v0.3", welcome_desc: "Seleziona un'opzione.", map_placeholder: "Luogo...", btn_search: "Cerca", map_hint: "Inserisci luogo.", theme_title: "🎨 Tema", lang_title: "🌍 Lingua", account_title: "👤 Account", account_current: "Utente:", btn_logout: "Esci", btn_switch: "Cambia", proj_browser_title: "🌐 1. Browser Inteligent", proj_browser_desc: "Browser veloce.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Sistema Linux.", chat_channels: "Canali", btn_new_group: "+ Crea", chat_placeholder: "Messaggio...", nav_notes: "Note", btn_new_note: "+ Nuovo", store_placeholder: "Cerca...", lbl_upload: "📤 Carica", info_title: "✨ Cronologia :", info_desc: "Registro degli aggiornamenti." },
+            es: { auth_title: "🔒 Iniciar sesión", auth_desc: "Ingrese datos:", nick: "Usuario:", pass: "Contraseña:", enter: "Entrar", nav_maps: "Inteligent Maps", nav_settings: "Ajustes", nav_projects: "Proyectos", nav_chat: "Intedisc", nav_notes: "Notas", nav_store: "Inteligent Store", nav_info: "Info", nav_media: "Medios", welcome_title: "Bienvenido a Inteligent v0.3", welcome_desc: "Seleccione una opción.", map_placeholder: "Ubicación...", btn_search: "Buscar", map_hint: "Ingrese ubicación.", theme_title: "🎨 Tema", lang_title: "🌍 Idioma", account_title: "👤 Cuenta", account_current: "Usuario:", btn_logout: "Salir", btn_switch: "Cambiar", proj_browser_title: "🌐 1. Navegador Inteligent", proj_browser_desc: "Navegador web.", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Sistema Linux.", chat_channels: "Canales", btn_new_group: "+ Crear", chat_placeholder: "Mensaje...", nav_notes: "Notas", btn_new_note: "+ Nuevo", store_placeholder: "Buscar...", lbl_upload: "📤 Subir", info_title: "✨ Registro :", info_desc: "Historial de actualizaciones." },
+            jp: { auth_title: "🔒 ログイン", auth_desc: "情報を入力:", nick: "ニックネーム:", pass: "パスワード:", enter: "ログイン", nav_maps: "Inteligent マップ", nav_settings: "設定", nav_projects: "プロジェクト", nav_chat: "Intedisc", nav_notes: "メモ", nav_store: "Inteligent ストア", nav_info: "情報", nav_media: "メディア", welcome_title: "Inteligent v0.3へようこそ", welcome_desc: "オプションを選択してください。", map_placeholder: "場所...", btn_search: "検索", map_hint: "場所を入力。", theme_title: "🎨 テーマ", lang_title: "🌍 言語", account_title: "👤 アカウント", account_current: "ユーザー:", btn_logout: "ログアウト", btn_switch: "切替", proj_browser_title: "🌐 1. Inteligent ブラウザ", proj_browser_desc: "高速ブラウザ。", proj_linux_title: "🐧 2. Linux Inteligent", proj_linux_desc: "Linux OS。", chat_channels: "チャンネル", btn_new_group: "+ 作成", chat_placeholder: "メッセージ...", nav_notes: "メモ", btn_new_note: "+ 新規", store_placeholder: "検索...", lbl_upload: "📤 アップロード", info_title: "✨ 更新履歴:", info_desc: "システムの変更履歴。" }
         };
 
         window.addEventListener('DOMContentLoaded', () => {
